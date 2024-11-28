@@ -1,9 +1,7 @@
-import NewGame from "./NewGame";
+import NewGame from "./menuLinks/NewGame";
 
 function Menu() {
-  return (
-    <NewGame />
-  );
+  return <NewGame />;
 }
 
 export default Menu;
