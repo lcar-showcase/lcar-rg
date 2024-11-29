@@ -1,7 +1,7 @@
+import Board from "./board/board";
+
 function Game() {
-  return (
-    <p>Game page</p>
-  );
+  return <Board />;
 }
 
 export default Game;

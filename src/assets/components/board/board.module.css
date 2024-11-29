@@ -1,0 +1,8 @@
+.boardLayout {
+    width: 350px;
+    height: 350px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    background: grey;
+}
