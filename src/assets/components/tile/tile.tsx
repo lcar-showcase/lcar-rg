@@ -4,7 +4,7 @@ function Tile(row: string, col: string) {
   const tileLabel = `${row}${col}`;
   return (
     <div key={tileLabel} className={style.boardTile}>
-      {tileLabel}
+      {/* {tileLabel} */}
     </div>
   );
 }
