@@ -1,7 +1,7 @@
-import NewGame from "./menuLinks/NewGame";
+import MenuLink from "./menuLinks/menuLink";
 
 function MainMenu() {
-  return <NewGame />;
+  return <MenuLink text="New Game" path="/game" />;
 }
 
 export default MainMenu;
