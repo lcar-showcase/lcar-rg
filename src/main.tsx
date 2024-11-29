@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainMenu />} />
+        <Route index element={<MainMenu />} />
         <Route path="/game" element={<Game />} />
         <Route path="*" element={<PageNotFound />} /> {/* Invalid path */}
       </Routes>
