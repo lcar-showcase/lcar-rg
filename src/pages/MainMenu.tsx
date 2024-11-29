@@ -1,4 +1,4 @@
-import MenuLink from "./menuLinks/menuLink";
+import MenuLink from "../components/menuLinks/menuLink";
 
 function MainMenu() {
   return (

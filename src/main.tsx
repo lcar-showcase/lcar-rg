@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "./index.css";
-import Game from "./components/Game";
-import MainMenu from "./components/MainMenu";
-import PageNotFound from "./components/PageNotFound";
+import Game from "./pages/Game";
+import MainMenu from "./pages/MainMenu";
+import PageNotFound from "./pages/PageNotFound";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
