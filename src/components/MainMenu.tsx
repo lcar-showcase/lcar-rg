@@ -1,7 +1,7 @@
 import NewGame from "./menuLinks/NewGame";
 
-function Menu() {
+function MainMenu() {
   return <NewGame />;
 }
 
-export default Menu;
+export default MainMenu;
