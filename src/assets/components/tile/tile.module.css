@@ -1,3 +1,6 @@
 .boardTile {
-    border: 1px solid cyan;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #37552A;
 }

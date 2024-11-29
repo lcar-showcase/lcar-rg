@@ -3,9 +3,18 @@ interface TileLabel {
   col: string;
 }
 
-function initLabels() {
-  const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
-  const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+export function getRows() {
+  return rows;
+}
+
+export function getCols() {
+  return cols;
+}
+
+export function initTileLabels() {
   const labels: TileLabel[] = []; // All 64 tile labels
 
   rows.forEach((row) => {
@@ -19,7 +28,3 @@ function initLabels() {
 
   return labels;
 }
-
-const tileLabels: TileLabel[] = initLabels();
-
-export default tileLabels;
