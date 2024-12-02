@@ -10,18 +10,18 @@ function initTiles() {
 
 function initRowLabels() {
   return getRows().map((row) => (
-      <div key={row} className={style.label}>
-        {row}
-      </div>
-    ));
+    <div key={row} className={style.label}>
+      {row}
+    </div>
+  ));
 }
 
 function initColLabels() {
   return getCols().map((col) => (
-      <div key={col} className={style.label}>
-        {col}
-      </div>
-    ));
+    <div key={col} className={style.label}>
+      {col}
+    </div>
+  ));
 }
 
 function Board() {

@@ -1,18 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
-import App from "./App";
 import "./index.css";
-import Game from "./assets/components/Game";
-import Menu from "./assets/components/Menu";
-import PageNotFound from "./assets/components/PageNotFound";
+import Game from "./pages/Game";
+import MainMenu from "./pages/MainMenu";
+import PageNotFound from "./pages/PageNotFound";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route index element={<Menu />} /> {/* Defaults to Menu */}
+        <Route index element={<MainMenu />} />
         <Route path="/game" element={<Game />} />
         <Route path="*" element={<PageNotFound />} /> {/* Invalid path */}
       </Routes>
