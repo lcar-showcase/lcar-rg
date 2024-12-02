@@ -1,9 +1,20 @@
 .navigable {
-  padding: 30px 40px;
-  align-self: flex-start;
+  color: #f1e3d7;
+  font-size: 2em;
+  font-weight: 800;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 30px;
+  left: 40px;
+  border: 1px solid blue;
+}
+
+.navigable:hover {
+  color: #7a7787;
+}
+
+/* Left arrow */
+.navigable::before {
+  content: "\2190";
 }
 
 .title {
