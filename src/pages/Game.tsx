@@ -1,6 +1,6 @@
-import Board from "./board/board";
+import Board from "../components/board/board";
+import Logo from "../components/logo/logo";
 import style from "./game.module.css";
-import Logo from "./logo/logo";
 
 function Game() {
   return (
