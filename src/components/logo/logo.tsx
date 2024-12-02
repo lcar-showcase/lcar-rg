@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import style from "./logo.module.css";
 
-function Logo({ isNav }: { isNav: boolean }) {
+function Logo() {
   return (
-    <Link to="/" className={isNav ? style.navigable : style.title}>
+    <Link to="/" className={`${style.text} ${style.navigable}`}>
       REVERSI
     </Link>
   );

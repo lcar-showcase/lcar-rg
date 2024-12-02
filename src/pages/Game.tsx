@@ -4,7 +4,7 @@ import Logo from "../components/logo/logo";
 function Game() {
   return (
     <>
-      <Logo isNav />
+      <Logo />
       <Board />
     </>
   );

@@ -1,11 +1,14 @@
-.navigable {
+.text {
   color: #f1e3d7;
   font-size: 2em;
   font-weight: 800;
+  /* border: 1px solid blue; */
+}
+
+.navigable {
   position: fixed;
   top: 30px;
   left: 40px;
-  border: 1px solid blue;
 }
 
 .navigable:hover {
@@ -15,8 +18,4 @@
 /* Left arrow */
 .navigable::before {
   content: "\2190";
-}
-
-.title {
-  background: magenta;
 }
