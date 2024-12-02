@@ -1,10 +1,10 @@
 .navigable {
-    width: 100%;
-    padding: 20px 20px;
-    border: 1px solid cyan;
-    margin: 0;
+  width: 100%;
+  padding: 20px 20px;
+  border: 1px solid cyan;
+  margin: 0;
 }
 
 .title {
-    background: magenta;
+  background: magenta;
 }
