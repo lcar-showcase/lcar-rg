@@ -1,8 +1,9 @@
 .navigable {
-  width: 100%;
-  padding: 20px 20px;
-  border: 1px solid cyan;
-  margin: 0;
+  padding: 30px 40px;
+  align-self: flex-start;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .title {
