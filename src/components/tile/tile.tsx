@@ -11,6 +11,12 @@ interface TileProps {
   diskColour: DiskColour;
 }
 
+/**
+ * An interactable game tile.
+ * @param pos - Position (label) of Tile on the board.
+ * @param diskColour - Disk colour on the Tile.
+ * @returns Tile component.
+ */
 function Tile({ pos, diskColour }: TileProps) {
   const tileLabel = `${pos.row}${pos.col}`;
 
