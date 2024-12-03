@@ -21,7 +21,7 @@ function Tile({ pos, diskColour }: TileProps) {
   const tileLabel = `${pos.row}${pos.col}`;
 
   return (
-    <div id={tileLabel} className={style.boardTile}>
+    <div id={tileLabel} className={style.tile}>
       <Disk colour={diskColour} />
     </div>
   );

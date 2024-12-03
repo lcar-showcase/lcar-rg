@@ -7,8 +7,7 @@ function MainMenu() {
       <p className={style.logo}>REVERSI</p>
       <div className={style.linksContainer}>
         <MenuLink text="New Game" path="/game" />
-        {/* TODO: Add "Continue Game button" */}
-        <MenuLink text="Continue Game" path="/game" />
+        {/* TODO: Add "Continue Game menuLink" */}
       </div>
     </>
   );

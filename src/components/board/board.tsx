@@ -11,7 +11,7 @@ const tileLabels = initTileLabels();
  * @param tile - Position of the Tile, defined by row and col.
  * @returns A Tile component, with an optional disk colour specified.
  */
-function initDefaultDisk(tilePos: TilePos) {
+function initTilesCallback(tilePos: TilePos) {
   const tileRow = tilePos.row;
   const tileCol = tilePos.col;
 
@@ -32,7 +32,7 @@ function initDefaultDisk(tilePos: TilePos) {
  * @returns Tile components.
  */
 function initTiles() {
-  return tileLabels.map(initDefaultDisk);
+  return tileLabels.map(initTilesCallback);
 }
 
 /**
