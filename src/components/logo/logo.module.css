@@ -1,21 +1,21 @@
-.text {
+.logo {
   color: #f1e3d7;
-  font-size: 2em;
-  font-weight: 800;
-  /* border: 1px solid blue; */
-}
-
-.navigable {
+  font-size: 1.5em;
+  font-weight: 700;
+  letter-spacing: 5px;
   position: fixed;
   top: 30px;
   left: 40px;
 }
 
-.navigable:hover {
+.logo:hover {
   color: #7a7787;
 }
 
-/* Left arrow */
-.navigable::before {
-  content: "\2190";
+/* Back arrow */
+.logo::before {
+  content: "\2BA8";
+  font-size: 0.9em;
+  padding-right: 5px;
+  color: #7a7787;
 }

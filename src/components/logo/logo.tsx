@@ -7,7 +7,7 @@ import style from "./logo.module.css";
  */
 function Logo() {
   return (
-    <Link to="/" className={`${style.text} ${style.navigable}`}>
+    <Link to="/" className={style.logo}>
       REVERSI
     </Link>
   );

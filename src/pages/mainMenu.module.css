@@ -1,7 +1,15 @@
+.logo {
+  color: #f1e3d7;
+  font-size: 3em;
+  margin-bottom: 30px;
+  font-weight: 700;
+  letter-spacing: 8px;
+}
+
 .linksContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
