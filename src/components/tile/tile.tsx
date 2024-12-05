@@ -1,11 +1,6 @@
 import Disk, { DiskColour } from "../disk/disk";
 import style from "./tile.module.css";
 
-export interface TilePos {
-  row: string;
-  col: string;
-}
-
 /**
  * An interactable game tile.
  * @param pos - Position (label) of Tile on the board.
