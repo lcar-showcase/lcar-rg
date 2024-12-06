@@ -1,3 +1,3 @@
-import { DiskColour } from "./types";
+type DiskColour = "dark" | "light" | null;
 
 export type { DiskColour };
