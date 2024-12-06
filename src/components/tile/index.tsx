@@ -1,5 +1,5 @@
 import { DiskColour } from "../../types";
-import Disk from "../disk/disk";
+import Disk from "../disk";
 import style from "./tile.module.css";
 
 /**

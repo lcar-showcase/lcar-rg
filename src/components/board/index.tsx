@@ -1,5 +1,5 @@
 import { DiskColour } from "../../types";
-import Tile from "../tile/tile";
+import Tile from "../tile";
 import style from "./board.module.css";
 
 // All possible rows and columns on the board

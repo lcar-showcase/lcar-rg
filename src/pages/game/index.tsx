@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Board, rows, cols } from "../../components";
+import Board, { cols, rows } from "../../components/board";
 import { DiskColour } from "../../types";
 import style from "./game.module.css";
 

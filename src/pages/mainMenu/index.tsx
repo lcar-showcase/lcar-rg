@@ -1,4 +1,4 @@
-import { MenuLink } from "../../components";
+import MenuLink from "../../components/menuLinks";
 import style from "./mainMenu.module.css";
 
 function MainMenu() {
