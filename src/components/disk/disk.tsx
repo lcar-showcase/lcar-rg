@@ -1,6 +1,5 @@
+import { DiskColour } from "../../types";
 import style from "./disk.module.css";
-
-export type DiskColour = "dark" | "light" | null;
 
 /**
  * A coloured disk.
@@ -9,8 +8,7 @@ export type DiskColour = "dark" | "light" | null;
  */
 function Disk({ colour }: { colour: DiskColour }) {
   if (colour) {
-    return <div className={colour === "dark" ? `${style.disk} ${style.dark}` : `${style.disk} ${style.light}`} />;
-    // return <div className={`${style.disk} ${style.colour}`} />;
+    return <div className={`${style.disk} ${style[colour]}`} />;
   }
   return null; // No disk colour given; empty tile
 }

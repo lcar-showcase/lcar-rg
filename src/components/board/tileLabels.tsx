@@ -1,4 +1,4 @@
-import { DiskColour } from "../disk/disk";
+import { DiskColour } from "../../types";
 
 // All possible rows and column labels on the board
 export const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
