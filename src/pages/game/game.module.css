@@ -1,11 +1,13 @@
 .logo {
+  display: flex;
   color: #f1e3d7;
-  font-size: 1.5em;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 5px;
   position: fixed;
   top: 30px;
   left: 40px;
+  align-items: center;
 }
 
 .logo:hover {
@@ -15,7 +17,7 @@
 /* Back arrow */
 .logo::before {
   content: "\2190";
-  font-size: 0.9em;
+  font-size: 1rem;
   padding-right: 5px;
   color: #7a7787;
 }

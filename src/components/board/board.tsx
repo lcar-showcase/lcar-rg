@@ -21,9 +21,9 @@ const colLabels = cols.map((col) => (
 function Board({ boardArray }: { boardArray: DiskColour[][] }) {
   function createTiles(board: DiskColour[][]): JSX.Element[] {
     const tileComponents: JSX.Element[] = [];
-    board.forEach((row) => {
-      row.forEach((tile) => {
-        tileComponents.push(<Tile diskColour={tile} />);
+    board.forEach((row, rowId: number) => {
+      row.forEach((tile, colId: number) => {
+        tileComponents.push(<Tile key={`${cols[colId]}${rows[rowId]}`} diskColour={tile} />);
       });
     });
 
