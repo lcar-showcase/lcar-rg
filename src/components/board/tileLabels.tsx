@@ -17,5 +17,3 @@ export function initBoardArray(): DiskColour[][] {
 
   return boardArray;
 }
-
-console.log(initBoardArray());
