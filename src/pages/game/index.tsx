@@ -9,10 +9,10 @@ const boardArray: DiskColour[][] = Array.from({ length: rows.length }, () =>
 );
 
 // Set default disks
-boardArray[rows.indexOf("4")][cols.indexOf("D")] = "light";
-boardArray[rows.indexOf("5")][cols.indexOf("E")] = "light";
-boardArray[rows.indexOf("4")][cols.indexOf("E")] = "dark";
-boardArray[rows.indexOf("5")][cols.indexOf("D")] = "dark";
+boardArray[3][3] = "light";
+boardArray[4][4] = "light";
+boardArray[3][4] = "dark";
+boardArray[4][3] = "dark";
 
 function Game() {
   return (
