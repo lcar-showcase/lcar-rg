@@ -17,7 +17,7 @@
 /* Back arrow */
 .logo::before {
   content: "\2190";
-  font-size: 1rem;
+  font-size: 1.5rem;
   padding-right: 5px;
   color: #7a7787;
 }

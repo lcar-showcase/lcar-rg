@@ -1,12 +1,10 @@
 import { Link } from "react-router";
-import Board, { cols, rows } from "../../components/board";
+import Board from "../../components/board";
 import { DiskColour } from "../../types";
 import style from "./game.module.css";
 
 // Initialise 8 by 8 board, no disks on each tile
-const boardArray: DiskColour[][] = Array.from({ length: rows.length }, () =>
-  Array.from({ length: cols.length }, () => null)
-);
+const boardArray: DiskColour[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
 
 // Set default disks
 boardArray[3][3] = "light";
