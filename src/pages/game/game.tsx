@@ -3,9 +3,9 @@ import { Board, rows, cols } from "../../components";
 import { DiskColour } from "../../types";
 import style from "./game.module.css";
 
-const boardArray: DiskColour[][] = Array.from(
-  { length: rows.length },
-  () => Array.from({ length: cols.length }, () => null) // Initialise 8 by 8 board, no disks on each tile
+// Initialise 8 by 8 board, no disks on each tile
+const boardArray: DiskColour[][] = Array.from({ length: rows.length }, () =>
+  Array.from({ length: cols.length }, () => null)
 );
 
 // Set default disks
