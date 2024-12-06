@@ -8,8 +8,6 @@ import style from "./tile.module.css";
  * @returns Tile component.
  */
 function Tile({ diskColour }: { diskColour: DiskColour }) {
-  // const tileLabel = `${pos.row}${pos.col}`;
-
   return (
     <div className={style.tile}>
       <Disk colour={diskColour} />
