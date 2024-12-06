@@ -1,10 +1,18 @@
 import { Link } from "react-router";
-import Board from "../../components/board/board";
-import { initBoardArray } from "../../components/board/tileLabels";
+import { Board, rows, cols } from "../../components";
+import { DiskColour } from "../../types";
 import style from "./game.module.css";
 
-// Initialise all 64 Tile labels
-const boardArray = initBoardArray();
+const boardArray: DiskColour[][] = Array.from(
+  { length: rows.length },
+  () => Array.from({ length: cols.length }, () => null) // Initialise 8 by 8 board, no disks on each tile
+);
+
+// Set default disks
+boardArray[rows.indexOf("4")][cols.indexOf("D")] = "light";
+boardArray[rows.indexOf("5")][cols.indexOf("E")] = "light";
+boardArray[rows.indexOf("4")][cols.indexOf("E")] = "dark";
+boardArray[rows.indexOf("5")][cols.indexOf("D")] = "dark";
 
 function Game() {
   return (
