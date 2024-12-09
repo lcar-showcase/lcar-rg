@@ -4,7 +4,7 @@ import { DiskColour } from "../../types";
 import style from "./game.module.css";
 
 // Initialise 8 by 8 board, no disks on each tile
-const boardArray: DiskColour[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
+const boardArray: DiskColour[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }));
 
 // Set default disks
 boardArray[3][3] = "light";

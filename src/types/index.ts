@@ -1,3 +1,3 @@
-type DiskColour = "dark" | "light" | null;
+type DiskColour = "dark" | "light";
 
 export type { DiskColour };

@@ -1,5 +1,4 @@
 import { DiskColour } from "../../types";
-import Disk from "../disk";
 import style from "./tile.module.css";
 
 /**
@@ -11,7 +10,8 @@ import style from "./tile.module.css";
 function Tile({ id, diskColour }: { id: string; diskColour: DiskColour }) {
   return (
     <div id={id} className={style.tile}>
-      <Disk colour={diskColour} />
+      <div className={`${style.disk} ${style[diskColour]}`} />
+      {/* TODO: Not working here */}
     </div>
   );
 }
