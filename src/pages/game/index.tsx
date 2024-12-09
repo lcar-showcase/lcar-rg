@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Board from "../../components/board";
 import { TileState } from "../../types";
 import style from "./game.module.css";
+import "../../index.css";
 
 // Initialise 8 by 8 board, no disks on each tile
 const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
@@ -21,7 +22,17 @@ function Game() {
   return (
     <>
       <Link to="/" className={style.logo}>
-        REVERSI
+        <img src="/images/back_arrow.png" alt="back" />
+        <h1>
+          {/* Spaced using flex and gap; letter-spacing does not work due to flipped E */}
+          <span>R</span>
+          <span>E</span>
+          <span>V</span>
+          <span className={style.flipped}>E</span>
+          <span>R</span>
+          <span>S</span>
+          <span>I</span>
+        </h1>
       </Link>
       <Board boardArray={boardArr} />
     </>

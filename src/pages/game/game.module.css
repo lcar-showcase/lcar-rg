@@ -1,23 +1,33 @@
 .logo {
   display: flex;
-  color: #f1e3d7;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 5px;
   position: fixed;
   top: 30px;
   left: 40px;
   align-items: center;
+  color: #f1e3d7;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  height: 35px;
+}
+
+.logo > h1 {
+  display: flex;
+  gap: 5px;
 }
 
 .logo:hover {
   color: #7a7787;
 }
 
-/* Back arrow */
-.logo::before {
-  content: "\2190";
-  font-size: 1.5rem;
-  padding-right: 5px;
-  color: #7a7787;
+.logo > img {
+  height: 40%;
+  aspect-ratio: 68 / 35;
+  margin-right: 10px;
+}
+
+/* Flipped 'E' in logo */
+.flipped {
+  display: inline-block;
+  transform: scaleX(-1);
 }
