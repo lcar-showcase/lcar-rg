@@ -5,10 +5,6 @@
   background: #37552a;
 }
 
-.unoccupied:hover {
-  background: #416632;
-}
-
 .disk {
   width: 75%;
   height: 75%;
@@ -23,4 +19,15 @@
 .light {
   background: #f1e3d7;
   border: 2px solid #d2bba7;
+}
+
+.valid {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.validTile:hover {
+  background: #456b35;
 }
