@@ -11,18 +11,6 @@ const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
  * @returns Board component.
  */
 function Board({ boardArray }: { boardArray: DiskColour[][] }) {
-  function createTiles(board: DiskColour[][]): JSX.Element[] {
-    const tileComponents: JSX.Element[] = [];
-    board.forEach((row, rowId: number) => {
-      row.forEach((tile, colId: number) => {
-        const tilePos = `${rows[rowId]}${cols[colId]}`;
-        tileComponents.push(<Tile key={tilePos} id={tilePos} diskColour={tile} />);
-      });
-    });
-
-    return tileComponents;
-  }
-
   return (
     <section className={style.container}>
       <div className={style.layout}>
@@ -40,7 +28,13 @@ function Board({ boardArray }: { boardArray: DiskColour[][] }) {
             </div>
           ))}
         </div>
-        <div className={style.playable}>{createTiles(boardArray)}</div>
+        <div className={style.playable}>
+          {boardArray.map((row, rowId) =>
+            row.map((tile, colId) => (
+              <Tile key={`${rows[rowId]}${cols[colId]}`} id={`${rows[rowId]}${cols[colId]}`} diskColour={tile} />
+            ))
+          )}
+        </div>
       </div>
     </section>
   );
