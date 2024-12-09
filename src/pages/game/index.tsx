@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
-import { DiskColour } from "../../types";
+import { TileState } from "../../types";
 import style from "./game.module.css";
 
 // Initialise 8 by 8 board, no disks on each tile
-const initBoardArray: DiskColour[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }));
+const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
 
 // Initialise default disks
 // TODO: Add configurations in a separate file to test the game in the future

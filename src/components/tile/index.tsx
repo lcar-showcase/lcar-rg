@@ -1,16 +1,16 @@
-import { DiskColour } from "../../types";
+import { TileState } from "../../types";
 import style from "./tile.module.css";
 
 /**
  * An interactable game tile.
  * @param id - div ID.
- * @param diskColour - Disk colour on the Tile.
+ * @param tileState - Disk colour on the Tile.
  * @returns Tile component.
  */
-function Tile({ id, diskColour }: { id: string; diskColour: DiskColour }) {
+function Tile({ id, tileState }: { id: string; tileState: TileState }) {
   return (
     <div id={id} className={style.tile}>
-      <div className={`${style.disk} ${style[diskColour]}`} />
+      {tileState && <div className={`${style.disk} ${style[tileState]}`} />}
     </div>
   );
 }

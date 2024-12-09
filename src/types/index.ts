@@ -1,3 +1,3 @@
-type DiskColour = "dark" | "light";
+type TileState = "dark" | "light" | null;
 
-export type { DiskColour };
+export type { TileState };

@@ -1,4 +1,4 @@
-import { DiskColour } from "../../types";
+import { TileState } from "../../types";
 import Tile from "../tile";
 import style from "./board.module.css";
 
@@ -10,7 +10,7 @@ const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
  * The game board.
  * @returns Board component.
  */
-function Board({ boardArray }: { boardArray: DiskColour[][] }) {
+function Board({ boardArray }: { boardArray: TileState[][] }) {
   return (
     <section className={style.container}>
       <div className={style.layout}>
@@ -31,7 +31,7 @@ function Board({ boardArray }: { boardArray: DiskColour[][] }) {
         <div className={style.playable}>
           {boardArray.map((row, rowId) =>
             row.map((tile, colId) => (
-              <Tile key={`${rows[rowId]}${cols[colId]}`} id={`${rows[rowId]}${cols[colId]}`} diskColour={tile} />
+              <Tile key={`${rows[rowId]}${cols[colId]}`} id={`${rows[rowId]}${cols[colId]}`} tileState={tile} />
             ))
           )}
         </div>
