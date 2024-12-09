@@ -11,7 +11,6 @@ function Tile({ id, diskColour }: { id: string; diskColour: DiskColour }) {
   return (
     <div id={id} className={style.tile}>
       <div className={`${style.disk} ${style[diskColour]}`} />
-      {/* TODO: Not working here */}
     </div>
   );
 }
