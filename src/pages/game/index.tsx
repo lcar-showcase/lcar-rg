@@ -17,7 +17,16 @@ initBoardArray[4][3] = "dark";
 
 function Game() {
   // * Not defining a set function yet, as I'm not using it and ESLint is complaining
-  const [boardArr] = useState(initBoardArray);
+  const [boardArr, setBoardArray] = useState(initBoardArray);
+  const [turn, setTurn] = useState(0);
+
+  const handleTurn = (row: number, col: number) => {
+    console.log(`Clicked ${row}, ${col}`);
+    const newBoardArr = boardArr.slice();
+    newBoardArr[row][col] = turn % 2 === 0 ? "dark" : "light";
+    setBoardArray(newBoardArr);
+    setTurn(turn + 1);
+  };
 
   return (
     <>
@@ -34,7 +43,8 @@ function Game() {
           <span>I</span>
         </h1>
       </Link>
-      <Board boardArray={boardArr} />
+      <p>{turn}</p>
+      <Board boardArray={boardArr} handleTurn={handleTurn} />
     </>
   );
 }

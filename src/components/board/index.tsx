@@ -6,11 +6,16 @@ import style from "./board.module.css";
 const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
+interface BoardProps {
+  boardArray: TileState[][];
+  handleTurn(row: number, col: number): void;
+}
+
 /**
  * The game board.
  * @returns Board component.
  */
-function Board({ boardArray }: { boardArray: TileState[][] }) {
+function Board({ boardArray, handleTurn }: BoardProps) {
   return (
     <section className={style.container}>
       <div className={style.layout}>
@@ -31,7 +36,12 @@ function Board({ boardArray }: { boardArray: TileState[][] }) {
         <div className={style.playable}>
           {boardArray.map((row, rowId) =>
             row.map((tile, colId) => (
-              <Tile key={`${rows[rowId]}${cols[colId]}`} id={`${rows[rowId]}${cols[colId]}`} tileState={tile} />
+              <Tile
+                key={`${rows[rowId]}${cols[colId]}`}
+                id={`${rows[rowId]}${cols[colId]}`}
+                tileState={tile}
+                handleClick={() => handleTurn(rowId, colId)}
+              />
             ))
           )}
         </div>
