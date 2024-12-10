@@ -15,6 +15,10 @@ initBoardArray[4][4] = "light";
 initBoardArray[3][4] = "dark";
 initBoardArray[4][3] = "dark";
 
+// initBoardArray[7][7] = "dark";
+// initBoardArray[1][0] = "light";
+// initBoardArray[1][1] = "dark";
+
 // Direction change when checking for valid tiles
 interface Direction {
   row: number; // x-axis: postitive is up; negative is down
@@ -68,6 +72,7 @@ const directions: Direction[] = [
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
+  const [history, setHistory] = useState(["Game start"]);
   const nextBoard = boardArr.slice(); // Modify board state for next turn
   const player = turn % 2 === 0 ? "dark" : "light"; // Current player (humans players are always even/dark)
   const opponent = turn % 2 === 0 ? "light" : "dark";
@@ -115,15 +120,18 @@ function Game() {
       }
     })
   );
+
   if (!hasValid) {
     // Player has no valid moves, skip turn
     // TODO: Handle win condition when both players have no valid moves
     setTurn(turn + 1);
+    setHistory([...history, `${player[0].toUpperCase()}${player.slice(1)}'s turn was skipped.`]);
   }
 
   const handleTurn = (row: number, col: number) => {
     nextBoard[row][col] = player;
     setTurn(turn + 1);
+    // setHistory([...history, `${player} moved to ${row}, ${col}`]);
     setBoardArray(nextBoard);
   };
 
@@ -142,8 +150,15 @@ function Game() {
           <span>I</span>
         </h1>
       </Link>
-      <p>{player}</p>
-      <Board boardArray={boardArr} handleTurn={handleTurn} />
+      <div className={style.gameInfo}>
+        <Board boardArray={boardArr} handleTurn={handleTurn} />
+        <div className={style.history}>
+          {/* Display up to last 2 turns that were skipped */}
+          {history.slice(-2).map((move) => (
+            <div key={`${history.indexOf(move)}`}>{move}</div>
+          ))}
+        </div>
+      </div>
     </>
   );
 }

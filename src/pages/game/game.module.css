@@ -31,3 +31,17 @@
   display: inline-block;
   transform: scaleX(-1);
 }
+
+.gameInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.history {
+  font-size: 1.5rem;
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
