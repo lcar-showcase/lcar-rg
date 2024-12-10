@@ -10,11 +10,13 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from
 
 // Initialise default disks
 // TODO: Add configurations in a separate file to test the game in the future
-initBoardArray[3][3] = "light";
-initBoardArray[4][4] = "light";
-initBoardArray[3][4] = "dark";
-initBoardArray[4][3] = "dark";
-initBoardArray[3][2] = "valid";
+// initBoardArray[3][3] = "light";
+// initBoardArray[4][4] = "light";
+// initBoardArray[3][4] = "dark";
+// initBoardArray[4][3] = "dark";
+initBoardArray[1][0] = "light";
+initBoardArray[1][1] = "dark";
+initBoardArray[7][7] = "dark";
 
 // Direction change when checking for valid tiles
 interface Direction {
@@ -70,26 +72,30 @@ function Game() {
   // * Not defining a set function yet, as I'm not using it and ESLint is complaining
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
+  const boardCopy = boardArr.slice();
+  const currPlayer = turn % 2 === 0 ? "dark" : "light";
+  const nextPlayer = turn % 2 === 0 ? "light" : "dark";
 
   function withinBounds(row: number, col: number) {
-    return row <= boardArr.length - 1 && col <= boardArr.length - 1;
+    return row <= boardCopy.length - 1 && col <= boardCopy.length - 1;
   }
 
-  function checkValid(nextPlayer: TileState, currPlayer: TileState) {
+  function checkValid(): boolean {
     // Clear previously valid tiles
-    boardArr.forEach((row, rowId) =>
+    boardCopy.forEach((row, rowId) =>
       row.forEach((_tile, colId) => {
-        if (boardArr[rowId][colId] === "valid") {
-          boardArr[rowId][colId] = null;
+        if (boardCopy[rowId][colId] === "valid") {
+          boardCopy[rowId][colId] = null;
         }
       })
     );
 
     // Check valid tiles for next player
-    boardArr.forEach((row, rowId) =>
+    let hasValid = false;
+    boardCopy.forEach((row, rowId) =>
       row.forEach((tile, colId) => {
         // Find next player's tiles
-        if (tile === nextPlayer) {
+        if (tile === currPlayer) {
           // Check in each direction (8 total) for lines to capture
           directions.forEach((direction) => {
             const { x: changeX, y: changeY } = direction;
@@ -98,14 +104,15 @@ function Game() {
             let encounterOpp = false;
             while (withinBounds(checkingRow, checkingCol)) {
               // Keep going towards direction of change
-              if (boardArr[checkingRow][checkingCol] === currPlayer) {
+              if (boardCopy[checkingRow][checkingCol] === nextPlayer) {
                 // Encountered current (opponent) player; keep going
                 encounterOpp = true;
                 checkingCol += changeX;
                 checkingRow += changeY;
-              } else if (boardArr[checkingRow][checkingCol] === null && encounterOpp) {
+              } else if (boardCopy[checkingRow][checkingCol] === null && encounterOpp) {
                 // Current tile is null AND all previous tiles occupied by current (opponent) player; valid tile
-                boardArr[checkingRow][checkingCol] = "valid";
+                boardCopy[checkingRow][checkingCol] = "valid";
+                hasValid = true;
                 break;
               } else {
                 // Line cannot be valid (Opponent player not encountered)
@@ -116,21 +123,19 @@ function Game() {
         }
       })
     );
-  }
-
-  if (turn === 0) {
-    checkValid("dark", "light");
+    return hasValid;
   }
 
   const handleTurn = (row: number, col: number) => {
-    const currPlayer = turn % 2 === 0 ? "dark" : "light";
-    const nextPlayer = turn % 2 === 0 ? "light" : "dark";
-    const newBoardArr = boardArr.slice(); // Copy of state
-    newBoardArr[row][col] = currPlayer;
-    setBoardArray(newBoardArr);
+    boardCopy[row][col] = currPlayer;
     setTurn(turn + 1);
-    checkValid(nextPlayer, currPlayer);
+    setBoardArray(boardCopy);
   };
+
+  if (!checkValid()) {
+    // TODO: Handle win condition when both players have no valid moves
+    setTurn(turn + 1);
+  }
 
   return (
     <>
@@ -147,7 +152,8 @@ function Game() {
           <span>I</span>
         </h1>
       </Link>
-      <p>{turn % 2 === 0 ? "dark" : "light"}</p>
+      <p>{turn}</p>
+      <p>{currPlayer}</p>
       <Board boardArray={boardArr} handleTurn={handleTurn} />
     </>
   );
