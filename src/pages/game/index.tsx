@@ -17,57 +17,62 @@ initBoardArray[4][3] = "dark";
 
 // Direction change when checking for valid tiles
 interface Direction {
-  row: number; // x-axis: postitive is up; negative is down
-  col: number; // y-axis: positive is right; negative is left
+  changeRow: number; // x-axis: postitive is up; negative is down
+  changeCol: number; // y-axis: positive is right; negative is left
 }
 
 // All directions to check for (8 total)
 const directions: Direction[] = [
   // North
   {
-    row: 1,
-    col: 0,
+    changeRow: 1,
+    changeCol: 0,
   },
   // North-east
   {
-    row: 1,
-    col: 1,
+    changeRow: 1,
+    changeCol: 1,
   },
   // East
   {
-    row: 0,
-    col: 1,
+    changeRow: 0,
+    changeCol: 1,
   },
   // South-east
   {
-    row: -1,
-    col: 1,
+    changeRow: -1,
+    changeCol: 1,
   },
   // South
   {
-    row: -1,
-    col: 0,
+    changeRow: -1,
+    changeCol: 0,
   },
   // South-west
   {
-    row: -1,
-    col: -1,
+    changeRow: -1,
+    changeCol: -1,
   },
   // West
   {
-    row: 0,
-    col: -1,
+    changeRow: 0,
+    changeCol: -1,
   },
   // North-west
   {
-    row: 1,
-    col: -1,
+    changeRow: 1,
+    changeCol: -1,
   },
 ];
 
+interface TilePos {
+  row: number;
+  col: number;
+}
+
 interface ValidTile {
-  start: Direction;
-  valid: Direction;
+  start: TilePos;
+  valid: TilePos;
   direction: Direction;
 }
 
@@ -86,7 +91,7 @@ function Game() {
       if (tile === player) {
         // Check in each direction (8 total) for lines to capture
         directions.forEach((direction) => {
-          const { row: changeRow, col: changeCol } = direction; // Change for one step
+          const { changeRow, changeCol } = direction; // Change for one step
           let checkCol = colId + changeCol; // Start from next tile
           let checkRow = rowId + changeRow;
           let seeOpp = false; // Flag to check if at least one opponent disk was seen
@@ -110,8 +115,8 @@ function Game() {
                   col: checkCol,
                 },
                 direction: {
-                  row: changeRow,
-                  col: changeCol,
+                  changeRow,
+                  changeCol,
                 },
               });
               break;
