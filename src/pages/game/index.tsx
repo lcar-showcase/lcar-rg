@@ -10,15 +10,15 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from
 
 // Initialise default disks
 // TODO: Add configurations in a separate file to test the game in the future
-// initBoardArray[3][3] = "light";
-// initBoardArray[4][4] = "light";
-// initBoardArray[3][4] = "dark";
-// initBoardArray[4][3] = "dark";
+initBoardArray[3][3] = "light";
+initBoardArray[4][4] = "light";
+initBoardArray[3][4] = "dark";
+initBoardArray[4][3] = "dark";
 
-initBoardArray[7][7] = "dark";
-initBoardArray[1][0] = "light";
-initBoardArray[1][1] = "dark";
-initBoardArray[1][4] = "light";
+// initBoardArray[7][7] = "dark";
+// initBoardArray[1][0] = "light";
+// initBoardArray[1][1] = "dark";
+// initBoardArray[1][4] = "light";
 
 // Direction change when checking for valid tiles
 interface Direction {
