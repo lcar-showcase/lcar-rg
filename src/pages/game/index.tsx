@@ -21,7 +21,7 @@ function Game() {
 
   return (
     <>
-      <Link to="/" className={style.logo}>
+      <Link to="/" className={style.backToMenuContainer}>
         <img src="/images/back_arrow.png" alt="back" />
         <h1>
           {/* Spaced using flex and gap; letter-spacing does not work due to flipped E */}

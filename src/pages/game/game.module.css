@@ -1,4 +1,4 @@
-.logo {
+.backToMenuContainer {
   display: flex;
   position: fixed;
   top: 30px;
@@ -7,20 +7,19 @@
   color: #f1e3d7;
   font-weight: 700;
   display: flex;
-  align-items: center;
   height: 35px;
 }
 
-.logo > h1 {
+.backToMenuContainer > h1 {
   display: flex;
   gap: 5px;
 }
 
-.logo:hover {
+.backToMenuContainer:hover {
   color: #7a7787;
 }
 
-.logo > img {
+.backToMenuContainer > img {
   height: 40%;
   aspect-ratio: 68 / 35;
   margin-right: 10px;
