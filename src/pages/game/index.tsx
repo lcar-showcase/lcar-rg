@@ -23,8 +23,8 @@ interface Direction {
 
 // Position of a tile
 interface TilePos {
-  row: number;
-  col: number;
+  row: number; // 0-7
+  col: number; // 0-7
 }
 
 // All directions to check for (8 total)
