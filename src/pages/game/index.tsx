@@ -10,14 +10,15 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from
 
 // Initialise default disks
 // TODO: Add configurations in a separate file to test the game in the future
-initBoardArray[3][3] = "light";
-initBoardArray[4][4] = "light";
-initBoardArray[3][4] = "dark";
-initBoardArray[4][3] = "dark";
+// initBoardArray[3][3] = "light";
+// initBoardArray[4][4] = "light";
+// initBoardArray[3][4] = "dark";
+// initBoardArray[4][3] = "dark";
 
-// initBoardArray[7][7] = "dark";
-// initBoardArray[1][0] = "light";
-// initBoardArray[1][1] = "dark";
+initBoardArray[7][7] = "dark";
+initBoardArray[1][0] = "light";
+initBoardArray[1][1] = "dark";
+initBoardArray[1][4] = "light";
 
 // Direction change when checking for valid tiles
 interface Direction {
@@ -125,13 +126,12 @@ function Game() {
     // Player has no valid moves, skip turn
     // TODO: Handle win condition when both players have no valid moves
     setTurn(turn + 1);
-    setHistory([...history, `${player[0].toUpperCase()}${player.slice(1)}'s turn was skipped.`]);
+    setHistory([...history, `${player[0].toUpperCase()}${player.slice(1)}'s turn was skipped`]);
   }
 
   const handleTurn = (row: number, col: number) => {
     nextBoard[row][col] = player;
     setTurn(turn + 1);
-    // setHistory([...history, `${player} moved to ${row}, ${col}`]);
     setBoardArray(nextBoard);
   };
 
@@ -153,10 +153,12 @@ function Game() {
       <div className={style.gameInfo}>
         <Board boardArray={boardArr} handleTurn={handleTurn} />
         <div className={style.history}>
-          {/* Display up to last 2 turns that were skipped */}
-          {history.slice(-2).map((move) => (
-            <div key={`${history.indexOf(move)}`}>{move}</div>
-          ))}
+          {history
+            .slice(-2) // Lastest 2 turns that were skipped
+            .reverse() // Most recent move first
+            .map((move) => (
+              <p key={`${history.indexOf(move)}`}>{move}</p>
+            ))}
         </div>
       </div>
     </>
