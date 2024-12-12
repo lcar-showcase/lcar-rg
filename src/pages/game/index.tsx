@@ -15,11 +15,6 @@ initBoardArray[4][4] = "light";
 initBoardArray[3][4] = "dark";
 initBoardArray[4][3] = "dark";
 
-// initBoardArray[7][7] = "dark";
-// initBoardArray[1][0] = "light";
-// initBoardArray[1][1] = "dark";
-// initBoardArray[1][4] = "light";
-
 // Direction change when checking for valid tiles
 interface Direction {
   row: number; // x-axis: postitive is up; negative is down
