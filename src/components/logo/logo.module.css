@@ -1,0 +1,20 @@
+/* Flipped 'E' in logo */
+h1 {
+  display: flex;
+  gap: 10px;
+  color: #f1e3d7;
+}
+
+.small {
+  font-size: 2rem;
+}
+
+.large {
+  font-size: 3rem;
+  margin-bottom: 30px;
+}
+
+.flipped {
+  display: inline-block;
+  transform: scaleX(-1);
+}
