@@ -9,7 +9,7 @@ import "../../index.css";
 const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
 
 // Initialise default disks
-// TODO: Add configurations in a separate file to test the game in the future
+// TODO: Add configurations in a separate file to test the game after implementing all game rules
 initBoardArray[3][3] = "light";
 initBoardArray[4][4] = "light";
 initBoardArray[3][4] = "dark";
@@ -65,27 +65,22 @@ const directions: Direction[] = [
   },
 ];
 
+interface ValidTile {
+  start: Direction;
+  valid: Direction;
+  direction: Direction;
+}
+
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState(["Game start"]);
-  const nextBoard = boardArr.slice(); // Modify board state for next turn
   const player = turn % 2 === 0 ? "dark" : "light"; // Current player (humans players are always even/dark)
   const opponent = turn % 2 === 0 ? "light" : "dark";
+  const nextHistory = [...history]; // Copy history state before reversing
 
-  // Reset all valid tiles
-  nextBoard.forEach((row, rowId) =>
-    row.forEach((_, colId) => {
-      if (nextBoard[rowId][colId] === "valid") {
-        nextBoard[rowId][colId] = null;
-      }
-    })
-  );
-
-  // Check valid tiles for current player
-  let hasValid = false;
-
-  nextBoard.forEach((row, rowId) =>
+  const validTiles: ValidTile[] = []; // Check valid tiles for current player
+  boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
       // Find current player's tiles
       if (tile === player) {
@@ -95,17 +90,30 @@ function Game() {
           let checkCol = colId + changeCol; // Start from next tile
           let checkRow = rowId + changeRow;
           let seeOpp = false; // Flag to check if at least one opponent disk was seen
-          while (checkRow >= 0 && checkRow < nextBoard.length && checkCol >= 0 && checkCol < nextBoard.length) {
+          while (checkRow >= 0 && checkRow < boardArr.length && checkCol >= 0 && checkCol < boardArr.length) {
             // Keep going in direction of change while within bounds of board
-            if (nextBoard[checkRow][checkCol] === opponent) {
+            if (boardArr[checkRow][checkCol] === opponent) {
               // Seen opponent; keep going
               seeOpp = true;
               checkCol += changeCol;
               checkRow += changeRow;
-            } else if (nextBoard[checkRow][checkCol] === null && seeOpp) {
+            } else if (boardArr[checkRow][checkCol] === null && seeOpp) {
+              // TODO: Setting it to valid here affects subsequent loops
               // Empty tile AND all previous tiles occupied by opponent; valid tile
-              nextBoard[checkRow][checkCol] = "valid";
-              hasValid = true;
+              validTiles.push({
+                start: {
+                  row: rowId,
+                  col: colId,
+                },
+                valid: {
+                  row: checkRow,
+                  col: checkCol,
+                },
+                direction: {
+                  row: changeRow,
+                  col: changeCol,
+                },
+              });
               break;
             } else {
               // Line cannot be valid (opponent player not encountered)
@@ -117,7 +125,7 @@ function Game() {
     })
   );
 
-  if (!hasValid) {
+  if (validTiles.length === 0) {
     // Player has no valid moves, skip turn
     // TODO: Handle win condition when both players have no valid moves
     setTurn(turn + 1);
@@ -125,9 +133,16 @@ function Game() {
   }
 
   const handleTurn = (row: number, col: number) => {
-    nextBoard[row][col] = player;
+    const newBoard = boardArr.map((boardRow, rowId) =>
+      boardRow.map((_tile, colId) => {
+        if (row === rowId && col === colId) {
+          return player;
+        }
+        return boardArr[rowId][colId];
+      })
+    );
     setTurn(turn + 1);
-    setBoardArray(nextBoard);
+    setBoardArray(newBoard);
   };
 
   return (
@@ -146,9 +161,22 @@ function Game() {
         </h1>
       </Link>
       <div className={style.gameInfo}>
-        <Board boardArray={boardArr} handleTurn={handleTurn} />
+        <Board
+          boardArray={boardArr.map((boardRow, rowId) =>
+            boardRow.map((_tile, colId) => {
+              const exists = validTiles.find(
+                (validTile) => validTile.valid.row === rowId && validTile.valid.col === colId
+              );
+              if (exists) {
+                return "valid";
+              }
+              return boardArr[rowId][colId];
+            })
+          )}
+          handleTurn={handleTurn}
+        />
         <div className={style.history}>
-          {history
+          {nextHistory
             .slice(-2) // Lastest 2 turns that were skipped
             .reverse() // Most recent move first
             .map((move) => (
