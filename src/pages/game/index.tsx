@@ -24,13 +24,16 @@ interface Direction {
   changeCol: number; // y-axis: positive is right; negative is left
 }
 
+/**
+ * Position of a tile
+ */
 interface TilePos {
   row: number;
   col: number;
 }
 
 /**
- * Position of a valid tile.
+ * A line that can be flipped, bound by the start and valid tile
  */
 interface Line {
   start: TilePos;
@@ -89,7 +92,7 @@ function Game() {
   const player = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
   const opponent = turn % 2 === 0 ? "light" : "dark";
 
-  // Determine valid tiles for player
+  // Determine lines that can be flipped by player
   const lines: Line[] = [];
   boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
@@ -109,7 +112,7 @@ function Game() {
               checkCol += changeCol;
               checkRow += changeRow;
             } else if (boardArr[checkRow][checkCol] === null && seeOpp) {
-              // Empty tile AND all previous tiles occupied by opponent; valid tile
+              // Empty tile AND all previous tiles occupied by opponent; this line can be flipped
               lines.push({
                 start: {
                   row: rowId,
@@ -148,22 +151,13 @@ function Game() {
    * @param col Col of clicked tile.
    */
   const handleTurn = (row: number, col: number) => {
-    // Set tile to player's colour
-    // const newBoard = boardArr.map((boardRow, rowId) =>
-    //   boardRow.map((_tile, colId) => {
-    //     if (row === rowId && col === colId) {
-    //       return player;
-    //     }
-    //     return boardArr[rowId][colId]; // Use old TileState
-    //   })
-    // );
+    // Get lines with matching valid tile position
+    const matchLines = lines.filter((line) => line.valid.row === row && line.valid.col === col);
 
-    const rel = lines.filter((line) => line.valid.row === row && line.valid.col === col);
-
-    let newBoard: TileState[][] = [...boardArr];
+    // Determine tiles that should be flipped (start, valid and everything in between)
     const flippedTiles: TilePos[] = [];
-    rel.forEach((relLine) => {
-      const { start, valid, direction } = relLine;
+    matchLines.forEach((line) => {
+      const { start, valid, direction } = line;
       let flipRow = start.row;
       let flipCol = start.col;
       while (flipRow !== valid.row + direction.changeRow || flipCol !== valid.col + direction.changeCol) {
@@ -176,18 +170,15 @@ function Game() {
       }
     });
 
-    flippedTiles.forEach((flip) => {
-      newBoard = boardArr.map((bRow, rowId) =>
-        bRow.map((_bCol, colId) => {
-          if (rowId === flip.row && colId === flip.col) {
-            return player;
-          }
-          return newBoard[rowId][colId];
-        })
-      );
-    });
-
-    console.log(newBoard);
+    // Create new board state
+    const newBoard = boardArr.map((boardRow, rowId) =>
+      boardRow.map((_boardTile, colId) => {
+        if (flippedTiles.find((flip) => flip.row === rowId && flip.col === colId)) {
+          return player; // Flip colour
+        }
+        return boardArr[rowId][colId]; // Unchanged
+      })
+    );
 
     setTurn(turn + 1);
     setBoardArray(newBoard);
