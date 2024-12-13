@@ -1,10 +1,9 @@
-import { LogoSize } from "../../types";
 import style from "./logo.module.css";
 
-function Logo({ size }: { size: LogoSize }) {
+function Logo({ isNav }: { isNav: boolean }) {
   return (
-    <h1 className={style[size]}>
-      {/* Spaced using flex and gap; letter-spacing does not work due to flipped E */}
+    // Hover effects on navigable navigable logo only
+    <h1 className={`${style.base} ${isNav ? style.navigable : style.nonNavigable}`}>
       <span>R</span>
       <span>E</span>
       <span>V</span>

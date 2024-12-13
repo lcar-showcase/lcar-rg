@@ -1,4 +1,4 @@
-.backToMenuContainer {
+.backToMainMenuContainer {
   display: flex;
   position: fixed;
   top: 30px;
@@ -10,23 +10,8 @@
   height: 35px;
 }
 
-.backToMenuContainer > h1 {
-  display: flex;
-  gap: 5px;
-}
-
-.backToMenuContainer:hover {
-  color: #7a7787;
-}
-
-.backToMenuContainer > img {
+.backToMainMenuContainer > img {
   height: 40%;
   aspect-ratio: 68 / 35;
   margin-right: 10px;
-}
-
-/* Flipped 'E' in logo */
-.flipped {
-  display: inline-block;
-  transform: scaleX(-1);
 }

@@ -1,19 +1,26 @@
-/* Flipped 'E' in logo */
-h1 {
+.base {
   display: flex;
-  gap: 10px;
   color: #f1e3d7;
 }
 
-.small {
-  font-size: 2rem;
-}
-
-.large {
+/* MainMenu */
+.nonNavigable {
   font-size: 3rem;
+  gap: 10px;
   margin-bottom: 30px;
 }
 
+/* Game */
+.navigable {
+  font-size: 2rem;
+  gap: 5px;
+}
+
+.navigable:hover {
+  color: #7a7787;
+}
+
+/* Flipped 'E' in logo */
 .flipped {
   display: inline-block;
   transform: scaleX(-1);

@@ -22,9 +22,9 @@ function Game() {
 
   return (
     <>
-      <Link to="/" className={style.backToMenuContainer}>
+      <Link to="/" className={style.backToMainMenuContainer}>
         <img src="/images/back_arrow.png" alt="back" />
-        <Logo size="small" />
+        <Logo isNav />
       </Link>
       <Board boardArray={boardArr} />
     </>
