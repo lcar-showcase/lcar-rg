@@ -24,12 +24,18 @@ interface Direction {
   changeCol: number; // y-axis: positive is right; negative is left
 }
 
+interface TilePos {
+  row: number;
+  col: number;
+}
+
 /**
  * Position of a valid tile.
  */
-interface ValidTilePos {
-  row: number; // 0-7
-  col: number; // 0-7
+interface Line {
+  start: TilePos;
+  valid: TilePos;
+  direction: Direction;
 }
 
 // All directions to check for (8 total)
@@ -84,7 +90,7 @@ function Game() {
   const opponent = turn % 2 === 0 ? "light" : "dark";
 
   // Determine valid tiles for player
-  const validTiles: ValidTilePos[] = [];
+  const lines: Line[] = [];
   boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
       // Find player's tiles
@@ -104,9 +110,19 @@ function Game() {
               checkRow += changeRow;
             } else if (boardArr[checkRow][checkCol] === null && seeOpp) {
               // Empty tile AND all previous tiles occupied by opponent; valid tile
-              validTiles.push({
-                row: checkRow,
-                col: checkCol,
+              lines.push({
+                start: {
+                  row: rowId,
+                  col: colId,
+                },
+                valid: {
+                  row: checkRow,
+                  col: checkCol,
+                },
+                direction: {
+                  changeRow,
+                  changeCol,
+                },
               });
               break;
             } else {
@@ -119,7 +135,7 @@ function Game() {
     })
   );
 
-  if (validTiles.length === 0) {
+  if (lines.length === 0) {
     // Player has no valid moves, skip turn
     // TODO: Handle win condition when both players have no valid moves
     setTurn(turn + 1);
@@ -133,14 +149,46 @@ function Game() {
    */
   const handleTurn = (row: number, col: number) => {
     // Set tile to player's colour
-    const newBoard = boardArr.map((boardRow, rowId) =>
-      boardRow.map((_tile, colId) => {
-        if (row === rowId && col === colId) {
-          return player;
-        }
-        return boardArr[rowId][colId]; // Use old TileState
-      })
-    );
+    // const newBoard = boardArr.map((boardRow, rowId) =>
+    //   boardRow.map((_tile, colId) => {
+    //     if (row === rowId && col === colId) {
+    //       return player;
+    //     }
+    //     return boardArr[rowId][colId]; // Use old TileState
+    //   })
+    // );
+
+    const rel = lines.filter((line) => line.valid.row === row && line.valid.col === col);
+
+    let newBoard: TileState[][] = [...boardArr];
+    const flippedTiles: TilePos[] = [];
+    rel.forEach((relLine) => {
+      const { start, valid, direction } = relLine;
+      let flipRow = start.row;
+      let flipCol = start.col;
+      while (flipRow !== valid.row + direction.changeRow || flipCol !== valid.col + direction.changeCol) {
+        flippedTiles.push({
+          row: flipRow,
+          col: flipCol,
+        });
+        flipRow += direction.changeRow;
+        flipCol += direction.changeCol;
+      }
+    });
+
+    flippedTiles.forEach((flip) => {
+      newBoard = boardArr.map((bRow, rowId) =>
+        bRow.map((_bCol, colId) => {
+          if (rowId === flip.row && colId === flip.col) {
+            return player;
+          }
+          return newBoard[rowId][colId];
+        })
+      );
+    });
+
+    console.log(newBoard);
+
     setTurn(turn + 1);
     setBoardArray(newBoard);
   };
@@ -158,7 +206,7 @@ function Game() {
           boardArray={boardArr.map((boardRow, rowId) =>
             boardRow.map((_boardTile, colId) => {
               // Set valid tiles
-              const exists = validTiles.find((tile) => tile.row === rowId && tile.col === colId);
+              const exists = lines.find((tile) => tile.valid.row === rowId && tile.valid.col === colId);
               if (exists) {
                 return "valid";
               }
