@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
+import Logo from "../../components/logo";
 import { TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -138,18 +139,9 @@ function Game() {
 
   return (
     <>
-      <Link to="/" className={style.logo}>
+      <Link to="/" className={style.backToMainMenuContainer}>
         <img src="/images/back_arrow.png" alt="back" />
-        <h1>
-          {/* Spaced using flex and gap; letter-spacing does not work due to flipped E */}
-          <span>R</span>
-          <span>E</span>
-          <span>V</span>
-          <span className={style.flipped}>E</span>
-          <span>R</span>
-          <span>S</span>
-          <span>I</span>
-        </h1>
+        <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
         <Board
