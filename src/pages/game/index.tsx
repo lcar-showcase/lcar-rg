@@ -16,14 +16,18 @@ initBoardArray[4][4] = "light";
 initBoardArray[3][4] = "dark";
 initBoardArray[4][3] = "dark";
 
-// Direction change when checking for valid tiles
+/**
+ * Direction change when checking for valid tiles.
+ */
 interface Direction {
   changeRow: number; // x-axis: postitive is up; negative is down
   changeCol: number; // y-axis: positive is right; negative is left
 }
 
-// Position of a tile
-interface TilePos {
+/**
+ * Position of a valid tile.
+ */
+interface ValidTilePos {
   row: number; // 0-7
   col: number; // 0-7
 }
@@ -76,17 +80,16 @@ function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState(["Game start"]);
-  const player = turn % 2 === 0 ? "dark" : "light"; // Current player (humans players are always even/dark)
+  const player = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
   const opponent = turn % 2 === 0 ? "light" : "dark";
-  const nextHistory = [...history]; // Copy history state for reversing
 
   // Determine valid tiles for player
-  const validTiles: TilePos[] = [];
+  const validTiles: ValidTilePos[] = [];
   boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
-      // Find current player's tiles
+      // Find player's tiles
       if (tile === player) {
-        // Check in each direction (8 total) for lines to capture
+        // Check in each direction (8 total) for valid tiles
         directions.forEach((direction) => {
           const { changeRow, changeCol } = direction; // Change for one step
           let checkCol = colId + changeCol; // Start from next tile
@@ -107,7 +110,7 @@ function Game() {
               });
               break;
             } else {
-              // Line cannot be valid (opponent player not encountered)
+              // Cannot be valid (opponent player not encountered)
               break;
             }
           }
@@ -123,6 +126,11 @@ function Game() {
     setHistory([...history, `${player[0].toUpperCase()}${player.slice(1)}'s turn was skipped`]);
   }
 
+  /**
+   * Process a turn after a player click's on a tile.
+   * @param row Row of clicked tile.
+   * @param col Col of clicked tile.
+   */
   const handleTurn = (row: number, col: number) => {
     // Set tile to player's colour
     const newBoard = boardArr.map((boardRow, rowId) =>
@@ -130,12 +138,14 @@ function Game() {
         if (row === rowId && col === colId) {
           return player;
         }
-        return boardArr[rowId][colId];
+        return boardArr[rowId][colId]; // Use old TileState
       })
     );
     setTurn(turn + 1);
     setBoardArray(newBoard);
   };
+
+  const nextHistory = [...history]; // Copy history state for .reverse()
 
   return (
     <>
@@ -152,7 +162,7 @@ function Game() {
               if (exists) {
                 return "valid";
               }
-              return boardArr[rowId][colId]; // No changes
+              return boardArr[rowId][colId]; // Use old TileState
             })
           )}
           handleTurn={handleTurn}
@@ -160,7 +170,7 @@ function Game() {
         <div className={style.history}>
           {nextHistory
             .slice(-2) // Lastest 2 turns that were skipped
-            .reverse() // Most recent move first
+            .reverse() // Most recent first
             .map((move) => (
               <p key={`${history.indexOf(move)}`}>{move}</p>
             ))}
