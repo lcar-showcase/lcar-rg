@@ -1,22 +1,7 @@
-.logo {
-  display: flex;
-  gap: 10px;
-  color: #f1e3d7;
-  font-size: 3rem;
-  margin-bottom: 30px;
-  font-weight: 700;
-}
-
 .linksContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
-}
-
-/* Flipped 'E' in logo */
-.flipped {
-  display: inline-block;
-  transform: scaleX(-1);
 }
