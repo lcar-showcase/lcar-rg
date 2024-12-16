@@ -6,15 +6,18 @@ import { TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
-// Initialise 8 by 8 board, no disks on each tile
-const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
-
-// Initialise default disks
-// TODO: Add configurations in a separate file to test the game after implementing all game rules
-initBoardArray[3][3] = "light";
-initBoardArray[4][4] = "light";
-initBoardArray[3][4] = "dark";
-initBoardArray[4][3] = "dark";
+// Initialise 8 by 8 board, with 4 default disks
+const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
+  Array.from({ length: 8 }, (_col, colId) => {
+    if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
+      return "light";
+    }
+    if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
+      return "dark";
+    }
+    return null;
+  })
+);
 
 /**
  * Direction change when checking for valid tiles.
