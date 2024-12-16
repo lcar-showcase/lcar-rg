@@ -148,8 +148,6 @@ function Game() {
     setBoardArray(newBoard);
   };
 
-  const nextHistory = [...history]; // Copy history state for .reverse()
-
   return (
     <>
       <Link to="/" className={style.backToMainMenuContainer}>
@@ -171,12 +169,8 @@ function Game() {
           handleTurn={handleTurn}
         />
         <div className={style.history}>
-          {nextHistory
-            .slice(-2) // Lastest 2 turns that were skipped
-            .reverse() // Most recent first
-            .map((move) => (
-              <p key={`${history.indexOf(move)}`}>{move}</p>
-            ))}
+          <p>{history[history.length - 1]}</p>
+          <p>{history[history.length - 2]}</p>
         </div>
       </div>
     </>
