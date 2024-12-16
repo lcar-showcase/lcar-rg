@@ -30,7 +30,7 @@ interface Direction {
 /**
  * Position of a valid tile.
  */
-interface ValidTilePos {
+interface Coordinate {
   row: number; // 0-7
   col: number; // 0-7
 }
@@ -86,7 +86,7 @@ function Game() {
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine valid tiles for player
-  const validTiles: ValidTilePos[] = [];
+  const validTiles: Coordinate[] = [];
   boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
       // Find player's tiles
