@@ -1,0 +1,22 @@
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #37552a;
+}
+
+.disk {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%; /* Circle */
+}
+
+.dark {
+  background: #090909;
+  border: 2px solid #1b2029;
+}
+
+.light {
+  background: #f1e3d7;
+  border: 2px solid #d2bba7;
+}

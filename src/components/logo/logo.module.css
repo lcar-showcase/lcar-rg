@@ -1,0 +1,35 @@
+.base {
+  color: #f1e3d7;
+}
+
+/* MainMenu */
+.nonNavigable {
+  font-size: 3rem;
+  margin-bottom: 30px;
+  letter-spacing: 8px;
+}
+
+/* Game */
+.navigable {
+  font-size: 2rem;
+  letter-spacing: 5px;
+}
+
+.navigable:hover {
+  color: #7a7787;
+}
+
+/* Flipped 'E' in logo */
+.flipped {
+  letter-spacing: 0;
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.navigable .flipped {
+  margin-right: 5px;
+}
+
+.nonNavigable .flipped {
+  margin-right: 8px;
+}
