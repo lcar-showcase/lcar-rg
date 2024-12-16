@@ -4,13 +4,15 @@ function Logo({ isNav }: { isNav: boolean }) {
   return (
     // Hover effects on navigable navigable logo only
     <h1 className={`${style.base} ${isNav ? style.navigable : style.nonNavigable}`}>
-      <span>R</span>
+      {/* <span>R</span>
       <span>E</span>
-      <span>V</span>
+      <span>V</span> */}
+      REV
       <span className={style.flipped}>E</span>
-      <span>R</span>
+      RSI
+      {/* <span>R</span>
       <span>S</span>
-      <span>I</span>
+      <span>I</span> */}
     </h1>
   );
 }

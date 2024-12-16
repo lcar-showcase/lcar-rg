@@ -6,7 +6,7 @@ import { TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
-// Initialise 8 by 8 board, with default disks
+// Initialise 8 by 8 board, with 4 default disks
 const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
   Array.from({ length: 8 }, (_col, colId) => {
     if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
