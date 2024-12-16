@@ -83,15 +83,14 @@ function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState(["Game start"]);
-  const player = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
-  const opponent = turn % 2 === 0 ? "light" : "dark";
+  const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine valid tiles for player
   const validTiles: ValidTilePos[] = [];
   boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
       // Find player's tiles
-      if (tile === player) {
+      if (tile === currentPlayer) {
         // Check in each direction (8 total) for valid tiles
         directions.forEach((direction) => {
           const { changeRow, changeCol } = direction; // Change for one step
@@ -99,8 +98,8 @@ function Game() {
           let checkRow = rowId + changeRow;
           let seeOpp = false; // Flag to check if at least one opponent disk was seen
           while (checkRow >= 0 && checkRow < boardArr.length && checkCol >= 0 && checkCol < boardArr.length) {
-            // Keep going in direction of change while within bounds of board
-            if (boardArr[checkRow][checkCol] === opponent) {
+            // Keep going in direction of change while within bounds of board; check for opponent
+            if (boardArr[checkRow][checkCol] === (currentPlayer === "light" ? "dark" : "light")) {
               // Seen opponent; keep going
               seeOpp = true;
               checkCol += changeCol;
@@ -126,7 +125,7 @@ function Game() {
     // Player has no valid moves, skip turn
     // TODO: Handle win condition when both players have no valid moves
     setTurn(turn + 1);
-    setHistory([...history, `${player[0].toUpperCase()}${player.slice(1)}'s turn was skipped`]);
+    setHistory([...history, `${currentPlayer[0].toUpperCase()}${currentPlayer.slice(1)}'s turn was skipped`]);
   }
 
   /**
@@ -139,7 +138,7 @@ function Game() {
     const newBoard = boardArr.map((boardRow, rowId) =>
       boardRow.map((_tile, colId) => {
         if (row === rowId && col === colId) {
-          return player;
+          return currentPlayer;
         }
         return boardArr[rowId][colId]; // Use old TileState
       })
