@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
@@ -7,17 +7,23 @@ import style from "./game.module.css";
 import "../../index.css";
 
 // Initialise 8 by 8 board, with 4 default disks
-const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
-  Array.from({ length: 8 }, (_col, colId) => {
-    if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
-      return "light";
-    }
-    if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
-      return "dark";
-    }
-    return null;
-  })
-);
+// const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
+//   Array.from({ length: 8 }, (_col, colId) => {
+//     if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
+//       return "light";
+//     }
+//     if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
+//       return "dark";
+//     }
+//     return null;
+//   })
+// );
+
+const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
+
+initBoardArray[0][0] = "dark";
+initBoardArray[0][1] = "light";
+initBoardArray[0][3] = "light";
 
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
@@ -75,9 +81,18 @@ function Game() {
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null }]);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
+  const validTiles: Coordinate[] = [];
+
+  useEffect(() => {
+    if (validTiles.length === 0) {
+      // Player has no valid moves, skip turn
+      // TODO: Handle win condition when both players have no valid moves
+      setTurn(turn + 1);
+      // setHistory([...history, `${currentPlayer[0].toUpperCase()}${currentPlayer.slice(1)}'s turn was skipped`]);
+    }
+  }, [turn, validTiles.length]);
 
   // Determine valid tiles for player
-  const validTiles: Coordinate[] = [];
   boardArr.forEach((row, rowId) =>
     row.forEach((tile, colId) => {
       // Find player's tiles
@@ -111,13 +126,6 @@ function Game() {
       }
     })
   );
-
-  // if (validTiles.length === 0) {
-  //   // Player has no valid moves, skip turn
-  //   // TODO: Handle win condition when both players have no valid moves
-  //   setTurn(turn + 1);
-  //   setHistory([...history, `${currentPlayer[0].toUpperCase()}${currentPlayer.slice(1)}'s turn was skipped`]);
-  // }
 
   /**
    * Process a turn after a player click's on a tile.
