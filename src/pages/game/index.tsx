@@ -19,16 +19,8 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
   })
 );
 
-/**
- * Direction change when checking for valid tiles.
- */
-interface Direction {
-  changeRow: number; // x-axis: postitive is up; negative is down
-  changeCol: number; // y-axis: positive is right; negative is left
-}
-
 // All directions to check for (8 total)
-const directions: Direction[] = [
+const directions = [
   // North
   {
     changeRow: 1,
