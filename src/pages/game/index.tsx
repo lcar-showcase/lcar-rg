@@ -65,10 +65,15 @@ const directions = [
   },
 ];
 
+interface HistoryItem {
+  colour: TileState;
+  tile: Coordinate | null;
+}
+
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
-  const [history, setHistory] = useState(["Game start"]);
+  const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null }]);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine valid tiles for player
@@ -107,12 +112,12 @@ function Game() {
     })
   );
 
-  if (validTiles.length === 0) {
-    // Player has no valid moves, skip turn
-    // TODO: Handle win condition when both players have no valid moves
-    setTurn(turn + 1);
-    setHistory([...history, `${currentPlayer[0].toUpperCase()}${currentPlayer.slice(1)}'s turn was skipped`]);
-  }
+  // if (validTiles.length === 0) {
+  //   // Player has no valid moves, skip turn
+  //   // TODO: Handle win condition when both players have no valid moves
+  //   setTurn(turn + 1);
+  //   setHistory([...history, `${currentPlayer[0].toUpperCase()}${currentPlayer.slice(1)}'s turn was skipped`]);
+  // }
 
   /**
    * Process a turn after a player click's on a tile.
@@ -131,8 +136,9 @@ function Game() {
     );
     // Set state only if tile is valid
     if (validTiles.find((validTile) => validTile.row === row && validTile.col === col)) {
-      setTurn(turn + 1);
+      setHistory([...history, { colour: currentPlayer, tile: { row, col } }]);
       setBoardArray(newBoard);
+      setTurn(turn + 1);
     }
   };
 
@@ -144,10 +150,10 @@ function Game() {
       </Link>
       <div className={style.gameInfo}>
         <Board boardArray={boardArr} validTiles={validTiles} handleTurn={handleTurn} />
-        <div className={style.history}>
+        {/* <div className={style.history}>
           <p>{history[history.length - 1]}</p>
           <p>{history[history.length - 2]}</p>
-        </div>
+        </div> */}
       </div>
     </>
   );
