@@ -1,4 +1,4 @@
-type TileState = "dark" | "light" | "valid" | null;
+type TileState = "dark" | "light" | null;
 
 /**
  * Position of a tile.
