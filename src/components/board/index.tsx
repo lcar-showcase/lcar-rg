@@ -1,4 +1,4 @@
-import { TileState } from "../../types";
+import { Coordinate, TileState } from "../../types";
 import Tile from "../tile";
 import style from "./board.module.css";
 
@@ -8,6 +8,7 @@ const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 interface BoardProps {
   boardArray: TileState[][];
+  validTiles: Coordinate[];
   handleTurn(row: number, col: number): void;
 }
 
@@ -15,7 +16,7 @@ interface BoardProps {
  * The game board.
  * @returns Board component.
  */
-function Board({ boardArray, handleTurn }: BoardProps) {
+function Board({ boardArray, validTiles, handleTurn }: BoardProps) {
   return (
     <section className={style.container}>
       <div className={style.layout}>
@@ -34,15 +35,20 @@ function Board({ boardArray, handleTurn }: BoardProps) {
           ))}
         </div>
         <div className={style.playable}>
-          {boardArray.map((row, rowId) =>
-            row.map((tile, colId) => (
-              <Tile
-                key={`${rows[rowId]}${cols[colId]}`}
-                id={`${rows[rowId]}${cols[colId]}`}
-                tileState={tile}
-                handleClick={() => handleTurn(rowId, colId)}
-              />
-            ))
+          {boardArray.map((boardRow, rowId) =>
+            boardRow.map((_boardTile, colId) => {
+              // Set valid tiles
+              const exists = validTiles.find((tile) => tile.row === rowId && tile.col === colId);
+              return (
+                <Tile
+                  key={`${rows[rowId]}${cols[colId]}`}
+                  id={`${rows[rowId]}${cols[colId]}`}
+                  tileState={exists ? null : boardArray[rowId][colId]}
+                  isValidMove={!!exists}
+                  handleClick={() => handleTurn(rowId, colId)}
+                />
+              );
+            })
           )}
         </div>
       </div>

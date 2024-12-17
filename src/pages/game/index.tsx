@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
-import { TileState } from "../../types";
+import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
@@ -25,14 +25,6 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
 interface Direction {
   changeRow: number; // x-axis: postitive is up; negative is down
   changeCol: number; // y-axis: positive is right; negative is left
-}
-
-/**
- * Position of a valid tile.
- */
-interface Coordinate {
-  row: number; // 0-7
-  col: number; // 0-7
 }
 
 // All directions to check for (8 total)
@@ -154,19 +146,7 @@ function Game() {
         <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
-        <Board
-          boardArray={boardArr.map((boardRow, rowId) =>
-            boardRow.map((_boardTile, colId) => {
-              // Set valid tiles
-              const exists = validTiles.find((tile) => tile.row === rowId && tile.col === colId);
-              if (exists) {
-                return "valid";
-              }
-              return boardArr[rowId][colId]; // Use old TileState
-            })
-          )}
-          handleTurn={handleTurn}
-        />
+        <Board boardArray={boardArr} validTiles={validTiles} handleTurn={handleTurn} />
         <div className={style.history}>
           <p>{history[history.length - 1]}</p>
           <p>{history[history.length - 2]}</p>
