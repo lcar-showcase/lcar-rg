@@ -21,8 +21,9 @@ function Tile({ id, tileState, isValidMove, handleClick }: TileProps) {
       className={`${style.tile} ${isValidMove && style.validTile}`} // Tile styling + additional styling if valid
       role="button"
       tabIndex={0}
-      aria-label="tile"
-      onClick={isValidMove ? handleClick : () => {}} // Enable click if valid
+      aria-label={`tile-${id}`}
+      // onClick={isValidMove ? handleClick : () => {}} // Enable click if valid
+      onClick={handleClick}
       onKeyDown={() => {}}
     >
       <div className={`${style.disk} ${tileState ? style[tileState] : isValidMove && style.valid}`} />

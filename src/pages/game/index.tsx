@@ -20,6 +20,8 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
 );
 
 // All directions to check for (8 total)
+// changeRow and changeCol behave like the x and y axes respectively.
+// e.g. Going north (up) means: { changeRow: 1, changeCol: 0 }
 const directions = [
   // North
   {
@@ -127,8 +129,11 @@ function Game() {
         return boardArr[rowId][colId]; // Use old TileState
       })
     );
-    setTurn(turn + 1);
-    setBoardArray(newBoard);
+    // Set state only if tile is valid
+    if (validTiles.find((validTile) => validTile.row === row && validTile.col === col)) {
+      setTurn(turn + 1);
+      setBoardArray(newBoard);
+    }
   };
 
   return (
