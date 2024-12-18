@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
@@ -66,72 +66,66 @@ const directions = [
 ];
 
 interface HistoryItem {
-  turn: number;
   colour: NonNullable<TileState>; // If a player made a move, this cannot be null
-  tile: Coordinate | null; // null means player turn was skipped
+  tile: Coordinate | null; // null means either player turn was skipped or game start
+  isSkipped: boolean; // Flag to determine if player's turn was skipped
 }
 
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
-  const [history, setHistory] = useState<HistoryItem[]>([{ turn: 0, colour: "dark", tile: null }]);
+  const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
-  const validTiles: Coordinate[] = [];
-
-  useEffect(() => {
-    if (validTiles.length === 0) {
-      // Player has no valid moves, skip turn
-      // TODO: Handle win condition when both players have no valid moves
-      setTurn(turn + 1);
-      setHistory([...history, { turn, colour: currentPlayer, tile: null }]);
-    }
-  }, [currentPlayer, history, turn, validTiles.length]);
 
   // Determine valid tiles for player
-  boardArr.forEach((row, rowId) =>
-    row.forEach((tile, colId) => {
-      // Find player's tiles
-      if (tile === currentPlayer) {
-        // Check in each direction (8 total) for valid tiles
-        directions.forEach((direction) => {
-          const { changeRow, changeCol } = direction; // Change for one step
-          let checkCol = colId + changeCol; // Start from next tile
-          let checkRow = rowId + changeRow;
-          let seeOpp = false; // Flag to check if at least one opponent disk was seen
-          while (checkRow >= 0 && checkRow < boardArr.length && checkCol >= 0 && checkCol < boardArr.length) {
-            // Keep going in direction of change while within bounds of board; check for opponent
-            if (boardArr[checkRow][checkCol] === (currentPlayer === "light" ? "dark" : "light")) {
-              // Seen opponent; keep going
-              seeOpp = true;
-              checkCol += changeCol;
-              checkRow += changeRow;
-            } else if (boardArr[checkRow][checkCol] === null && seeOpp) {
-              // Empty tile AND all previous tiles occupied by opponent; valid tile
-              validTiles.push({
-                row: checkRow,
-                col: checkCol,
-              });
-              break;
-            } else {
-              // Cannot be valid (opponent player not encountered)
-              break;
+  function computeValidTiles(boardArray: TileState[][], player: TileState) {
+    const validTiles: Coordinate[] = [];
+    boardArray.forEach((row, rowId) =>
+      row.forEach((tile, colId) => {
+        // Find player's tiles
+        if (tile === player) {
+          // Check in each direction (8 total) for valid tiles
+          directions.forEach((direction) => {
+            const { changeRow, changeCol } = direction; // Change for one step
+            let checkCol = colId + changeCol; // Start from next tile
+            let checkRow = rowId + changeRow;
+            let seeOpp = false; // Flag to check if at least one opponent disk was seen
+            while (checkRow >= 0 && checkRow < boardArray.length && checkCol >= 0 && checkCol < boardArray.length) {
+              // Keep going in direction of change while within bounds of board; check for opponent
+              if (boardArray[checkRow][checkCol] === (player === "light" ? "dark" : "light")) {
+                // Seen opponent; keep going
+                seeOpp = true;
+                checkCol += changeCol;
+                checkRow += changeRow;
+              } else if (boardArray[checkRow][checkCol] === null && seeOpp) {
+                // Empty tile AND all previous tiles occupied by opponent; valid tile
+                validTiles.push({
+                  row: checkRow,
+                  col: checkCol,
+                });
+                break;
+              } else {
+                // Cannot be valid (opponent player not encountered)
+                break;
+              }
             }
-          }
-        });
-      }
-    })
-  );
+          });
+        }
+      })
+    );
+    return validTiles;
+  }
 
   function generateHistoryMessage(historyItem: HistoryItem | null) {
     if (historyItem) {
-      const { turn: currentTurn, colour, tile } = historyItem;
-      if (currentTurn === 0) {
+      const { colour, tile, isSkipped } = historyItem;
+      if (tile === null && !isSkipped) {
         return "Game start";
       }
-      if (tile === null) {
-        return `${colour.slice(0, 1).toUpperCase()}${colour.slice(1)}'s turn was skipped`;
+      if (isSkipped) {
+        return `${colour[0].toUpperCase()}${colour.slice(1)}'s turn was skipped`;
       }
-      return null; // TODO: Implement message for valid move in another user story
+      return null; // TODO: Return message for valid move in another user story
     }
     return null; // historyItem is null/undefined during 1st turn
   }
@@ -152,10 +146,19 @@ function Game() {
       })
     );
     // Set state only if tile is valid
-    if (validTiles.find((validTile) => validTile.row === row && validTile.col === col)) {
-      // TODO: Set history here for valid move history in another user story
+    if (
+      computeValidTiles(boardArr, currentPlayer).find((validTile) => validTile.row === row && validTile.col === col)
+    ) {
       setBoardArray(newBoard);
-      setTurn(turn + 1);
+      // TODO: Set history here for valid move history in another user story
+      // Check if next player's turn should be skipped
+      const otherPlayer = currentPlayer === "light" ? "dark" : "light";
+      if (computeValidTiles(newBoard, otherPlayer).length === 0) {
+        setTurn(turn + 2);
+        setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+      } else {
+        setTurn(turn + 1);
+      }
     }
   };
 
@@ -166,7 +169,8 @@ function Game() {
         <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
-        <Board boardArray={boardArr} validTiles={validTiles} handleTurn={handleTurn} />
+        {turn}
+        <Board boardArray={boardArr} validTiles={computeValidTiles(boardArr, currentPlayer)} handleTurn={handleTurn} />
         <div className={style.history}>
           <p>{generateHistoryMessage(history[history.length - 1])}</p>
           <p>{generateHistoryMessage(history[history.length - 2])}</p>
