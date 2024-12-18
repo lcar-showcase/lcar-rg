@@ -65,7 +65,10 @@ const directions = [
   },
 ];
 
-interface Line {
+/**
+ * A line that can be flipped (captured) to a different colour.
+ */
+interface FlipLine {
   start: Coordinate;
   valid: Coordinate;
   direction: {
@@ -86,9 +89,10 @@ function Game() {
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
-  // Determine valid tiles for player
+  // Determine "lines" that can be flipped by player
+  // "Lines" are bound by two disks of the same colour, and all tiles in between occupied by the other colour
   function computeValidLines(boardArray: TileState[][], player: TileState) {
-    const lines: Line[] = [];
+    const lines: FlipLine[] = [];
     boardArray.forEach((row, rowId) =>
       row.forEach((tile, colId) => {
         // Find player's tiles
@@ -107,12 +111,13 @@ function Game() {
                 checkCol += changeCol;
                 checkRow += changeRow;
               } else if (boardArray[checkRow][checkCol] === null && seeOpp) {
-                // Empty tile AND all previous tiles occupied by opponent; valid tile
+                // Empty tile AND all previous tiles occupied by opponent; valid line
                 lines.push({
                   start: {
                     row: rowId,
                     col: colId,
                   },
+                  // Where line ends
                   valid: {
                     row: checkRow,
                     col: checkCol,
@@ -207,10 +212,9 @@ function Game() {
         <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
-        {turn}
         <Board
           boardArray={boardArr}
-          validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)}
+          validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
           handleTurn={handleTurn}
         />
         <div className={style.history}>
