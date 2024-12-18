@@ -7,23 +7,17 @@ import style from "./game.module.css";
 import "../../index.css";
 
 // Initialise 8 by 8 board, with 4 default disks
-// const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
-//   Array.from({ length: 8 }, (_col, colId) => {
-//     if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
-//       return "light";
-//     }
-//     if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
-//       return "dark";
-//     }
-//     return null;
-//   })
-// );
-
-const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
-
-initBoardArray[0][0] = "dark";
-initBoardArray[0][1] = "light";
-initBoardArray[0][3] = "light";
+const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
+  Array.from({ length: 8 }, (_col, colId) => {
+    if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
+      return "light";
+    }
+    if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
+      return "dark";
+    }
+    return null;
+  })
+);
 
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
@@ -72,14 +66,15 @@ const directions = [
 ];
 
 interface HistoryItem {
-  colour: TileState;
-  tile: Coordinate | null;
+  turn: number;
+  colour: NonNullable<TileState>; // If a player made a move, this cannot be null
+  tile: Coordinate | null; // null means player turn was skipped
 }
 
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
-  const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null }]);
+  const [history, setHistory] = useState<HistoryItem[]>([{ turn: 0, colour: "dark", tile: null }]);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
   const validTiles: Coordinate[] = [];
 
@@ -88,9 +83,9 @@ function Game() {
       // Player has no valid moves, skip turn
       // TODO: Handle win condition when both players have no valid moves
       setTurn(turn + 1);
-      // setHistory([...history, `${currentPlayer[0].toUpperCase()}${currentPlayer.slice(1)}'s turn was skipped`]);
+      setHistory([...history, { turn, colour: currentPlayer, tile: null }]);
     }
-  }, [turn, validTiles.length]);
+  }, [currentPlayer, history, turn, validTiles.length]);
 
   // Determine valid tiles for player
   boardArr.forEach((row, rowId) =>
@@ -127,6 +122,20 @@ function Game() {
     })
   );
 
+  function generateHistoryMessage(historyItem: HistoryItem | null) {
+    if (historyItem) {
+      const { turn: currentTurn, colour, tile } = historyItem;
+      if (currentTurn === 0) {
+        return "Game start";
+      }
+      if (tile === null) {
+        return `${colour.slice(0, 1).toUpperCase()}${colour.slice(1)}'s turn was skipped`;
+      }
+      return null; // TODO: Implement message for valid move in another user story
+    }
+    return null; // historyItem is null/undefined during 1st turn
+  }
+
   /**
    * Process a turn after a player click's on a tile.
    * @param row Row of clicked tile.
@@ -144,7 +153,7 @@ function Game() {
     );
     // Set state only if tile is valid
     if (validTiles.find((validTile) => validTile.row === row && validTile.col === col)) {
-      setHistory([...history, { colour: currentPlayer, tile: { row, col } }]);
+      // TODO: Set history here for valid move history in another user story
       setBoardArray(newBoard);
       setTurn(turn + 1);
     }
@@ -158,10 +167,10 @@ function Game() {
       </Link>
       <div className={style.gameInfo}>
         <Board boardArray={boardArr} validTiles={validTiles} handleTurn={handleTurn} />
-        {/* <div className={style.history}>
-          <p>{history[history.length - 1]}</p>
-          <p>{history[history.length - 2]}</p>
-        </div> */}
+        <div className={style.history}>
+          <p>{generateHistoryMessage(history[history.length - 1])}</p>
+          <p>{generateHistoryMessage(history[history.length - 2])}</p>
+        </div>
       </div>
     </>
   );
