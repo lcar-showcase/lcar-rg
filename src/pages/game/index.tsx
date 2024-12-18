@@ -2,47 +2,27 @@ import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
-import { TileState } from "../../types";
+import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
-// Initialise 8 by 8 board, no disks on each tile
-const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
-
-// Initialise default disks
-// TODO: Add configurations in a separate file to test the game after implementing all game rules
-initBoardArray[3][3] = "light";
-initBoardArray[4][4] = "light";
-initBoardArray[3][4] = "dark";
-initBoardArray[4][3] = "dark";
-
-/**
- * Direction change when checking for valid tiles.
- */
-interface Direction {
-  changeRow: number; // x-axis: postitive is up; negative is down
-  changeCol: number; // y-axis: positive is right; negative is left
-}
-
-/**
- * Position of a tile
- */
-interface TilePos {
-  row: number;
-  col: number;
-}
-
-/**
- * A line that can be flipped, bound by the start and valid tile
- */
-interface Line {
-  start: TilePos;
-  valid: TilePos;
-  direction: Direction;
-}
+// Initialise 8 by 8 board, with 4 default disks
+const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
+  Array.from({ length: 8 }, (_col, colId) => {
+    if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
+      return "light";
+    }
+    if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
+      return "dark";
+    }
+    return null;
+  })
+);
 
 // All directions to check for (8 total)
-const directions: Direction[] = [
+// changeRow and changeCol behave like the x and y axes respectively.
+// e.g. Going north (up) means: { changeRow: 1, changeCol: 0 }
+const directions = [
   // North
   {
     changeRow: 1,
@@ -85,64 +65,88 @@ const directions: Direction[] = [
   },
 ];
 
+interface Line {
+  start: Coordinate;
+  valid: Coordinate;
+  direction: {
+    changeRow: number;
+    changeCol: number;
+  };
+}
+
+interface HistoryItem {
+  colour: NonNullable<TileState>; // If a player made a move, this cannot be null
+  tile: Coordinate | null; // null means either player turn was skipped or game start
+  isSkipped: boolean; // Flag to determine if player's turn was skipped
+}
+
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
-  const [history, setHistory] = useState(["Game start"]);
-  const player = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
-  const opponent = turn % 2 === 0 ? "light" : "dark";
+  const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
+  const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
-  // Determine lines that can be flipped by player
-  const lines: Line[] = [];
-  boardArr.forEach((row, rowId) =>
-    row.forEach((tile, colId) => {
-      // Find player's tiles
-      if (tile === player) {
-        // Check in each direction (8 total) for valid tiles
-        directions.forEach((direction) => {
-          const { changeRow, changeCol } = direction; // Change for one step
-          let checkCol = colId + changeCol; // Start from next tile
-          let checkRow = rowId + changeRow;
-          let seeOpp = false; // Flag to check if at least one opponent disk was seen
-          while (checkRow >= 0 && checkRow < boardArr.length && checkCol >= 0 && checkCol < boardArr.length) {
-            // Keep going in direction of change while within bounds of board
-            if (boardArr[checkRow][checkCol] === opponent) {
-              // Seen opponent; keep going
-              seeOpp = true;
-              checkCol += changeCol;
-              checkRow += changeRow;
-            } else if (boardArr[checkRow][checkCol] === null && seeOpp) {
-              // Empty tile AND all previous tiles occupied by opponent; this line can be flipped
-              lines.push({
-                start: {
-                  row: rowId,
-                  col: colId,
-                },
-                valid: {
-                  row: checkRow,
-                  col: checkCol,
-                },
-                direction: {
-                  changeRow,
-                  changeCol,
-                },
-              });
-              break;
-            } else {
-              // Cannot be valid (opponent player not encountered)
-              break;
+  // Determine valid tiles for player
+  function computeValidLines(boardArray: TileState[][], player: TileState) {
+    const lines: Line[] = [];
+    boardArray.forEach((row, rowId) =>
+      row.forEach((tile, colId) => {
+        // Find player's tiles
+        if (tile === player) {
+          // Check in each direction (8 total) for valid tiles
+          directions.forEach((direction) => {
+            const { changeRow, changeCol } = direction; // Change for one step
+            let checkCol = colId + changeCol; // Start from next tile
+            let checkRow = rowId + changeRow;
+            let seeOpp = false; // Flag to check if at least one opponent disk was seen
+            while (checkRow >= 0 && checkRow < boardArray.length && checkCol >= 0 && checkCol < boardArray.length) {
+              // Keep going in direction of change while within bounds of board; check for opponent
+              if (boardArray[checkRow][checkCol] === (player === "light" ? "dark" : "light")) {
+                // Seen opponent; keep going
+                seeOpp = true;
+                checkCol += changeCol;
+                checkRow += changeRow;
+              } else if (boardArray[checkRow][checkCol] === null && seeOpp) {
+                // Empty tile AND all previous tiles occupied by opponent; valid tile
+                lines.push({
+                  start: {
+                    row: rowId,
+                    col: colId,
+                  },
+                  valid: {
+                    row: checkRow,
+                    col: checkCol,
+                  },
+                  direction: {
+                    changeRow,
+                    changeCol,
+                  },
+                });
+                break;
+              } else {
+                // Cannot be valid (opponent player not encountered)
+                break;
+              }
             }
-          }
-        });
-      }
-    })
-  );
+          });
+        }
+      })
+    );
+    return lines;
+  }
 
-  if (lines.length === 0) {
-    // Player has no valid moves, skip turn
-    // TODO: Handle win condition when both players have no valid moves
-    setTurn(turn + 1);
-    setHistory([...history, `${player[0].toUpperCase()}${player.slice(1)}'s turn was skipped`]);
+  function generateHistoryMessage(historyItem: HistoryItem | null) {
+    if (historyItem) {
+      const { colour, tile, isSkipped } = historyItem;
+      if (tile === null && !isSkipped) {
+        return "Game start";
+      }
+      if (isSkipped) {
+        return `${colour[0].toUpperCase()}${colour.slice(1)}'s turn was skipped`;
+      }
+      return null; // TODO: Return message for valid move in another user story
+    }
+    return null; // historyItem is null/undefined during 1st turn
   }
 
   /**
@@ -152,10 +156,12 @@ function Game() {
    */
   const handleTurn = (row: number, col: number) => {
     // Get lines with matching valid tile position
-    const matchLines = lines.filter((line) => line.valid.row === row && line.valid.col === col);
+    const matchLines = computeValidLines(boardArr, currentPlayer).filter(
+      (line) => line.valid.row === row && line.valid.col === col
+    );
 
     // Determine tiles that should be flipped (start, valid and everything in between)
-    const flippedTiles: TilePos[] = [];
+    const flippedTiles: Coordinate[] = [];
     matchLines.forEach((line) => {
       const { start, valid, direction } = line;
       let flipRow = start.row;
@@ -174,17 +180,25 @@ function Game() {
     const newBoard = boardArr.map((boardRow, rowId) =>
       boardRow.map((_boardTile, colId) => {
         if (flippedTiles.find((flip) => flip.row === rowId && flip.col === colId)) {
-          return player; // Flip colour
+          return currentPlayer; // Flip colour
         }
         return boardArr[rowId][colId]; // Unchanged
       })
     );
-
-    setTurn(turn + 1);
-    setBoardArray(newBoard);
+    // Set state only if tile is valid
+    if (computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)) {
+      setBoardArray(newBoard);
+      // TODO: Set history here for valid move history in another user story
+      // Check if next player's turn should be skipped
+      const otherPlayer = currentPlayer === "light" ? "dark" : "light";
+      if (computeValidLines(newBoard, otherPlayer).length === 0) {
+        setTurn(turn + 2);
+        setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+      } else {
+        setTurn(turn + 1);
+      }
+    }
   };
-
-  const nextHistory = [...history]; // Copy history state for .reverse()
 
   return (
     <>
@@ -193,26 +207,15 @@ function Game() {
         <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
+        {turn}
         <Board
-          boardArray={boardArr.map((boardRow, rowId) =>
-            boardRow.map((_boardTile, colId) => {
-              // Set valid tiles
-              const exists = lines.find((tile) => tile.valid.row === rowId && tile.valid.col === colId);
-              if (exists) {
-                return "valid";
-              }
-              return boardArr[rowId][colId]; // Use old TileState
-            })
-          )}
+          boardArray={boardArr}
+          validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)}
           handleTurn={handleTurn}
         />
         <div className={style.history}>
-          {nextHistory
-            .slice(-2) // Lastest 2 turns that were skipped
-            .reverse() // Most recent first
-            .map((move) => (
-              <p key={`${history.indexOf(move)}`}>{move}</p>
-            ))}
+          <p>{generateHistoryMessage(history[history.length - 1])}</p>
+          <p>{generateHistoryMessage(history[history.length - 2])}</p>
         </div>
       </div>
     </>
