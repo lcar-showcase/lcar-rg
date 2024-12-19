@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
+import PlayerInfo from "../../components/playerInfo";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -154,7 +155,7 @@ function Game() {
     return null; // historyItem is null/undefined during 1st turn
   }
 
-  function getPlayerScore(playerColour: TileState) {
+  const getPlayerScore = (playerColour: TileState) => {
     let score = 0;
     boardArr.forEach((row) =>
       row.forEach((tile) => {
@@ -164,7 +165,7 @@ function Game() {
       })
     );
     return score;
-  }
+  };
 
   /**
    * Process a turn after a player click's on a tile.
@@ -225,14 +226,8 @@ function Game() {
       </Link>
       <div className={style.gameInfo}>
         <div className={style.scoreboardContainer}>
-          <div className={style.playerInfo}>
-            <div className={`${style.scoreDiskBackground} ${style.dark}`}>{getPlayerScore("dark")}</div>
-            <span>Player</span>
-          </div>
-          <div className={style.playerInfo}>
-            <span>Computer</span>
-            <div className={`${style.scoreDiskBackground} ${style.light}`}>{getPlayerScore("light")}</div>
-          </div>
+          <PlayerInfo playerColour="dark" getPlayerScore={getPlayerScore} />
+          <PlayerInfo playerColour="light" getPlayerScore={getPlayerScore} />
         </div>
         <Board
           boardArray={boardArr}
