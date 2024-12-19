@@ -226,8 +226,8 @@ function Game() {
       </Link>
       <div className={style.gameInfo}>
         <div className={style.scoreboardContainer}>
-          <PlayerInfo playerColour="dark" getPlayerScore={getPlayerScore} />
-          <PlayerInfo playerColour="light" getPlayerScore={getPlayerScore} />
+          <PlayerInfo currPlayer={currentPlayer} playerColour="dark" getPlayerScore={getPlayerScore} />
+          <PlayerInfo currPlayer={currentPlayer} playerColour="light" getPlayerScore={getPlayerScore} />
         </div>
         <Board
           boardArray={boardArr}

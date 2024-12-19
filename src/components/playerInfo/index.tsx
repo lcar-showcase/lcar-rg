@@ -2,6 +2,7 @@ import { TileState } from "../../types";
 import style from "./playerInfo.module.css";
 
 interface PlayerInfoProps {
+  currPlayer: TileState; // Player for current turn
   playerColour: TileState; // Which player information to store (human player or computer)
   getPlayerScore(playerColour: TileState): number;
 }
@@ -9,7 +10,8 @@ interface PlayerInfoProps {
 /**
  * Represents information for one player (turn indicator, score and player name) on the scoreboard.
  */
-function PlayerInfo({ playerColour, getPlayerScore }: PlayerInfoProps) {
+function PlayerInfo({ currPlayer, playerColour, getPlayerScore }: PlayerInfoProps) {
+  const isCurrPlayerTurn = currPlayer === playerColour;
   const isDark = playerColour === "dark";
   return (
     <div className={`${style.playerInfo} ${isDark && style.playerScore}`}>
@@ -19,6 +21,12 @@ function PlayerInfo({ playerColour, getPlayerScore }: PlayerInfoProps) {
       <div className={`${style.scoreDiskBackground} ${isDark ? style.dark : style.light}`}>
         {getPlayerScore(playerColour)}
       </div>
+      {/* Turn indicator */}
+      <img
+        className={`${style.turnIndicator} ${isDark && style.playerTurnIndicator} ${isCurrPlayerTurn && style.activeTurnIndicator}`}
+        src={isCurrPlayerTurn ? "/images/turn_indicator_active.png" : "/images/turn_indicator_inactive.png"}
+        alt={isCurrPlayerTurn ? "Turn indidcator active" : "Turn indicator inactive"}
+      />
     </div>
   );
 }
