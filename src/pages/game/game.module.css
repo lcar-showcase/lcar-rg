@@ -16,6 +16,13 @@
   margin-right: 10px;
 }
 
+.scoreboardContainer {
+  display: flex;
+  color: #f1e3d7;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .gameInfo {
   display: flex;
   flex-direction: column;

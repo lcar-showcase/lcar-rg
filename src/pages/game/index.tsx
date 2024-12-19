@@ -154,6 +154,18 @@ function Game() {
     return null; // historyItem is null/undefined during 1st turn
   }
 
+  function getPlayerScore(playerColour: TileState) {
+    let score = 0;
+    boardArr.forEach((row) =>
+      row.forEach((tile) => {
+        if (tile === playerColour) {
+          score += 1;
+        }
+      })
+    );
+    return score;
+  }
+
   /**
    * Process a turn after a player click's on a tile.
    * @param row Row of clicked tile.
@@ -212,6 +224,10 @@ function Game() {
         <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
+        <div className={style.scoreboardContainer}>
+          <div>{getPlayerScore("dark")}</div>
+          <div>{getPlayerScore("light")}</div>
+        </div>
         <Board
           boardArray={boardArr}
           validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
