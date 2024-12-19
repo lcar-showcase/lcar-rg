@@ -141,6 +141,30 @@ function Game() {
     return lines;
   }
 
+  const getPlayerScore = (playerColour: TileState) => {
+    let score = 0;
+    boardArr.forEach((row) =>
+      row.forEach((tile) => {
+        if (tile === playerColour) {
+          score += 1;
+        }
+      })
+    );
+    return score;
+  };
+
+  // Check for winner - no more valid moves
+  let winner;
+  if (computeValidLines(boardArr, currentPlayer).length === 0) {
+    if (getPlayerScore("dark") === getPlayerScore("light")) {
+      winner = "Tie";
+    } else if (getPlayerScore("dark") > getPlayerScore("light")) {
+      winner = "Player won";
+    } else {
+      winner = "Computer won";
+    }
+  }
+
   function generateHistoryMessage(historyItem: HistoryItem | null) {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
@@ -154,18 +178,6 @@ function Game() {
     }
     return null; // historyItem is null/undefined during 1st turn
   }
-
-  const getPlayerScore = (playerColour: TileState) => {
-    let score = 0;
-    boardArr.forEach((row) =>
-      row.forEach((tile) => {
-        if (tile === playerColour) {
-          score += 1;
-        }
-      })
-    );
-    return score;
-  };
 
   /**
    * Process a turn after a player click's on a tile.
@@ -207,11 +219,14 @@ function Game() {
     if (computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)) {
       setBoardArray(newBoard);
       // TODO: Set history here for valid move history in another user story
-      // Check if next player's turn should be skipped
       const otherPlayer = currentPlayer === "light" ? "dark" : "light";
       if (computeValidLines(newBoard, otherPlayer).length === 0) {
+        // Next player has no valid moves on new board; skip
         setTurn(turn + 2);
-        setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+        if (computeValidLines(newBoard, currentPlayer).length !== 0) {
+          // Do not add to history if game over
+          setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+        }
       } else {
         setTurn(turn + 1);
       }
@@ -235,8 +250,14 @@ function Game() {
           handleTurn={handleTurn}
         />
         <div className={style.history}>
-          <p>{generateHistoryMessage(history[history.length - 1])}</p>
-          <p>{generateHistoryMessage(history[history.length - 2])}</p>
+          {winner ? (
+            <p>{winner}</p>
+          ) : (
+            <>
+              <p>{generateHistoryMessage(history[history.length - 1])}</p>
+              <p>{generateHistoryMessage(history[history.length - 2])}</p>
+            </>
+          )}
         </div>
       </div>
     </>
