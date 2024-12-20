@@ -44,3 +44,27 @@
 .history p:nth-child(2) {
   color: #7a7787;
 }
+
+.darken {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgb(0, 0, 0, 0.4);
+}
+
+.popUp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  height: 250px;
+  background: #323138;
+  border-radius: 10px;
+  box-shadow: 0 0 5px #1b1b1f;
+}

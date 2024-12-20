@@ -235,31 +235,35 @@ function Game() {
 
   return (
     <>
-      <Link to="/" className={style.backToMainMenuContainer}>
-        <img src="/images/back_arrow.png" alt="back" />
-        <Logo isNav />
-      </Link>
-      <div className={style.gameInfo}>
-        <div className={style.scoreboardContainer}>
-          <PlayerInfo currPlayer={currentPlayer} playerColour="dark" getPlayerScore={getPlayerScore} />
-          <PlayerInfo currPlayer={currentPlayer} playerColour="light" getPlayerScore={getPlayerScore} />
-        </div>
-        <Board
-          boardArray={boardArr}
-          validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
-          handleTurn={handleTurn}
-        />
-        <div className={style.history}>
-          {winner ? (
-            <p>{winner}</p>
-          ) : (
-            <>
-              <p>{generateHistoryMessage(history[history.length - 1])}</p>
-              <p>{generateHistoryMessage(history[history.length - 2])}</p>
-            </>
-          )}
+      <div>
+        <Link to="/" className={style.backToMainMenuContainer}>
+          <img src="/images/back_arrow.png" alt="back" />
+          <Logo isNav />
+        </Link>
+        <div className={style.gameInfo}>
+          <div className={style.scoreboardContainer}>
+            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" getPlayerScore={getPlayerScore} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="light" getPlayerScore={getPlayerScore} />
+          </div>
+          <Board
+            boardArray={boardArr}
+            validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
+            handleTurn={handleTurn}
+          />
+          <div className={style.history}>
+            <p>{generateHistoryMessage(history[history.length - 1])}</p>
+            <p>{generateHistoryMessage(history[history.length - 2])}</p>
+          </div>
         </div>
       </div>
+      {winner && (
+        <div className={style.darken}>
+          <div className={style.popUp}>
+            <h2>Player wins!</h2>
+            <div />
+          </div>
+        </div>
+      )}
     </>
   );
 }
