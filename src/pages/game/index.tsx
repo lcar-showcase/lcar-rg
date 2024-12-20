@@ -173,17 +173,18 @@ function Game() {
       }
     }
 
-    let winnerMessage: TileState = null;
-    const playerScore = getPlayerScore("dark", board);
-    const computerScore = getPlayerScore("light", board);
+    let winner: TileState = null;
     if (isGameOver) {
+      // Check who won
+      const playerScore = getPlayerScore("dark", board);
+      const computerScore = getPlayerScore("light", board);
       if (playerScore > computerScore) {
-        winnerMessage = "dark";
+        winner = "dark";
       } else if (playerScore < computerScore) {
-        winnerMessage = "light";
+        winner = "light";
       }
     }
-    return winnerMessage;
+    return winner;
   }
 
   function generateHistoryMessage(historyItem: HistoryItem | null) {
@@ -252,22 +253,12 @@ function Game() {
         setTurn(turn + 1);
       }
     }
-    // * Clicking on the board after game ends shows the pop-up
+    // Show pop up once a winner is detected
     if (checkWinner(newBoard)) {
       setWinnerColour(checkWinner(newBoard));
       setShowPopUp(true);
     }
   };
-
-  function generateWinnerMessage(winner: TileState) {
-    if (winner) {
-      if (winner === "dark") {
-        return "Player wins!";
-      }
-      return "Computer wins!";
-    }
-    return "Tie!";
-  }
 
   return (
     <>
@@ -294,7 +285,7 @@ function Game() {
       </div>
       {showPopUp && (
         <PopUp
-          title={generateWinnerMessage(winnerColour)}
+          title={winnerColour ? (winnerColour === "dark" ? "Player wins!" : "Computer wins!") : "Tie!"}
           buttonText="Return to Game"
           handleButtonClick={() => setShowPopUp(false)}
         />

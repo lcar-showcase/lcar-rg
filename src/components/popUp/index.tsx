@@ -6,12 +6,12 @@ interface PopUpProps {
   handleButtonClick(): void;
 }
 
-function PopUp({ title, buttonText, handleButtonClick: handleClick }: PopUpProps) {
+function PopUp({ title, buttonText, handleButtonClick }: PopUpProps) {
   return (
     <div className={style.darken}>
       <div className={style.popUp}>
         <h2>{title}</h2>
-        <button type="button" onClick={handleClick} className={style.popUpButton}>
+        <button type="button" onClick={handleButtonClick} className={style.popUpButton}>
           {buttonText}
         </button>
       </div>
