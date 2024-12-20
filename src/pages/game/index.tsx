@@ -304,7 +304,6 @@ function Game() {
             >
               Return to Game
             </button>
-            <div />
           </div>
         </div>
       )}
