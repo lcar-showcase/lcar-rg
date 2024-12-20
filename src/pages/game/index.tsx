@@ -20,6 +20,11 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
   })
 );
 
+// const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
+
+// initBoardArray[0][0] = "dark";
+// initBoardArray[0][1] = "light";
+
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
 // e.g. Going north (up) means: { changeRow: 1, changeCol: 0 }
@@ -88,6 +93,8 @@ function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [winnerColour, setWinnerColour] = useState<TileState>(null);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -141,9 +148,9 @@ function Game() {
     return lines;
   }
 
-  const getPlayerScore = (playerColour: TileState) => {
+  const getPlayerScore = (playerColour: TileState, board: TileState[][] = boardArr) => {
     let score = 0;
-    boardArr.forEach((row) =>
+    board.forEach((row) =>
       row.forEach((tile) => {
         if (tile === playerColour) {
           score += 1;
@@ -154,15 +161,28 @@ function Game() {
   };
 
   // Check for winner - no more valid moves
-  let winner;
-  if (computeValidLines(boardArr, currentPlayer).length === 0) {
-    if (getPlayerScore("dark") === getPlayerScore("light")) {
-      winner = "Tie";
-    } else if (getPlayerScore("dark") > getPlayerScore("light")) {
-      winner = "Player won";
-    } else {
-      winner = "Computer won";
+  function checkWinner(board: TileState[][]) {
+    let isGameOver = false;
+    const otherPlayer = currentPlayer === "light" ? "dark" : "light";
+    // Check next turn (other player)
+    if (computeValidLines(board, otherPlayer).length === 0) {
+      // Check next next turn (current player)
+      if (computeValidLines(board, currentPlayer).length === 0) {
+        isGameOver = true;
+      }
     }
+
+    let winnerMessage: TileState = null;
+    const playerScore = getPlayerScore("dark", board);
+    const computerScore = getPlayerScore("light", board);
+    if (isGameOver) {
+      if (playerScore > computerScore) {
+        winnerMessage = "dark";
+      } else if (playerScore < computerScore) {
+        winnerMessage = "light";
+      }
+    }
+    return winnerMessage;
   }
 
   function generateHistoryMessage(historyItem: HistoryItem | null) {
@@ -223,15 +243,30 @@ function Game() {
       if (computeValidLines(newBoard, otherPlayer).length === 0) {
         // Next player has no valid moves on new board; skip
         setTurn(turn + 2);
-        if (computeValidLines(newBoard, currentPlayer).length !== 0) {
-          // Do not add to history if game over
+        if (!checkWinner(newBoard)) {
+          // Do not add last "skip turn" to history if game over
           setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
         }
       } else {
         setTurn(turn + 1);
       }
     }
+    // * Clicking on the board after game ends shows the pop-up
+    if (checkWinner(newBoard)) {
+      setWinnerColour(checkWinner(newBoard));
+      setShowPopUp(true);
+    }
   };
+
+  function generateWinnerMessage(winner: TileState) {
+    if (winner) {
+      if (winner === "dark") {
+        return "Player wins!";
+      }
+      return "Computer wins!";
+    }
+    return "Tie!";
+  }
 
   return (
     <>
@@ -256,10 +291,19 @@ function Game() {
           </div>
         </div>
       </div>
-      {winner && (
+      {showPopUp && (
         <div className={style.darken}>
           <div className={style.popUp}>
-            <h2>Player wins!</h2>
+            <h2>{generateWinnerMessage(winnerColour)}</h2>
+            <button
+              type="button"
+              onClick={() => {
+                setShowPopUp(false);
+              }}
+              className={style.popUpButton}
+            >
+              Return to Game
+            </button>
             <div />
           </div>
         </div>
