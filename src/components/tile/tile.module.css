@@ -20,3 +20,15 @@
   background: #f1e3d7;
   border: 2px solid #d2bba7;
 }
+
+.valid {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.validTile:hover {
+  background: #456b35;
+  cursor: pointer;
+}
