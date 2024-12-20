@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
+import PopUp from "../../components/popUp";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -292,20 +293,11 @@ function Game() {
         </div>
       </div>
       {showPopUp && (
-        <div className={style.darken}>
-          <div className={style.popUp}>
-            <h2>{generateWinnerMessage(winnerColour)}</h2>
-            <button
-              type="button"
-              onClick={() => {
-                setShowPopUp(false);
-              }}
-              className={style.popUpButton}
-            >
-              Return to Game
-            </button>
-          </div>
-        </div>
+        <PopUp
+          title={generateWinnerMessage(winnerColour)}
+          buttonText="Return to Game"
+          handleButtonClick={() => setShowPopUp(false)}
+        />
       )}
     </>
   );
