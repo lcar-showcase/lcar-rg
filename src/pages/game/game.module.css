@@ -48,7 +48,7 @@
 @keyframes historyFirstItem {
   from {
     font-size: 1.25rem;
-    translate: 0 -15px;
+    translate: 0 -20px;
   }
 }
 
@@ -62,7 +62,8 @@
 @keyframes historySecondItem {
   from {
     color: #f1e3d7;
-    font-size: 1.15rem;
-    translate: 0 -25px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    translate: 0 -30px;
   }
 }
