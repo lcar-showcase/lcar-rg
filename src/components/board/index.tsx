@@ -2,13 +2,11 @@ import { Coordinate, TileState } from "../../types";
 import Tile from "../tile";
 import style from "./board.module.css";
 
-// All possible rows and columns on the board
-const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
-const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
-
 interface BoardProps {
   boardArray: TileState[][];
   validTiles: Coordinate[];
+  rows: string[];
+  cols: string[];
   handleTurn(row: number, col: number): void;
 }
 
@@ -16,7 +14,7 @@ interface BoardProps {
  * The game board.
  * @returns Board component.
  */
-function Board({ boardArray, validTiles, handleTurn }: BoardProps) {
+function Board({ boardArray, validTiles, rows, cols, handleTurn }: BoardProps) {
   return (
     <section className={style.container}>
       <div className={style.layout}>

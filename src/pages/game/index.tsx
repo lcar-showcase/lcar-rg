@@ -8,6 +8,10 @@ import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
+// All possible rows and columns on the board
+const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
 // Initialise 8 by 8 board, with 4 default disks
 const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
   Array.from({ length: 8 }, (_col, colId) => {
@@ -20,11 +24,6 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
     return null;
   })
 );
-
-// const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
-
-// initBoardArray[0][0] = "dark";
-// initBoardArray[0][1] = "light";
 
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
@@ -190,13 +189,16 @@ function Game() {
   function generateHistoryMessage(historyItem: HistoryItem | null) {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
+      const playerName = colour === "dark" ? "Player" : "Computer";
+      if (tile) {
+        return `${playerName} moved to ${cols[tile.col]}${tile.row + 1}`;
+      }
+      if (isSkipped) {
+        return `${playerName}'s turn was skipped`;
+      }
       if (tile === null && !isSkipped) {
         return "Game start";
       }
-      if (isSkipped) {
-        return `${colour[0].toUpperCase()}${colour.slice(1)}'s turn was skipped`;
-      }
-      return null; // TODO: Return message for valid move in another user story
     }
     return null; // historyItem is null/undefined during 1st turn
   }
@@ -240,7 +242,7 @@ function Game() {
     // Set state only if tile is valid
     if (computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)) {
       setBoardArray(newBoard);
-      // TODO: Set history here for valid move history in another user story
+      setHistory([...history, { colour: currentPlayer, tile: { row, col }, isSkipped: false }]);
       const otherPlayer = currentPlayer === "light" ? "dark" : "light";
       if (computeValidLines(newBoard, otherPlayer).length === 0) {
         // Next player has no valid moves on new board; skip
@@ -275,6 +277,8 @@ function Game() {
           <Board
             boardArray={boardArr}
             validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
+            rows={rows}
+            cols={cols}
             handleTurn={handleTurn}
           />
           <div className={style.history}>
