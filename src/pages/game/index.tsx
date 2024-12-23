@@ -21,11 +21,6 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
   })
 );
 
-// const initBoardArray: TileState[][] = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
-
-// initBoardArray[0][0] = "dark";
-// initBoardArray[0][1] = "light";
-
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
 // e.g. Going north (up) means: { changeRow: 1, changeCol: 0 }
