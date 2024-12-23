@@ -155,7 +155,7 @@ function Game() {
     return null; // historyItem is null/undefined during 1st turn
   }
 
-  const getPlayerScore = (playerColour: TileState) => {
+  function getPlayerScore(playerColour: TileState) {
     let score = 0;
     boardArr.forEach((row) =>
       row.forEach((tile) => {
@@ -165,7 +165,7 @@ function Game() {
       })
     );
     return score;
-  };
+  }
 
   /**
    * Process a turn after a player click's on a tile.
@@ -226,8 +226,8 @@ function Game() {
       </Link>
       <div className={style.gameInfo}>
         <div className={style.scoreboardContainer}>
-          <PlayerInfo playerColour="dark" getPlayerScore={getPlayerScore} />
-          <PlayerInfo playerColour="light" getPlayerScore={getPlayerScore} />
+          <PlayerInfo playerColour="dark" score={getPlayerScore("dark")} />
+          <PlayerInfo playerColour="light" score={getPlayerScore("light")} />
         </div>
         <Board
           boardArray={boardArr}
