@@ -1,4 +1,5 @@
 import style from "./popUp.module.css";
+import "../../index.css";
 
 interface PopUpProps {
   title: string;
@@ -11,7 +12,7 @@ function PopUp({ title, buttonText, handleButtonClick }: PopUpProps) {
     <div className={style.darken}>
       <div className={style.popUp}>
         <h2>{title}</h2>
-        <button type="button" onClick={handleButtonClick} className={style.popUpButton}>
+        <button type="button" onClick={handleButtonClick} className="btn">
           {buttonText}
         </button>
       </div>

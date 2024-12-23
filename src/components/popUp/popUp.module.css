@@ -22,15 +22,3 @@
   border-radius: 10px;
   box-shadow: 0 0 5px #1b1b1f;
 }
-
-.popUpButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 175px;
-  height: 45px;
-  background: #22aaff;
-  border-radius: 10px;
-  color: white;
-  font-weight: bold;
-}
