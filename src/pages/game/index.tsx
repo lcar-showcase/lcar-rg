@@ -97,7 +97,7 @@ function Game() {
 
   // Determine "lines" that can be flipped by player
   // "Lines" are bound by two disks of the same colour, and all tiles in between occupied by the other colour
-  function computeValidLines(boardArray: TileState[][], player: TileState) {
+  const computeValidLines = (boardArray: TileState[][], player: TileState) => {
     const lines: FlipLine[] = [];
     boardArray.forEach((row, rowId) =>
       row.forEach((tile, colId) => {
@@ -144,7 +144,7 @@ function Game() {
       })
     );
     return lines;
-  }
+  };
 
   const getPlayerScore = (playerColour: TileState, board: TileState[][] = boardArr) => {
     let score = 0;
@@ -159,7 +159,7 @@ function Game() {
   };
 
   // Check for winner - no more valid moves for both players
-  function checkWinner(board: TileState[][]) {
+  const checkWinner = (board: TileState[][]) => {
     let isGameOver = false;
     const otherPlayer = currentPlayer === "light" ? "dark" : "light";
     // Check next turn (other player)
@@ -184,9 +184,9 @@ function Game() {
       }
     }
     return winner;
-  }
+  };
 
-  function generateHistoryMessage(historyItem: HistoryItem | null) {
+  const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
       if (tile === null && !isSkipped) {
@@ -198,7 +198,7 @@ function Game() {
       return null; // TODO: Return message for valid move in another user story
     }
     return null; // historyItem is null/undefined during 1st turn
-  }
+  };
 
   /**
    * Process a turn after a player click's on a tile.
@@ -268,8 +268,8 @@ function Game() {
         </Link>
         <div className={style.gameInfo}>
           <div className={style.scoreboardContainer}>
-            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" getPlayerScore={getPlayerScore} />
-            <PlayerInfo currPlayer={currentPlayer} playerColour="light" getPlayerScore={getPlayerScore} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark")} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light")} />
           </div>
           <Board
             boardArray={boardArr}
