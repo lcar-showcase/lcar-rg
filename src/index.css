@@ -52,6 +52,11 @@ body {
   cursor: pointer;
 }
 
+.btn:focus,
+.btn:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 .btn:hover {
   color: white;
   background: #1395e6;
