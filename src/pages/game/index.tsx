@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
+import PlayerInfo from "../../components/playerInfo";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -65,6 +66,18 @@ const directions = [
   },
 ];
 
+/**
+ * A line that can be flipped (captured) to a different colour.
+ */
+interface FlipLine {
+  start: Coordinate;
+  valid: Coordinate;
+  direction: {
+    changeRow: number;
+    changeCol: number;
+  };
+}
+
 interface HistoryItem {
   colour: NonNullable<TileState>; // If a player made a move, this cannot be null
   tile: Coordinate | null; // null means either player turn was skipped or game start
@@ -77,9 +90,10 @@ function Game() {
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
-  // Determine valid tiles for player
-  function computeValidTiles(boardArray: TileState[][], player: TileState) {
-    const validTiles: Coordinate[] = [];
+  // Determine "lines" that can be flipped by player
+  // "Lines" are bound by two disks of the same colour, and all tiles in between occupied by the other colour
+  const computeValidLines = (boardArray: TileState[][], player: TileState) => {
+    const lines: FlipLine[] = [];
     boardArray.forEach((row, rowId) =>
       row.forEach((tile, colId) => {
         // Find player's tiles
@@ -98,10 +112,21 @@ function Game() {
                 checkCol += changeCol;
                 checkRow += changeRow;
               } else if (boardArray[checkRow][checkCol] === null && seeOpp) {
-                // Empty tile AND all previous tiles occupied by opponent; valid tile
-                validTiles.push({
-                  row: checkRow,
-                  col: checkCol,
+                // Empty tile AND all previous tiles occupied by opponent; valid line
+                lines.push({
+                  start: {
+                    row: rowId,
+                    col: colId,
+                  },
+                  // Where line ends
+                  valid: {
+                    row: checkRow,
+                    col: checkCol,
+                  },
+                  direction: {
+                    changeRow,
+                    changeCol,
+                  },
                 });
                 break;
               } else {
@@ -113,10 +138,10 @@ function Game() {
         }
       })
     );
-    return validTiles;
-  }
+    return lines;
+  };
 
-  function generateHistoryMessage(historyItem: HistoryItem | null) {
+  const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
       if (tile === null && !isSkipped) {
@@ -128,7 +153,19 @@ function Game() {
       return null; // TODO: Return message for valid move in another user story
     }
     return null; // historyItem is null/undefined during 1st turn
-  }
+  };
+
+  const getPlayerScore = (playerColour: TileState) => {
+    let score = 0;
+    boardArr.forEach((row) =>
+      row.forEach((tile) => {
+        if (tile === playerColour) {
+          score += 1;
+        }
+      })
+    );
+    return score;
+  };
 
   /**
    * Process a turn after a player click's on a tile.
@@ -136,24 +173,43 @@ function Game() {
    * @param col Col of clicked tile.
    */
   const handleTurn = (row: number, col: number) => {
-    // Set tile to player's colour
+    // Get lines with matching valid tile position
+    const matchLines = computeValidLines(boardArr, currentPlayer).filter(
+      (line) => line.valid.row === row && line.valid.col === col
+    );
+
+    // Determine tiles that should be flipped (start, valid and everything in between)
+    const flippedTiles: Coordinate[] = [];
+    matchLines.forEach((line) => {
+      const { start, valid, direction } = line;
+      let flipRow = start.row;
+      let flipCol = start.col;
+      while (flipRow !== valid.row + direction.changeRow || flipCol !== valid.col + direction.changeCol) {
+        flippedTiles.push({
+          row: flipRow,
+          col: flipCol,
+        });
+        flipRow += direction.changeRow;
+        flipCol += direction.changeCol;
+      }
+    });
+
+    // Create new board state
     const newBoard = boardArr.map((boardRow, rowId) =>
-      boardRow.map((_tile, colId) => {
-        if (row === rowId && col === colId) {
-          return currentPlayer;
+      boardRow.map((_boardTile, colId) => {
+        if (flippedTiles.find((flip) => flip.row === rowId && flip.col === colId)) {
+          return currentPlayer; // Flip colour
         }
-        return boardArr[rowId][colId]; // Use old TileState
+        return boardArr[rowId][colId]; // Unchanged
       })
     );
     // Set state only if tile is valid
-    if (
-      computeValidTiles(boardArr, currentPlayer).find((validTile) => validTile.row === row && validTile.col === col)
-    ) {
+    if (computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)) {
       setBoardArray(newBoard);
       // TODO: Set history here for valid move history in another user story
       // Check if next player's turn should be skipped
       const otherPlayer = currentPlayer === "light" ? "dark" : "light";
-      if (computeValidTiles(newBoard, otherPlayer).length === 0) {
+      if (computeValidLines(newBoard, otherPlayer).length === 0) {
         setTurn(turn + 2);
         setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
       } else {
@@ -169,8 +225,15 @@ function Game() {
         <Logo isNav />
       </Link>
       <div className={style.gameInfo}>
-        {turn}
-        <Board boardArray={boardArr} validTiles={computeValidTiles(boardArr, currentPlayer)} handleTurn={handleTurn} />
+        <div className={style.scoreboardContainer}>
+          <PlayerInfo playerColour="dark" score={getPlayerScore("dark")} />
+          <PlayerInfo playerColour="light" score={getPlayerScore("light")} />
+        </div>
+        <Board
+          boardArray={boardArr}
+          validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
+          handleTurn={handleTurn}
+        />
         <div className={style.history}>
           <p>{generateHistoryMessage(history[history.length - 1])}</p>
           <p>{generateHistoryMessage(history[history.length - 2])}</p>
