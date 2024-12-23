@@ -92,7 +92,7 @@ function Game() {
 
   // Determine "lines" that can be flipped by player
   // "Lines" are bound by two disks of the same colour, and all tiles in between occupied by the other colour
-  function computeValidLines(boardArray: TileState[][], player: TileState) {
+  const computeValidLines = (boardArray: TileState[][], player: TileState) => {
     const lines: FlipLine[] = [];
     boardArray.forEach((row, rowId) =>
       row.forEach((tile, colId) => {
@@ -139,9 +139,9 @@ function Game() {
       })
     );
     return lines;
-  }
+  };
 
-  function generateHistoryMessage(historyItem: HistoryItem | null) {
+  const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
       if (tile === null && !isSkipped) {
@@ -153,9 +153,9 @@ function Game() {
       return null; // TODO: Return message for valid move in another user story
     }
     return null; // historyItem is null/undefined during 1st turn
-  }
+  };
 
-  function getPlayerScore(playerColour: TileState) {
+  const getPlayerScore = (playerColour: TileState) => {
     let score = 0;
     boardArr.forEach((row) =>
       row.forEach((tile) => {
@@ -165,7 +165,7 @@ function Game() {
       })
     );
     return score;
-  }
+  };
 
   /**
    * Process a turn after a player click's on a tile.
