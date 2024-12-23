@@ -5,11 +5,6 @@
   font-size: 1rem;
 }
 
-/* Player name */
-.playerInfo > span {
-  margin: 0 12px;
-}
-
 .playerScore {
   flex-direction: row-reverse; /* Elements in flexbox for player and computer scores are mirrored */
 }
@@ -20,6 +15,7 @@
   line-height: 30px; /* Vertically centre text */
   font-weight: bold;
   border-radius: 50%;
+  margin: 0 12px;
 }
 
 .dark {
@@ -32,4 +28,17 @@
   color: #090909;
   background: #f1e3d7;
   outline: 2px solid #d2bba7;
+}
+
+.turnIndicator {
+  width: 12px;
+  aspect-ratio: 20 / 24; /* Original image size in pixels */
+}
+
+.playerTurnIndicator {
+  transform: scaleX(-1); /* Flip pointer image for player */
+}
+
+.activeTurnIndicator {
+  filter: drop-shadow(0 0 3px #ffa600);
 }
