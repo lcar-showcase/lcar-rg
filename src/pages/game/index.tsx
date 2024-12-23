@@ -282,8 +282,8 @@ function Game() {
             handleTurn={handleTurn}
           />
           <div className={style.history}>
-            <p>{generateHistoryMessage(history[history.length - 1])}</p>
-            <p>{generateHistoryMessage(history[history.length - 2])}</p>
+            <p key={history.length - 1}>{generateHistoryMessage(history[history.length - 1])}</p>
+            <p key={history.length - 2}>{generateHistoryMessage(history[history.length - 2])}</p>
           </div>
         </div>
       </div>
