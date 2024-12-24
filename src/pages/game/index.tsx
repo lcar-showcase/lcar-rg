@@ -89,17 +89,19 @@ interface HistoryItem {
   isSkipped: boolean; // Flag to determine if player's turn was skipped
 }
 
+type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
+
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const [showPopUp, setShowPopUp] = useState(false);
-  const [winnerColour, setWinnerColour] = useState<TileState>(null);
+  const [winnerColour, setWinnerColour] = useState<Winner>(null);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
   // "Lines" are bound by two disks of the same colour, and all tiles in between occupied by the other colour
-  function computeValidLines(boardArray: TileState[][], player: TileState) {
+  const computeValidLines = (boardArray: TileState[][], player: TileState) => {
     const lines: FlipLine[] = [];
     boardArray.forEach((row, rowId) =>
       row.forEach((tile, colId) => {
@@ -146,7 +148,7 @@ function Game() {
       })
     );
     return lines;
-  }
+  };
 
   const getPlayerScore = (playerColour: TileState, board: TileState[][] = boardArr) => {
     let score = 0;
@@ -160,8 +162,8 @@ function Game() {
     return score;
   };
 
-  // Check for winner - no more valid moves
-  function checkWinner(board: TileState[][]) {
+  // Check for winner - no more valid moves for both players
+  const checkWinner = (board: TileState[][]) => {
     let isGameOver = false;
     const otherPlayer = currentPlayer === "light" ? "dark" : "light";
     // Check next turn (other player)
@@ -172,7 +174,7 @@ function Game() {
       }
     }
 
-    let winner: TileState = null;
+    let winner: Winner = null;
     if (isGameOver) {
       // Check who won
       const playerScore = getPlayerScore("dark", board);
@@ -181,12 +183,14 @@ function Game() {
         winner = "dark";
       } else if (playerScore < computerScore) {
         winner = "light";
+      } else {
+        winner = "tie";
       }
     }
     return winner;
-  }
+  };
 
-  function generateHistoryMessage(historyItem: HistoryItem | null) {
+  const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
       const playerName = colour === "dark" ? "Player" : "Computer";
@@ -201,7 +205,7 @@ function Game() {
       }
     }
     return null; // historyItem is null/undefined during 1st turn
-  }
+  };
 
   /**
    * Process a turn after a player click's on a tile.
@@ -271,8 +275,8 @@ function Game() {
         </Link>
         <div className={style.gameInfo}>
           <div className={style.scoreboardContainer}>
-            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" getPlayerScore={getPlayerScore} />
-            <PlayerInfo currPlayer={currentPlayer} playerColour="light" getPlayerScore={getPlayerScore} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark")} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light")} />
           </div>
           <Board
             boardArray={boardArr}
@@ -289,7 +293,7 @@ function Game() {
       </div>
       {showPopUp && (
         <PopUp
-          title={winnerColour ? (winnerColour === "dark" ? "Player wins!" : "Computer wins!") : "Tie!"}
+          title={winnerColour === "tie" ? "Tie!" : winnerColour === "dark" ? "Player wins!" : "Computer wins!"}
           buttonText="Return to Game"
           handleButtonClick={() => setShowPopUp(false)}
         />

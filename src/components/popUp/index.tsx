@@ -11,7 +11,7 @@ function PopUp({ title, buttonText, handleButtonClick }: PopUpProps) {
     <div className={style.darken}>
       <div className={style.popUp}>
         <h2>{title}</h2>
-        <button type="button" onClick={handleButtonClick} className={style.popUpButton}>
+        <button type="button" onClick={handleButtonClick} className="btn">
           {buttonText}
         </button>
       </div>
