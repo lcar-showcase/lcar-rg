@@ -53,7 +53,7 @@
   gap: 2px;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1400px) {
   .container {
     width: 600px;
     height: 600px;

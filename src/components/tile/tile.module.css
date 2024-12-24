@@ -32,3 +32,10 @@
   background: #456b35;
   cursor: pointer;
 }
+
+@media (min-width: 1400px) {
+  .dark,
+  .light {
+    border-width: 3px;
+  }
+}
