@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
+import PopUp from "../../components/popUp";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -84,10 +85,14 @@ interface HistoryItem {
   isSkipped: boolean; // Flag to determine if player's turn was skipped
 }
 
+type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
+
 function Game() {
   const [boardArr, setBoardArray] = useState(initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [winnerColour, setWinnerColour] = useState<Winner>(null);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -141,6 +146,46 @@ function Game() {
     return lines;
   };
 
+  const getPlayerScore = (playerColour: TileState, board: TileState[][] = boardArr) => {
+    let score = 0;
+    board.forEach((row) =>
+      row.forEach((tile) => {
+        if (tile === playerColour) {
+          score += 1;
+        }
+      })
+    );
+    return score;
+  };
+
+  // Check for winner - no more valid moves for both players
+  const checkWinner = (board: TileState[][]) => {
+    let isGameOver = false;
+    const otherPlayer = currentPlayer === "light" ? "dark" : "light";
+    // Check next turn (other player)
+    if (computeValidLines(board, otherPlayer).length === 0) {
+      // Check next next turn (current player)
+      if (computeValidLines(board, currentPlayer).length === 0) {
+        isGameOver = true;
+      }
+    }
+
+    let winner: Winner = null;
+    if (isGameOver) {
+      // Check who won
+      const playerScore = getPlayerScore("dark", board);
+      const computerScore = getPlayerScore("light", board);
+      if (playerScore > computerScore) {
+        winner = "dark";
+      } else if (playerScore < computerScore) {
+        winner = "light";
+      } else {
+        winner = "tie";
+      }
+    }
+    return winner;
+  };
+
   const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
       const { colour, tile, isSkipped } = historyItem;
@@ -153,18 +198,6 @@ function Game() {
       return null; // TODO: Return message for valid move in another user story
     }
     return null; // historyItem is null/undefined during 1st turn
-  };
-
-  const getPlayerScore = (playerColour: TileState) => {
-    let score = 0;
-    boardArr.forEach((row) =>
-      row.forEach((tile) => {
-        if (tile === playerColour) {
-          score += 1;
-        }
-      })
-    );
-    return score;
   };
 
   /**
@@ -207,38 +240,55 @@ function Game() {
     if (computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)) {
       setBoardArray(newBoard);
       // TODO: Set history here for valid move history in another user story
-      // Check if next player's turn should be skipped
       const otherPlayer = currentPlayer === "light" ? "dark" : "light";
       if (computeValidLines(newBoard, otherPlayer).length === 0) {
+        // Next player has no valid moves on new board; skip
         setTurn(turn + 2);
-        setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+        if (!checkWinner(newBoard)) {
+          // Do not add last "skip turn" to history if game over
+          setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+        }
       } else {
         setTurn(turn + 1);
       }
+    }
+    // Show pop up once a winner is detected
+    if (checkWinner(newBoard)) {
+      setWinnerColour(checkWinner(newBoard));
+      setShowPopUp(true);
     }
   };
 
   return (
     <>
-      <Link to="/" className={style.backToMainMenuContainer}>
-        <img src="/images/back_arrow.png" alt="back" />
-        <Logo isNav />
-      </Link>
-      <div className={style.gameInfo}>
-        <div className={style.scoreboardContainer}>
-          <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark")} />
-          <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light")} />
-        </div>
-        <Board
-          boardArray={boardArr}
-          validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
-          handleTurn={handleTurn}
-        />
-        <div className={style.history}>
-          <p>{generateHistoryMessage(history[history.length - 1])}</p>
-          <p>{generateHistoryMessage(history[history.length - 2])}</p>
+      <div>
+        <Link to="/" className={style.backToMainMenuContainer}>
+          <img src="/images/back_arrow.png" alt="back" />
+          <Logo isNav />
+        </Link>
+        <div className={style.gameInfo}>
+          <div className={style.scoreboardContainer}>
+            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark")} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light")} />
+          </div>
+          <Board
+            boardArray={boardArr}
+            validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
+            handleTurn={handleTurn}
+          />
+          <div className={style.history}>
+            <p>{generateHistoryMessage(history[history.length - 1])}</p>
+            <p>{generateHistoryMessage(history[history.length - 2])}</p>
+          </div>
         </div>
       </div>
+      {showPopUp && (
+        <PopUp
+          title={winnerColour === "tie" ? "Tie!" : winnerColour === "dark" ? "Player wins!" : "Computer wins!"}
+          buttonText="Return to Game"
+          handleButtonClick={() => setShowPopUp(false)}
+        />
+      )}
     </>
   );
 }

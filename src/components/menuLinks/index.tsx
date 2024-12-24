@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import style from "./menuLink.module.css";
+import "../../index.css";
 
 /**
  * A menu option shown on the MainMenu page.
@@ -9,7 +10,7 @@ import style from "./menuLink.module.css";
  */
 function MenuLink({ text, path }: { text: string; path: string }) {
   return (
-    <Link to={path} className={style.asBtn}>
+    <Link to={path} className={`btn ${style.linkAsBtn}`}>
       {text}
     </Link>
   );
