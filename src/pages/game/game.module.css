@@ -32,8 +32,8 @@
 .history {
   display: flex;
   flex-direction: column;
-  min-height: 60px;
-  gap: 8px;
+  min-height: 50px;
+  justify-content: space-between;
   color: #f1e3d7;
 }
 
@@ -43,8 +43,8 @@
   animation-name: historyFirstItem;
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
-  --animation-initial-font-size: 1.25rem; /* Make initial font bigger when it first renders */
-  --animation-initial-offset: -20px /* Where text should "come in" from */;
+  --animation-initial-font-size: 0.5rem; /* Font is smaller when animation starts */
+  --animation-initial-offset: -20px; /* Text comes in from the top */
 }
 
 @keyframes historyFirstItem {
@@ -78,13 +78,13 @@
   }
 
   .history {
-    min-height: 90px;
+    min-height: 65px;
     gap: 10px;
   }
 
   .history p:nth-child(1) {
     font-size: 1.5rem;
-    --animation-initial-font-size: 1.6rem;
+    --animation-initial-font-size: 0.6rem;
     --animation-initial-offset: -30px;
   }
 
