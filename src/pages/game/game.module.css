@@ -67,3 +67,9 @@
     translate: 0 -30px;
   }
 }
+
+@media (min-width: 1400px) {
+  .gameInfo {
+    gap: 30px;
+  }
+}

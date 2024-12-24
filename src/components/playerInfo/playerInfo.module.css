@@ -42,3 +42,26 @@
 .activeTurnIndicator {
   filter: drop-shadow(0 0 3px #ffa600);
 }
+
+@media (min-width: 1400px) {
+  .playerInfo {
+    font-size: 1.5rem;
+  }
+
+  .turnIndicator {
+    width: 20px;
+  }
+
+  .scoreDiskBackground {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 1.6rem;
+    margin: 0 20px;
+  }
+
+  .dark,
+  .light {
+    border-width: 3px;
+  }
+}
