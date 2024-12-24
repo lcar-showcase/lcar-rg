@@ -43,12 +43,14 @@
   animation-name: historyFirstItem;
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
+  --animation-initial-font-size: 1.25rem; /* Make initial font bigger when it first renders */
+  --animation-initial-offset: -20px /* Where text should "come in" from */;
 }
 
 @keyframes historyFirstItem {
   from {
-    font-size: 1.25rem;
-    translate: 0 -20px;
+    font-size: var(--animation-initial-font-size);
+    translate: 0 var(--animation-initial-offset);
   }
 }
 
@@ -57,19 +59,38 @@
   animation-name: historySecondItem;
   animation-duration: 0.3s;
   animation-timing-function: ease-in-out;
+  --animation-initial-font-size: 1.2rem;
+  --animation-initial-offset: -30px;
 }
 
 @keyframes historySecondItem {
   from {
     color: #f1e3d7;
     font-weight: bold;
-    font-size: 1.2rem;
-    translate: 0 -30px;
+    font-size: var(--animation-initial-font-size);
+    translate: 0 var(--animation-initial-offset);
   }
 }
 
 @media (min-width: 1400px) {
   .gameInfo {
     gap: 30px;
+  }
+
+  .history {
+    min-height: 90px;
+    gap: 10px;
+  }
+
+  .history p:nth-child(1) {
+    font-size: 1.5rem;
+    --animation-initial-font-size: 1.6rem;
+    --animation-initial-offset: -30px;
+  }
+
+  .history p:nth-child(2) {
+    font-size: 1.2rem;
+    --animation-initial-font-size: 1.5rem;
+    --animation-initial-offset: -40px;
   }
 }
