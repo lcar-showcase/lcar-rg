@@ -61,3 +61,11 @@ body {
   color: white;
   background: #1395e6;
 }
+
+@media (min-width: 1400px) {
+  .btn {
+    font-size: 1.5rem;
+    min-width: 250px;
+    padding: 20px;
+  }
+}
