@@ -1,5 +1,4 @@
 import style from "./popUp.module.css";
-import "../../index.css";
 
 interface PopUpProps {
   title: string;
