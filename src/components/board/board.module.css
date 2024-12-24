@@ -51,3 +51,27 @@
   grid-template-rows: subgrid;
   gap: 2px;
 }
+
+@media (min-width: 800px) {
+  .container {
+    width: 600px;
+    height: 600px;
+  }
+
+  .layout {
+    width: 570px;
+    height: 570px;
+    display: grid;
+    grid-template-columns: 25px repeat(8, 1fr) 25px;
+    grid-template-rows: 25px repeat(8, 1fr) 25px;
+    background: #2c4123;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+
+  .playable {
+    gap: 3px; /* Make gaps between tiles more obvious */
+  }
+}
