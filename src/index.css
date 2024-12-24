@@ -20,6 +20,10 @@
   height: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 body {
   margin: 0;
   min-width: 320px;
