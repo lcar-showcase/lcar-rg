@@ -217,8 +217,9 @@ function Game() {
    * Process a turn after a player click's on a tile.
    * @param row Row of clicked tile.
    * @param col Col of clicked tile.
+   * @param isComputer Check if computer made the move, prevents player click from updating state during computer turn
    */
-  const handleTurn = (row: number, col: number) => {
+  const handleTurn = (row: number, col: number, isComputer = false) => {
     // Get lines with matching valid tile position
     const matchLines = computeValidLines(boardArr, currentPlayer).filter(
       (line) => line.valid.row === row && line.valid.col === col
@@ -249,8 +250,12 @@ function Game() {
         return boardArr[rowId][colId]; // Unchanged
       })
     );
-    // Set state only if tile is valid
-    if (computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)) {
+    // Set state only if
+    // (Dark turn OR Computer made a move during light turn) AND Tile is valid
+    if (
+      (currentPlayer === "dark" || (isComputer && currentPlayer === "light")) &&
+      computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)
+    ) {
       setBoardArray(newBoard);
       setHistory([...history, { colour: currentPlayer, tile: { row, col }, isSkipped: false }]);
       const otherPlayer = currentPlayer === "light" ? "dark" : "light";
@@ -273,13 +278,12 @@ function Game() {
   };
 
   useEffect(() => {
-    // TODO: Disable board during computer's turn
     if (currentPlayer === "light" && !winnerColour) {
       // Delay computer move
       const timeoutId = setTimeout(() => {
         const { row, col } = getComputerMove(computeValidLines(boardArr, currentPlayer));
-        handleTurn(row, col);
-      }, 1000);
+        handleTurn(row, col, true);
+      }, 3000);
       return () => clearInterval(timeoutId);
     }
   });
