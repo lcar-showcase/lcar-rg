@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
@@ -97,6 +97,7 @@ function Game() {
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [winnerColour, setWinnerColour] = useState<Winner>(null);
+  // const [comp, setComp] = useState(false);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -207,6 +208,11 @@ function Game() {
     return null; // historyItem is null/undefined during 1st turn
   };
 
+  const getComputerMove = (validTiles: FlipLine[]): Coordinate => {
+    const movePos = validTiles[Math.floor(Math.random() * validTiles.length)]; // Random move
+    return movePos.valid; // Coordinate of valid tile
+  };
+
   /**
    * Process a turn after a player click's on a tile.
    * @param row Row of clicked tile.
@@ -265,6 +271,18 @@ function Game() {
       setShowPopUp(true);
     }
   };
+
+  useEffect(() => {
+    // TODO: Disable board during computer's turn
+    if (currentPlayer === "light" && !winnerColour) {
+      // Delay computer move
+      const timeoutId = setTimeout(() => {
+        const { row, col } = getComputerMove(computeValidLines(boardArr, currentPlayer));
+        handleTurn(row, col);
+      }, 1000);
+      return () => clearInterval(timeoutId);
+    }
+  });
 
   return (
     <>
