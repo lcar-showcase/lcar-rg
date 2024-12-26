@@ -97,7 +97,6 @@ function Game() {
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [winnerColour, setWinnerColour] = useState<Winner>(null);
-  // const [comp, setComp] = useState(false);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
