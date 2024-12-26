@@ -277,13 +277,13 @@ function Game() {
     }
   };
 
+  // Render board after player turn, delay, then re-render board with computer's move
   useEffect(() => {
     if (currentPlayer === "light" && !winnerColour) {
-      // Delay computer move
       const timeoutId = setTimeout(() => {
         const { row, col } = getComputerMove(computeValidLines(boardArr, currentPlayer));
         handleTurn(row, col, true);
-      }, 3000);
+      }, 1000);
       return () => clearInterval(timeoutId);
     }
   });
@@ -305,6 +305,7 @@ function Game() {
             validTiles={computeValidLines(boardArr, currentPlayer).map((line) => line.valid)} // Pass in valid tiles only
             rows={rows}
             cols={cols}
+            currentPlayer={currentPlayer}
             handleTurn={handleTurn}
           />
           <div className={style.history}>
