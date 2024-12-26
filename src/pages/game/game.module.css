@@ -79,7 +79,6 @@
 
   .history {
     min-height: 65px;
-    gap: 10px;
   }
 
   .history p:nth-child(1) {
