@@ -22,7 +22,6 @@ function Tile({ id, tileState, isValidMove, handleClick }: TileProps) {
       role="button"
       tabIndex={0}
       aria-label={`tile-${id}`}
-      // onClick={isValidMove ? handleClick : () => {}} // Enable click if valid
       onClick={handleClick}
       onKeyDown={() => {}}
     >
