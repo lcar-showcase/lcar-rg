@@ -1,5 +1,7 @@
 type TileState = "dark" | "light" | null;
 
+type PopUpType = "save" | "load" | "confirm" | "win";
+
 /**
  * Position of a tile.
  */
@@ -8,4 +10,4 @@ interface Coordinate {
   col: number; // 0-7
 }
 
-export type { TileState, Coordinate };
+export type { TileState, PopUpType, Coordinate };

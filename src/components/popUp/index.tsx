@@ -1,19 +1,22 @@
+import { PopUpType } from "../../types";
 import style from "./popUp.module.css";
 
 interface PopUpProps {
+  popUpType: PopUpType; // Determines pop-up content and button
   title: string;
-  buttonText: string;
   handleButtonClick(): void;
 }
 
-function PopUp({ title, buttonText, handleButtonClick }: PopUpProps) {
+function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
   return (
     <div className={style.darken}>
       <div className={style.popUp}>
         <h2>{title}</h2>
-        <button type="button" onClick={handleButtonClick} className="btn">
-          {buttonText}
-        </button>
+        {popUpType === "win" && (
+          <button type="button" onClick={handleButtonClick} className="btn">
+            Return to Game
+          </button>
+        )}
       </div>
     </div>
   );

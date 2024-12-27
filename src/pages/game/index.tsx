@@ -316,8 +316,8 @@ function Game() {
       </div>
       {showPopUp && (
         <PopUp
+          popUpType="win"
           title={winnerColour === "tie" ? "Tie!" : winnerColour === "dark" ? "Player wins!" : "Computer wins!"}
-          buttonText="Return to Game"
           handleButtonClick={() => setShowPopUp(false)}
         />
       )}
