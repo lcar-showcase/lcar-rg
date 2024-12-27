@@ -22,8 +22,8 @@
 }
 
 .valid {
-  width: 40%;
-  height: 40%;
+  width: 30%;
+  height: 30%;
   border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.3);
 }
@@ -31,4 +31,12 @@
 .validTile:hover {
   background: #456b35;
   cursor: pointer;
+}
+
+@media (min-width: 1400px) {
+  .dark,
+  .light,
+  .valid {
+    border-width: 3px;
+  }
 }

@@ -18,16 +18,16 @@ function Board({ boardArray, validTiles, rows, cols, handleTurn }: BoardProps) {
   return (
     <section className={style.container}>
       <div className={style.layout}>
-        <div className={style.rowLabels}>
+        <div className={style.rowIdContainer}>
           {rows.map((row) => (
-            <div key={row} className={style.label}>
+            <div key={row} className={style.rowColId}>
               {row}
             </div>
           ))}
         </div>
-        <div className={style.colLabels}>
+        <div className={style.colIdContainer}>
           {cols.map((col) => (
-            <div key={col} className={style.label}>
+            <div key={col} className={style.rowColId}>
               {col}
             </div>
           ))}

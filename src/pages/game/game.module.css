@@ -32,8 +32,8 @@
 .history {
   display: flex;
   flex-direction: column;
-  min-height: 60px;
-  gap: 8px;
+  min-height: 50px;
+  justify-content: space-between;
   color: #f1e3d7;
 }
 
@@ -43,12 +43,14 @@
   animation-name: historyFirstItem;
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
+  --animation-initial-font-size: 0.5rem; /* Font is smaller when animation starts */
+  --animation-initial-offset: -20px; /* Text comes in from the top */
 }
 
 @keyframes historyFirstItem {
   from {
-    font-size: 1.25rem;
-    translate: 0 -20px;
+    font-size: var(--animation-initial-font-size);
+    translate: 0 var(--animation-initial-offset);
   }
 }
 
@@ -57,13 +59,37 @@
   animation-name: historySecondItem;
   animation-duration: 0.3s;
   animation-timing-function: ease-in-out;
+  --animation-initial-font-size: 1.2rem;
+  --animation-initial-offset: -30px;
 }
 
 @keyframes historySecondItem {
   from {
     color: #f1e3d7;
     font-weight: bold;
+    font-size: var(--animation-initial-font-size);
+    translate: 0 var(--animation-initial-offset);
+  }
+}
+
+@media (min-width: 1400px) {
+  .gameInfo {
+    gap: 30px;
+  }
+
+  .history {
+    min-height: 65px;
+  }
+
+  .history p:nth-child(1) {
+    font-size: 1.5rem;
+    --animation-initial-font-size: 0.6rem;
+    --animation-initial-offset: -30px;
+  }
+
+  .history p:nth-child(2) {
     font-size: 1.2rem;
-    translate: 0 -30px;
+    --animation-initial-font-size: 1.5rem;
+    --animation-initial-offset: -40px;
   }
 }
