@@ -39,8 +39,31 @@
 
 .history p:nth-child(1) {
   font-size: 1.2rem;
+  font-weight: bold;
+  animation-name: historyFirstItem;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+}
+
+@keyframes historyFirstItem {
+  from {
+    font-size: 1.25rem;
+    translate: 0 -20px;
+  }
 }
 
 .history p:nth-child(2) {
   color: #7a7787;
+  animation-name: historySecondItem;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes historySecondItem {
+  from {
+    color: #f1e3d7;
+    font-weight: bold;
+    font-size: 1.2rem;
+    translate: 0 -30px;
+  }
 }
