@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { PopUpType } from "../../types";
 import style from "./popUp.module.css";
 
@@ -16,6 +17,20 @@ function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
           <button type="button" onClick={handleButtonClick} className="btn">
             Return to Game
           </button>
+        )}
+        {popUpType === "save" && (
+          <div className={style.buttonsContainer}>
+            <div role="button" aria-label="Save Game" tabIndex={0} onClick={handleButtonClick} onKeyDown={() => {}}>
+              <Link to="/" className="btn">
+                Back
+              </Link>
+            </div>
+            <div role="button" aria-label="Save Game" tabIndex={0} onClick={handleButtonClick} onKeyDown={() => {}}>
+              <Link to="/game" className="btn">
+                Continue
+              </Link>
+            </div>
+          </div>
         )}
       </div>
     </div>

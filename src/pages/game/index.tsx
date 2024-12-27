@@ -314,6 +314,7 @@ function Game() {
           </div>
         </div>
       </div>
+      {/* Pop-ups */}
       {showPopUp && (
         <PopUp
           popUpType="win"
