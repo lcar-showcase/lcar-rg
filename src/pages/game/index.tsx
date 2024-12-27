@@ -279,6 +279,7 @@ function Game() {
   // Render board after player turn, delay, then re-render board with computer's move
   useEffect(() => {
     if (currentPlayer === "light" && !winnerColour) {
+      // TODO: Additionally, maybe highlight tile to show where computer placed its tile (as future enhancement)
       const timeoutId = setTimeout(() => {
         const { row, col } = getComputerMove(computeValidLines(boardArr, currentPlayer));
         handleTurn(row, col, true);
