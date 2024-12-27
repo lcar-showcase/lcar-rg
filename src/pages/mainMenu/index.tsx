@@ -4,20 +4,27 @@ import PopUp from "../../components/popUp";
 import style from "./mainMenu.module.css";
 
 function MainMenu() {
-  const [showSaveGame, setShowSaveGame] = useState(false);
+  const [showSaveGame, setShowSaveGame] = useState(false); // Show pop up for New Game (asks for save name)
+  const [showContinueGame, setShowContinueGame] = useState(false); // Show pop up for Continue Game (asks for save name)
 
   return (
     <>
       <Logo isNav={false} />
-      <div className={style.linksContainer}>
+      <div className={style.mainMenuButtonsContainer}>
+        {/* TODO: Manually typing /game in URL bypasses this pop-up */}
         <button type="button" onClick={() => setShowSaveGame(true)} className="btn">
           New Game
         </button>
-        {/* TODO: Add "Continue Game menuLink" */}
+        <button type="button" onClick={() => setShowContinueGame(true)} className="btn">
+          Continue Game
+        </button>
       </div>
       {/* PopUps */}
       {showSaveGame && (
         <PopUp popUpType="save" title="Enter a save name" handleButtonClick={() => setShowSaveGame(false)} />
+      )}
+      {showContinueGame && (
+        <PopUp popUpType="load" title="Load game" handleButtonClick={() => setShowContinueGame(false)} />
       )}
     </>
   );

@@ -18,7 +18,8 @@ function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
             Return to Game
           </button>
         )}
-        {popUpType === "save" && (
+        {(popUpType === "save" || popUpType === "load") && (
+          // TODO: Load game will have to query DB then load a saved game
           <div className={style.buttonsContainer}>
             <LinkButton label="Back" path="/" handleButtonClick={handleButtonClick} />
             <LinkButton label="Continue" path="/game" handleButtonClick={handleButtonClick} />
