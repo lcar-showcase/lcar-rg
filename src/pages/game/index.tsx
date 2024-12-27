@@ -208,8 +208,8 @@ function Game() {
   };
 
   const getComputerMove = (validTiles: FlipLine[]): Coordinate => {
-    const movePos = validTiles[Math.floor(Math.random() * validTiles.length)]; // Random move
-    return movePos.valid; // Coordinate of valid tile
+    const moveCoord = validTiles[Math.floor(Math.random() * validTiles.length)]; // Random move
+    return moveCoord.valid; // Coordinate of valid tile
   };
 
   /**
