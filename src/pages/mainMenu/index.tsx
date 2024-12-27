@@ -11,7 +11,7 @@ function MainMenu() {
     <>
       <Logo isNav={false} />
       <div className={style.mainMenuButtonsContainer}>
-        {/* TODO: Manually typing /game in URL bypasses this pop-up */}
+        {/* TODO: Manually typing /game in URL bypasses this pop-up, check Refresh also */}
         <button type="button" onClick={() => setShowSaveGame(true)} className="btn">
           New Game
         </button>
