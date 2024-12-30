@@ -207,11 +207,6 @@ function Game() {
     return null; // historyItem is null/undefined during 1st turn
   };
 
-  const getComputerMove = (validTiles: FlipLine[]): Coordinate => {
-    const moveCoord = validTiles[Math.floor(Math.random() * validTiles.length)]; // Random move
-    return moveCoord.valid; // Coordinate of valid tile
-  };
-
   /**
    * Process a turn after a player click's on a tile.
    * @param row Row of clicked tile.
@@ -281,8 +276,12 @@ function Game() {
     if (currentPlayer === "light" && !winnerColour) {
       // TODO: Additionally, maybe highlight tile to show where computer placed its tile (as future enhancement)
       const timeoutId = setTimeout(() => {
-        const { row, col } = getComputerMove(computeValidLines(boardArr, currentPlayer));
-        handleTurn(row, col, true);
+        const compValidTiles = computeValidLines(boardArr, currentPlayer);
+        const moveId = Math.floor(Math.random() * compValidTiles.length); // Random move
+        const {
+          valid: { row, col },
+        } = compValidTiles[moveId];
+        handleTurn(row, col, true); // isComputer = true; to indicate computer made the move
       }, 1000);
       return () => clearInterval(timeoutId);
     }

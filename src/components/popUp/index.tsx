@@ -20,10 +20,13 @@ function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
         )}
         {(popUpType === "save" || popUpType === "load") && (
           // TODO: Load game will have to query DB then load a saved game
-          <div className={style.buttonsContainer}>
-            <LinkButton label="Back" path="/" isSecondary handleButtonClick={handleButtonClick} />
-            <LinkButton label="Continue" path="/game" isSecondary={false} handleButtonClick={handleButtonClick} />
-          </div>
+          <>
+            {/* TODO: Add input field here */}
+            <div className={style.buttonsContainer}>
+              <LinkButton label="Back" path="/" isSecondary handleButtonClick={handleButtonClick} />
+              <LinkButton label="Continue" path="/game" isSecondary={false} handleButtonClick={handleButtonClick} />
+            </div>
+          </>
         )}
       </div>
     </div>
