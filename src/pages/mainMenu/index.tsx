@@ -20,11 +20,9 @@ function MainMenu() {
         </button>
       </div>
       {/* PopUps */}
-      {showSaveGame && (
-        <PopUp popUpType="save" title="Enter a save name" handleButtonClick={() => setShowSaveGame(false)} />
-      )}
+      {showSaveGame && <PopUp popUpType="save" title="New Game" handleButtonClick={() => setShowSaveGame(false)} />}
       {showContinueGame && (
-        <PopUp popUpType="load" title="Load game" handleButtonClick={() => setShowContinueGame(false)} />
+        <PopUp popUpType="continue" title="Continue Game" handleButtonClick={() => setShowContinueGame(false)} />
       )}
     </>
   );

@@ -18,10 +18,41 @@ function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
             Return to Game
           </button>
         )}
-        {(popUpType === "save" || popUpType === "load") && (
+        {popUpType === "save" && (
           // TODO: Load game will have to query DB then load a saved game
           <>
-            {/* TODO: Add input field here */}
+            <div className={style.nameInput}>
+              <label htmlFor="gameid">
+                Enter a save name
+                <input
+                  type="text"
+                  id="gameid"
+                  name="gameid"
+                  placeholder="Letters and numbers only; maximum 20 characters"
+                />
+              </label>
+              <p>Save name taken.</p>
+            </div>
+            <div className={style.buttonsContainer}>
+              <LinkButton label="Back" path="/" isSecondary handleButtonClick={handleButtonClick} />
+              <LinkButton label="Continue" path="/game" isSecondary={false} handleButtonClick={handleButtonClick} />
+            </div>
+          </>
+        )}
+        {popUpType === "continue" && (
+          <>
+            <div className={style.nameInput}>
+              <label htmlFor="gameid">
+                Enter an existing save name
+                <input
+                  type="text"
+                  id="gameid"
+                  name="gameid"
+                  placeholder="Letters and numbers only; maximum 20 characters"
+                />
+              </label>
+              <p>Save name not found.</p>
+            </div>
             <div className={style.buttonsContainer}>
               <LinkButton label="Back" path="/" isSecondary handleButtonClick={handleButtonClick} />
               <LinkButton label="Continue" path="/game" isSecondary={false} handleButtonClick={handleButtonClick} />
