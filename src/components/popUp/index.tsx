@@ -1,5 +1,5 @@
 import { PopUpType } from "../../types";
-import NavigationButton from "../linkButton";
+import NavigationButton from "../navigationButton";
 import TextInput from "../textInput";
 import style from "./popUp.module.css";
 
