@@ -1,20 +1,22 @@
-import { Link } from "react-router";
-
-interface LinkButtonProps {
+interface NavigationButtonProps {
   label: string;
-  path: string;
   isSecondary: boolean; // Primary or secondary button has different CSS
   handleButtonClick(): void;
 }
 
-function LinkButton({ label, path, isSecondary, handleButtonClick }: LinkButtonProps) {
+function NavigationButton({ label, isSecondary, handleButtonClick }: NavigationButtonProps) {
   return (
-    <div role="button" aria-label={label} tabIndex={0} onClick={handleButtonClick} onKeyDown={() => {}}>
-      <Link to={path} className={`btn ${isSecondary && "secondaryBtn"}`}>
-        {label}
-      </Link>
+    <div
+      role="button"
+      aria-label={label}
+      tabIndex={0}
+      onClick={handleButtonClick}
+      onKeyDown={() => {}}
+      className={`btn ${isSecondary && "secondaryBtn"}`}
+    >
+      {label}
     </div>
   );
 }
 
-export default LinkButton;
+export default NavigationButton;
