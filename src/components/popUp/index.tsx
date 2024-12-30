@@ -1,5 +1,6 @@
 import { PopUpType } from "../../types";
 import LinkButton from "../linkButton";
+import TextInput from "../textInput";
 import style from "./popUp.module.css";
 
 interface PopUpProps {
@@ -21,18 +22,13 @@ function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
         {popUpType === "save" && (
           // TODO: Load game will have to query DB then load a saved game
           <>
-            <div className={style.nameInput}>
-              <label htmlFor="gameid">
-                Enter a save name
-                <input
-                  type="text"
-                  id="gameid"
-                  name="gameid"
-                  placeholder="Letters and numbers only; maximum 20 characters"
-                />
-              </label>
-              <p>Save name taken.</p>
-            </div>
+            <TextInput
+              label="Enter a save name"
+              id="gameid"
+              name="gameid"
+              placeholder="Letters and numbers only; maximum 20 characters"
+              errorMsg="Save name taken."
+            />
             <div className={style.buttonsContainer}>
               <LinkButton label="Back" path="/" isSecondary handleButtonClick={handleButtonClick} />
               <LinkButton label="Continue" path="/game" isSecondary={false} handleButtonClick={handleButtonClick} />
@@ -41,18 +37,13 @@ function PopUp({ popUpType, title, handleButtonClick }: PopUpProps) {
         )}
         {popUpType === "continue" && (
           <>
-            <div className={style.nameInput}>
-              <label htmlFor="gameid">
-                Enter an existing save name
-                <input
-                  type="text"
-                  id="gameid"
-                  name="gameid"
-                  placeholder="Letters and numbers only; maximum 20 characters"
-                />
-              </label>
-              <p>Save name not found.</p>
-            </div>
+            <TextInput
+              label="Enter an existing save name"
+              id="gameid"
+              name="gameid"
+              placeholder="Letters and numbers only; maximum 20 characters"
+              errorMsg="Save name not found."
+            />
             <div className={style.buttonsContainer}>
               <LinkButton label="Back" path="/" isSecondary handleButtonClick={handleButtonClick} />
               <LinkButton label="Continue" path="/game" isSecondary={false} handleButtonClick={handleButtonClick} />
