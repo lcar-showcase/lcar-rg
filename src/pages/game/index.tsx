@@ -316,9 +316,9 @@ function Game() {
       {/* Pop-ups */}
       {showPopUp && (
         <PopUp
-          popUpType="win"
+          type="win"
           title={winnerColour === "tie" ? "Tie!" : winnerColour === "dark" ? "Player wins!" : "Computer wins!"}
-          handlePrimaryButtonClick={() => setShowPopUp(false)}
+          disablePopUp={() => setShowPopUp(false)}
         />
       )}
     </>

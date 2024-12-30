@@ -1,6 +1,6 @@
 type TileState = "dark" | "light" | null;
 
-type PopUpType = "save" | "continue" | "confirm" | "win";
+type PopUpType = "save" | "continue" | "win";
 
 /**
  * Position of a tile.

@@ -10,12 +10,6 @@
   background: rgb(0, 0, 0, 0.4);
 }
 
-.buttonsContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-}
-
 .popUp {
   display: flex;
   flex-direction: column;
