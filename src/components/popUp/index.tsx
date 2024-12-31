@@ -18,7 +18,8 @@ function PopUp({ type, title, disablePopUp }: PopUpProps) {
             Return to Game
           </button>
         )}
-        {(type === "save" || "continue") && <CustomForm formType={type} disablePopUp={disablePopUp} />}
+        {(type === "save" || type === "continue") && <CustomForm formType={type} disablePopUp={disablePopUp} />}
+        {type === "saving" && <img src="/images/loading.png" alt="Loading" className={style.loading} />}
       </div>
     </div>
   );

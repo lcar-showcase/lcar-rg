@@ -1,3 +1,18 @@
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.header button {
+  position: fixed;
+  right: 40px;
+  top: 30px;
+  font-size: 1rem;
+  min-width: 120px;
+  height: 40px;
+  padding: 10px 10px;
+}
+
 .backToMainMenuContainer {
   display: flex;
   position: fixed;
@@ -73,6 +88,12 @@
 }
 
 @media (min-width: 1400px) {
+  .header button {
+    font-size: 1.3rem;
+    min-width: 160px;
+    height: 50px;
+  }
+
   .gameInfo {
     gap: 30px;
   }

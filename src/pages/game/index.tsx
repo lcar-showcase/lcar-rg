@@ -4,7 +4,7 @@ import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
-import { Coordinate, TileState } from "../../types";
+import { Coordinate, PopUpType, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
@@ -97,6 +97,7 @@ function Game() {
   const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [winnerColour, setWinnerColour] = useState<Winner>(null);
+  const [popUpType, setPopUpType] = useState<PopUpType>("win");
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -267,7 +268,37 @@ function Game() {
     // Show pop up once a winner is detected
     if (checkWinner(newBoard)) {
       setWinnerColour(checkWinner(newBoard));
+      setPopUpType("win");
       setShowPopUp(true);
+    }
+  };
+
+  const save = async () => {
+    setPopUpType("saving");
+    setShowPopUp(true);
+    const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
+      method: "POST",
+      body: JSON.stringify({
+        id: "reversi-cl",
+        data: boardArr,
+      }),
+    });
+    try {
+      const res = await fetch(req);
+      if (!res.ok) {
+        throw new Error(`Response status: ${res.status}`);
+      }
+      const body = await res.json();
+      setShowPopUp(false);
+      console.log(body);
+    } catch (err: unknown) {
+      // Network error etc.
+      setShowPopUp(false);
+      if (err instanceof Error) {
+        console.log(err.message);
+      } else {
+        console.log(err);
+      }
     }
   };
 
@@ -290,10 +321,17 @@ function Game() {
   return (
     <>
       <div>
-        <Link to="/" className={style.backToMainMenuContainer}>
-          <img src="/images/back_arrow.png" alt="back" />
-          <Logo isNav />
-        </Link>
+        {/* Header (Logo + Save button) */}
+        <div className={style.header}>
+          <Link to="/" className={style.backToMainMenuContainer}>
+            <img src="/images/back_arrow.png" alt="back" />
+            <Logo isNav />
+          </Link>
+          <button type="button" className="btn" onClick={save}>
+            Save
+          </button>
+        </div>
+        {/* Board */}
         <div className={style.gameInfo}>
           <div className={style.scoreboardContainer}>
             <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark")} />
@@ -316,8 +354,16 @@ function Game() {
       {/* Pop-ups */}
       {showPopUp && (
         <PopUp
-          type="win"
-          title={winnerColour === "tie" ? "Tie!" : winnerColour === "dark" ? "Player wins!" : "Computer wins!"}
+          type={popUpType}
+          title={
+            popUpType === "win"
+              ? winnerColour === "tie"
+                ? "Tie!"
+                : winnerColour === "dark"
+                  ? "Player wins!"
+                  : "Computer wins!"
+              : "Saving game"
+          }
           disablePopUp={() => setShowPopUp(false)}
         />
       )}
