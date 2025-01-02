@@ -4,7 +4,7 @@ import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
-import { Coordinate, PopUpType, TileState } from "../../types";
+import { Coordinate, PopUpType, SaveStatus, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
@@ -98,6 +98,8 @@ function Game() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [winnerColour, setWinnerColour] = useState<Winner>(null);
   const [popUpType, setPopUpType] = useState<PopUpType>("win");
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
+  const [uuid, setUuid] = useState("");
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -273,33 +275,23 @@ function Game() {
     }
   };
 
-  const save = async () => {
-    setPopUpType("saving");
-    setShowPopUp(true);
-    const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
-      method: "POST",
-      body: JSON.stringify({
-        id: "reversi-cl",
-        data: boardArr,
-      }),
-    });
-    try {
-      const res = await fetch(req);
-      if (!res.ok) {
-        throw new Error(`Response status: ${res.status}`);
-      }
-      const body = await res.json();
-      setShowPopUp(false);
-      console.log(body);
-    } catch (err: unknown) {
-      // Network error etc.
-      setShowPopUp(false);
-      if (err instanceof Error) {
-        console.log(err.message);
-      } else {
-        console.log(err);
-      }
+  const getPopUpTitle = () => {
+    let title;
+    switch (popUpType) {
+      case "win":
+        if (winnerColour === "dark") {
+          title = "Player wins!";
+        } else {
+          title = "Computer wins!";
+        }
+        break;
+      case "saving":
+        title = "Saving game";
+        break;
+      default:
+        title = "An error occured";
     }
+    return title;
   };
 
   // Render board after player turn, delay, then re-render board with computer's move
@@ -318,6 +310,41 @@ function Game() {
     }
   });
 
+  useEffect(() => {
+    const save = async () => {
+      const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
+        method: "POST",
+        body: JSON.stringify({
+          id: "reversi-cl",
+          data: JSON.stringify(boardArr),
+        }),
+      });
+      try {
+        const res = await fetch(req);
+        const body = await res.json();
+        setUuid(body.uuid);
+        return true;
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.log(err.message);
+        } else {
+          console.log(err);
+        }
+      }
+      return false;
+    };
+
+    if (popUpType === "saving") {
+      save().then((success) => {
+        if (success) {
+          setSaveStatus("ok");
+        } else {
+          setSaveStatus("fail");
+        }
+      });
+    }
+  }, [boardArr, popUpType]);
+
   return (
     <>
       <div>
@@ -327,7 +354,15 @@ function Game() {
             <img src="/images/back_arrow.png" alt="back" />
             <Logo isNav />
           </Link>
-          <button type="button" className="btn" onClick={save}>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              setShowPopUp(true);
+              setPopUpType("saving");
+              setSaveStatus("pending");
+            }}
+          >
             Save
           </button>
         </div>
@@ -355,16 +390,11 @@ function Game() {
       {showPopUp && (
         <PopUp
           type={popUpType}
-          title={
-            popUpType === "win"
-              ? winnerColour === "tie"
-                ? "Tie!"
-                : winnerColour === "dark"
-                  ? "Player wins!"
-                  : "Computer wins!"
-              : "Saving game"
-          }
-          disablePopUp={() => setShowPopUp(false)}
+          title={getPopUpTitle()}
+          saveStatus={saveStatus}
+          uuid={uuid}
+          togglePopUp={setShowPopUp}
+          setParentPopUp={setPopUpType}
         />
       )}
     </>

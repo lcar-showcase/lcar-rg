@@ -35,6 +35,11 @@
   font-size: 1.2rem;
 }
 
+.nameInputContainer input:disabled {
+  background: grey;
+  cursor: not-allowed;
+}
+
 .nameInputContainer input::placeholder {
   color: #b9b4cc;
 }

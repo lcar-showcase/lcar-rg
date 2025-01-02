@@ -22,6 +22,7 @@
 
 a {
   text-decoration: none;
+  color: white;
 }
 
 body {
@@ -60,6 +61,16 @@ body {
   background: #1395e6;
 }
 
+.btn:disabled {
+  background-color: grey;
+  border: 3px solid grey;
+  cursor: not-allowed;
+}
+
+.btn[disabled]:hover {
+  color: white;
+}
+
 .secondaryBtn {
   background: none;
   border-radius: 10px;
@@ -70,6 +81,16 @@ body {
   color: white;
   border-color: white;
   background: #22aaff20;
+}
+
+.secondaryBtn:disabled {
+  background: none;
+  border: 3px solid grey;
+}
+
+.secondaryBtn[disabled]:hover {
+  background: none;
+  border: 3px solid grey;
 }
 
 @media (min-width: 1400px) {

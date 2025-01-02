@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
 import { PopUpType } from "../../types";
 import style from "./saveForm.module.css";
 
-interface FormProps {
+interface SaveFormProps {
   formType: PopUpType; // TODO: Includes "win"
-  disablePopUp(): void;
+  togglePopUp(show: boolean): void;
 }
 
-function CustomForm({ formType, disablePopUp }: FormProps) {
+type SaveStatus = "notSaving" | "saving";
+
+function SaveForm({ formType, togglePopUp = () => {} }: SaveFormProps) {
   const [currentName, setCurrentName] = useState(""); // Current text input
-  const [errorMsg, setErrorMsg] = useState(formType === "save" ? "Save name taken." : "Save name not found.");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("notSaving");
   const label = formType === "save" ? "Enter a save name" : "Enter an existing save name";
   const id = "gameid";
   const name = "gameid";
   const placeholder = "Letters and numbers only; 1-20 characters";
-  const goTo = useNavigate();
 
-  // TODO: Pass pop-up type here, then handle the logic for save/continue here
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Alphanumeric, no spaces
@@ -26,8 +26,8 @@ function CustomForm({ formType, disablePopUp }: FormProps) {
     if (!regex.exec(currentName)) {
       setErrorMsg("Invalid name provided.");
     } else {
-      disablePopUp();
-      goTo("/game");
+      setSaveStatus("saving");
+      setErrorMsg("Saving...");
     }
   };
 
@@ -43,6 +43,7 @@ function CustomForm({ formType, disablePopUp }: FormProps) {
             name={name}
             placeholder={placeholder}
             maxLength={20}
+            disabled={saveStatus === "saving"}
             onChange={(e) => {
               setCurrentName(e.target.value);
             }}
@@ -52,15 +53,20 @@ function CustomForm({ formType, disablePopUp }: FormProps) {
       </div>
       {/* Buttons */}
       <div className={style.buttonsContainer}>
-        <button type="button" onClick={disablePopUp} className="btn secondaryBtn">
+        <button
+          type="button"
+          disabled={saveStatus === "saving"}
+          onClick={() => togglePopUp(false)}
+          className="btn secondaryBtn"
+        >
           Back
         </button>
-        <button type="submit" className="btn">
-          Continue
+        <button type="submit" disabled={saveStatus === "saving"} className="btn">
+          Save
         </button>
       </div>
     </form>
   );
 }
 
-export default CustomForm;
+export default SaveForm;
