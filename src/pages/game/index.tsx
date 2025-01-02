@@ -150,20 +150,17 @@ function Game() {
     return lines;
   };
 
-  const getPlayerScore = useCallback(
-    (playerColour: TileState, board: TileState[][] = boardArr) => {
-      let score = 0;
-      board.forEach((row) =>
-        row.forEach((tile) => {
-          if (tile === playerColour) {
-            score += 1;
-          }
-        })
-      );
-      return score;
-    },
-    [boardArr]
-  );
+  const getPlayerScore = (playerColour: TileState, board: TileState[][]) => {
+    let score = 0;
+    board.forEach((row) =>
+      row.forEach((tile) => {
+        if (tile === playerColour) {
+          score += 1;
+        }
+      })
+    );
+    return score;
+  };
 
   const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
@@ -274,7 +271,7 @@ function Game() {
         setShowPopUp(true);
       }
     },
-    [boardArr, currentPlayer, getPlayerScore, history, turn]
+    [boardArr, currentPlayer, history, turn]
   );
 
   // Render board after player turn, delay, then re-render board with computer's move
@@ -302,8 +299,8 @@ function Game() {
         </Link>
         <div className={style.gameInfo}>
           <div className={style.scoreboardContainer}>
-            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark")} />
-            <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light")} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark", boardArr)} />
+            <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light", boardArr)} />
           </div>
           <Board
             boardArray={boardArr}
