@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
@@ -150,45 +150,20 @@ function Game() {
     return lines;
   };
 
-  const getPlayerScore = (playerColour: TileState, board: TileState[][] = boardArr) => {
-    let score = 0;
-    board.forEach((row) =>
-      row.forEach((tile) => {
-        if (tile === playerColour) {
-          score += 1;
-        }
-      })
-    );
-    return score;
-  };
-
-  // Check for winner - no more valid moves for both players
-  const checkWinner = (board: TileState[][]) => {
-    let isGameOver = false;
-    const otherPlayer = currentPlayer === "light" ? "dark" : "light";
-    // Check next turn (other player)
-    if (computeValidLines(board, otherPlayer).length === 0) {
-      // Check next next turn (current player)
-      if (computeValidLines(board, currentPlayer).length === 0) {
-        isGameOver = true;
-      }
-    }
-
-    let winner: Winner = null;
-    if (isGameOver) {
-      // Check who won
-      const playerScore = getPlayerScore("dark", board);
-      const computerScore = getPlayerScore("light", board);
-      if (playerScore > computerScore) {
-        winner = "dark";
-      } else if (playerScore < computerScore) {
-        winner = "light";
-      } else {
-        winner = "tie";
-      }
-    }
-    return winner;
-  };
+  const getPlayerScore = useCallback(
+    (playerColour: TileState, board: TileState[][] = boardArr) => {
+      let score = 0;
+      board.forEach((row) =>
+        row.forEach((tile) => {
+          if (tile === playerColour) {
+            score += 1;
+          }
+        })
+      );
+      return score;
+    },
+    [boardArr]
+  );
 
   const generateHistoryMessage = (historyItem: HistoryItem | null) => {
     if (historyItem) {
@@ -213,63 +188,94 @@ function Game() {
    * @param col Col of clicked tile.
    * @param isComputer Check if computer made the move, prevents player click from updating state during computer turn
    */
-  const handleTurn = (row: number, col: number, isComputer = false) => {
-    // Get lines with matching valid tile position
-    const matchLines = computeValidLines(boardArr, currentPlayer).filter(
-      (line) => line.valid.row === row && line.valid.col === col
-    );
-
-    // Determine tiles that should be flipped (start, valid and everything in between)
-    const flippedTiles: Coordinate[] = [];
-    matchLines.forEach((line) => {
-      const { start, valid, direction } = line;
-      let flipRow = start.row;
-      let flipCol = start.col;
-      while (flipRow !== valid.row + direction.changeRow || flipCol !== valid.col + direction.changeCol) {
-        flippedTiles.push({
-          row: flipRow,
-          col: flipCol,
-        });
-        flipRow += direction.changeRow;
-        flipCol += direction.changeCol;
-      }
-    });
-
-    // Create new board state
-    const newBoard = boardArr.map((boardRow, rowId) =>
-      boardRow.map((_boardTile, colId) => {
-        if (flippedTiles.find((flip) => flip.row === rowId && flip.col === colId)) {
-          return currentPlayer; // Flip colour
+  const handleTurn = useCallback(
+    (row: number, col: number, isComputer = false) => {
+      // Check for winner - no more valid moves for both players
+      const checkWinner = (board: TileState[][]) => {
+        let isGameOver = false;
+        const otherPlayer = currentPlayer === "light" ? "dark" : "light";
+        // Check next turn (other player)
+        if (computeValidLines(board, otherPlayer).length === 0) {
+          // Check next next turn (current player)
+          if (computeValidLines(board, currentPlayer).length === 0) {
+            isGameOver = true;
+          }
         }
-        return boardArr[rowId][colId]; // Unchanged
-      })
-    );
-    // Set state only if
-    // (Dark turn OR Computer made a move during light turn) AND Tile is valid
-    if (
-      (currentPlayer === "dark" || (isComputer && currentPlayer === "light")) &&
-      computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)
-    ) {
-      setBoardArray(newBoard);
-      setHistory([...history, { colour: currentPlayer, tile: { row, col }, isSkipped: false }]);
-      const otherPlayer = currentPlayer === "light" ? "dark" : "light";
-      if (computeValidLines(newBoard, otherPlayer).length === 0) {
-        // Next player has no valid moves on new board; skip
-        setTurn(turn + 2);
-        if (!checkWinner(newBoard)) {
-          // Do not add last "skip turn" to history if game over
-          setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+
+        let winner: Winner = null;
+        if (isGameOver) {
+          // Check who won
+          const playerScore = getPlayerScore("dark", board);
+          const computerScore = getPlayerScore("light", board);
+          if (playerScore > computerScore) {
+            winner = "dark";
+          } else if (playerScore < computerScore) {
+            winner = "light";
+          } else {
+            winner = "tie";
+          }
         }
-      } else {
-        setTurn(turn + 1);
+        return winner;
+      };
+
+      // Get lines with matching valid tile position
+      const matchLines = computeValidLines(boardArr, currentPlayer).filter(
+        (line) => line.valid.row === row && line.valid.col === col
+      );
+
+      // Determine tiles that should be flipped (start, valid and everything in between)
+      const flippedTiles: Coordinate[] = [];
+      matchLines.forEach((line) => {
+        const { start, valid, direction } = line;
+        let flipRow = start.row;
+        let flipCol = start.col;
+        while (flipRow !== valid.row + direction.changeRow || flipCol !== valid.col + direction.changeCol) {
+          flippedTiles.push({
+            row: flipRow,
+            col: flipCol,
+          });
+          flipRow += direction.changeRow;
+          flipCol += direction.changeCol;
+        }
+      });
+
+      // Create new board state
+      const newBoard = boardArr.map((boardRow, rowId) =>
+        boardRow.map((_boardTile, colId) => {
+          if (flippedTiles.find((flip) => flip.row === rowId && flip.col === colId)) {
+            return currentPlayer; // Flip colour
+          }
+          return boardArr[rowId][colId]; // Unchanged
+        })
+      );
+      // Set state only if
+      // (Dark turn OR Computer made a move during light turn) AND Tile is valid
+      if (
+        (currentPlayer === "dark" || (isComputer && currentPlayer === "light")) &&
+        computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)
+      ) {
+        setBoardArray(newBoard);
+        setHistory([...history, { colour: currentPlayer, tile: { row, col }, isSkipped: false }]);
+        const otherPlayer = currentPlayer === "light" ? "dark" : "light";
+        if (computeValidLines(newBoard, otherPlayer).length === 0) {
+          // Next player has no valid moves on new board; skip
+          setTurn(turn + 2);
+          if (!checkWinner(newBoard)) {
+            // Do not add last "skip turn" to history if game over
+            setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+          }
+        } else {
+          setTurn(turn + 1);
+        }
       }
-    }
-    // Show pop up once a winner is detected
-    if (checkWinner(newBoard)) {
-      setWinnerColour(checkWinner(newBoard));
-      setShowPopUp(true);
-    }
-  };
+      // Show pop up once a winner is detected
+      if (checkWinner(newBoard)) {
+        setWinnerColour(checkWinner(newBoard));
+        setShowPopUp(true);
+      }
+    },
+    [boardArr, currentPlayer, getPlayerScore, history, turn]
+  );
 
   // Render board after player turn, delay, then re-render board with computer's move
   useEffect(() => {
@@ -285,7 +291,7 @@ function Game() {
       }, 1000);
       return () => clearInterval(timeoutId);
     }
-  });
+  }, [boardArr, currentPlayer, handleTurn, turn, winnerColour]);
 
   return (
     <>
