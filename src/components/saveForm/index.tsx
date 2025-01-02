@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import { PopUpType } from "../../types";
 import style from "./saveForm.module.css";
 
@@ -7,27 +8,58 @@ interface SaveFormProps {
   togglePopUp(show: boolean): void;
 }
 
-type SaveStatus = "notSaving" | "saving";
+type LoadingStatus = "notLoading" | "loading";
 
 function SaveForm({ formType, togglePopUp = () => {} }: SaveFormProps) {
-  const [currentName, setCurrentName] = useState(""); // Current text input
+  const [currentInput, setCurrentInput] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>("notSaving");
-  const label = formType === "save" ? "Enter a save name" : "Enter an existing save name";
+  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>("notLoading");
+  const label = formType === "save" ? "Enter a save name" : "Enter an existing UUID";
   const id = "gameid";
   const name = "gameid";
-  const placeholder = "Letters and numbers only; 1-20 characters";
+  const placeholder = "Letters, numbers and hyphens only; 36 characters";
+  const goTo = useNavigate();
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Alphanumeric, no spaces
-    const regex = /^[a-zA-Z0-9]+$/; // TODO: Test regex more extensively during refinement
+    // Alphanumeric and hyphens, no spaces
+    const regex = /^[a-zA-Z0-9-]+$/; // TODO: Update regex to follow UUID format
     // Check if inputs valid (alphanumeric only)
-    if (!regex.exec(currentName)) {
-      setErrorMsg("Invalid name provided.");
+    if (!regex.exec(currentInput)) {
+      setErrorMsg("Invalid UUID provided.");
     } else {
-      setSaveStatus("saving");
-      setErrorMsg("Saving...");
+      setLoadingStatus("loading");
+      setErrorMsg("Loading...");
+      // Retrieve info from db
+      const getGame = async () => {
+        const req = new Request(
+          `https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/?id=reversi-cl&uuid=${currentInput}`,
+          {
+            method: "GET",
+          }
+        );
+        try {
+          const res = await fetch(req);
+          const body = await res.json();
+          const loadBoard = JSON.parse(body.data.board);
+          const loadHistory = JSON.parse(body.data.history);
+          if (loadBoard) {
+            // console.log(boardRes);
+            goTo("/game", { state: { loadedBoardArr: loadBoard, loadedHistory: loadHistory } });
+            togglePopUp(false);
+          } else {
+            setErrorMsg("Failed to load game.");
+          }
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            console.log(err.message);
+          } else {
+            console.log(err);
+          }
+        }
+        setLoadingStatus("notLoading");
+      };
+      getGame();
     }
   };
 
@@ -42,27 +74,29 @@ function SaveForm({ formType, togglePopUp = () => {} }: SaveFormProps) {
             id={id}
             name={name}
             placeholder={placeholder}
-            maxLength={20}
-            disabled={saveStatus === "saving"}
+            maxLength={36}
+            minLength={36}
+            required
+            disabled={loadingStatus === "loading"}
             onChange={(e) => {
-              setCurrentName(e.target.value);
+              setCurrentInput(e.target.value);
             }}
           />
         </label>
-        <p>{errorMsg}</p>
+        <p className={style[loadingStatus]}>{loadingStatus === "loading" ? "Loading..." : errorMsg}</p>
       </div>
       {/* Buttons */}
       <div className={style.buttonsContainer}>
         <button
           type="button"
-          disabled={saveStatus === "saving"}
+          disabled={loadingStatus === "loading"}
           onClick={() => togglePopUp(false)}
           className="btn secondaryBtn"
         >
           Back
         </button>
-        <button type="submit" disabled={saveStatus === "saving"} className="btn">
-          Save
+        <button type="submit" disabled={loadingStatus === "loading"} className="btn">
+          Continue
         </button>
       </div>
     </form>

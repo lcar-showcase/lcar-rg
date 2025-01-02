@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
@@ -92,9 +92,21 @@ interface HistoryItem {
 type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
 function Game() {
-  const [boardArr, setBoardArray] = useState(initBoardArray);
+  const { state } = useLocation();
+  let loadBoardArr;
+  let loadHistory;
+  try {
+    loadBoardArr = state.loadedBoardArr as TileState[][];
+    loadHistory = state.loadedHistory as HistoryItem[];
+  } catch {
+    loadBoardArr = null;
+    loadHistory = null;
+  }
+  const [boardArr, setBoardArray] = useState(loadBoardArr || initBoardArray);
   const [turn, setTurn] = useState(0);
-  const [history, setHistory] = useState<HistoryItem[]>([{ colour: "dark", tile: null, isSkipped: false }]);
+  const [history, setHistory] = useState<HistoryItem[]>(
+    loadHistory || [{ colour: "dark", tile: null, isSkipped: false }]
+  );
   const [showPopUp, setShowPopUp] = useState(false);
   const [winnerColour, setWinnerColour] = useState<Winner>(null);
   const [popUpType, setPopUpType] = useState<PopUpType>("win");
@@ -316,7 +328,7 @@ function Game() {
         method: "POST",
         body: JSON.stringify({
           id: "reversi-cl",
-          data: JSON.stringify(boardArr),
+          data: { board: JSON.stringify(boardArr), history: JSON.stringify(history) },
         }),
       });
       try {
@@ -343,7 +355,7 @@ function Game() {
         }
       });
     }
-  }, [boardArr, popUpType]);
+  }, [boardArr, history, popUpType]);
 
   return (
     <>

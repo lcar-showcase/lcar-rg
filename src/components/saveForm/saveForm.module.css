@@ -44,8 +44,12 @@
   color: #b9b4cc;
 }
 
-.nameInputContainer p {
-  color: #e85a5c; /* Error message e.g. "Save name taken." */
+.notLoading {
+  color: #e85a5c; /* If not loading, it displays the error message */
+}
+
+.loading {
+  color: #b9b4cc;
 }
 
 @media (min-width: 1400px) {
