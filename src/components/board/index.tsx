@@ -7,6 +7,7 @@ interface BoardProps {
   validTiles: Coordinate[];
   rows: string[];
   cols: string[];
+  currentPlayer: TileState;
   handleTurn(row: number, col: number): void;
 }
 
@@ -14,7 +15,7 @@ interface BoardProps {
  * The game board.
  * @returns Board component.
  */
-function Board({ boardArray, validTiles, rows, cols, handleTurn }: BoardProps) {
+function Board({ boardArray, validTiles, rows, cols, currentPlayer, handleTurn }: BoardProps) {
   return (
     <section className={style.container}>
       <div className={style.layout}>
@@ -41,6 +42,7 @@ function Board({ boardArray, validTiles, rows, cols, handleTurn }: BoardProps) {
                 <Tile
                   key={`${rows[rowId]}${cols[colId]}`}
                   id={`${rows[rowId]}${cols[colId]}`}
+                  currentPlayer={currentPlayer}
                   tileState={exists ? null : boardArray[rowId][colId]}
                   isValidMove={!!exists}
                   handleClick={() => handleTurn(rowId, colId)}

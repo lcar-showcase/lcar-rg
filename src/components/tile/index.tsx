@@ -5,6 +5,7 @@ interface TileProps {
   id: string;
   tileState: TileState;
   isValidMove: boolean;
+  currentPlayer: TileState;
   handleClick(): void;
 }
 
@@ -14,15 +15,14 @@ interface TileProps {
  * @param tileState - Disk colour on the Tile.
  * @returns Tile component.
  */
-function Tile({ id, tileState, isValidMove, handleClick }: TileProps) {
+function Tile({ id, tileState, isValidMove, currentPlayer, handleClick }: TileProps) {
   return (
     <div
       id={id}
-      className={`${style.tile} ${isValidMove && style.validTile}`} // Tile styling + additional styling if valid
+      className={`${style.tile} ${isValidMove && currentPlayer === "dark" && style.validTile}`} // Highlight and change cursor on valid tile hover only if player turn
       role="button"
       tabIndex={0}
       aria-label={`tile-${id}`}
-      // onClick={isValidMove ? handleClick : () => {}} // Enable click if valid
       onClick={handleClick}
       onKeyDown={() => {}}
     >
