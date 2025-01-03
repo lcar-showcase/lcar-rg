@@ -53,12 +53,12 @@
 }
 
 @media (min-width: 1400px) {
-  .nameInput,
-  .nameInput label {
+  .inputContainer,
+  .inputContainer label {
     font-size: 1.2rem;
   }
 
-  .nameInput input {
+  .inputContainer input {
     height: 80px;
     padding: 0 20px;
     font-size: 1.3rem;
