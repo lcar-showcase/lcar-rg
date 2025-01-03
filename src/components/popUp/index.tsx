@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { PopUpType, SaveStatus } from "../../types";
 import ContinueGameForm from "../continueGameForm";
 import style from "./popUp.module.css";
@@ -21,6 +22,17 @@ function PopUp({
   togglePopUp = () => {},
   setParentPopUp = () => {},
 }: PopUpProps) {
+  const [copyButtonClicked, setCopyButtonClicked] = useState(false);
+
+  // Repeat animation when copy button is clicked
+  useEffect(() => {
+    setTimeout(() => {
+      if (copyButtonClicked === true) {
+        setCopyButtonClicked(false);
+      }
+    }, 1000);
+  }, [copyButtonClicked]);
+
   return (
     <div className={style.darken}>
       <div className={style.popUp}>
@@ -38,7 +50,23 @@ function PopUp({
             ) : saveStatus === "ok" ? (
               <div className={style.saveOutcomeContainer}>
                 <p className={style[saveStatus]}>Game saved successfully</p>
-                <p className={style.uuid}>{uuid}</p> {/* TODO: (Refinement) clicking UUID to copy to clipboard */}
+                <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
+                  <p>{uuid}</p>
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={copyButtonClicked}
+                    onClick={() => {
+                      // Copy to clipboard
+                      navigator.clipboard.writeText(uuid);
+                      if (copyButtonClicked === false) {
+                        setCopyButtonClicked(true);
+                      }
+                    }}
+                  >
+                    {copyButtonClicked ? "Copied" : "Copy"}
+                  </button>
+                </div>
                 <p>Use the UUID above to load the game</p>
               </div>
             ) : (

@@ -55,11 +55,41 @@
 }
 
 .uuid {
+  display: flex;
+  background-color: #7a7787;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 10px;
+  gap: 20px;
+}
+
+.uuid p {
   color: white;
   font-size: 1.2rem;
-  background-color: #7a7787;
-  padding: 20px 25px;
-  border-radius: 10px;
+}
+
+.uuid button {
+  font-size: 1rem;
+  min-width: 80px;
+  padding: 8px 10px;
+}
+
+.copyButtonClicked {
+  animation-name: flashGreen;
+  animation-duration: 1s;
+}
+
+.copyButtonClicked button:disabled {
+  /* Disable button for 1s to let animation run to completion */
+  background: #48ca48;
+  border: 3px solid #48ca48;
+}
+
+@keyframes flashGreen {
+  from {
+    background: #b7b3c7;
+  }
 }
 
 @keyframes spin {

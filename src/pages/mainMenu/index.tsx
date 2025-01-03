@@ -7,6 +7,8 @@ import style from "./mainMenu.module.css";
 function MainMenu() {
   const [showPopUp, setShowPopUp] = useState(false);
 
+  // TODO: (Enhancement) Make MainMenu title bigger (or anything that will make it stand out)
+
   return (
     <>
       <Logo isNav={false} />
