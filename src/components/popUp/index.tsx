@@ -5,8 +5,10 @@ import style from "./popUp.module.css";
 interface PopUpProps {
   type: PopUpType; // Determines pop-up content and button
   title: string;
+  // For save game
   saveStatus?: SaveStatus;
   uuid?: string;
+  // Set states of parent pop-up
   togglePopUp(show: boolean): void;
   setParentPopUp?(type: PopUpType): void;
 }
@@ -28,7 +30,7 @@ function PopUp({
             Return to Game
           </button>
         )}
-        {(type === "save" || type === "continue") && <ContinueGameForm togglePopUp={togglePopUp} />}
+        {type === "continue" && <ContinueGameForm togglePopUp={togglePopUp} />}
         {type === "saving" && (
           <div className={style.popUpBodyContainer}>
             {saveStatus === "pending" ? (
@@ -36,7 +38,7 @@ function PopUp({
             ) : saveStatus === "ok" ? (
               <div className={style.saveOutcomeContainer}>
                 <p className={style[saveStatus]}>Game saved successfully</p>
-                <p className={style.uuid}>{uuid}</p>
+                <p className={style.uuid}>{uuid}</p> {/* TODO: (Refinement) clicking UUID to copy to clipboard */}
                 <p>Use the UUID above to load the game</p>
               </div>
             ) : (
@@ -46,19 +48,11 @@ function PopUp({
               type="button"
               onClick={() => {
                 togglePopUp(false);
-                setParentPopUp("win"); // Set back to default popUpType
+                setParentPopUp("win"); // Set back to default PopUpType - "win"
               }}
               className="btn"
               disabled={saveStatus === "pending"}
             >
-              Return to Game
-            </button>
-          </div>
-        )}
-        {type === "error" && (
-          <div className={style.popUpBodyContainer}>
-            <p>There was a problem saving the game.</p>
-            <button type="button" onClick={() => togglePopUp(false)} className="btn">
               Return to Game
             </button>
           </div>
