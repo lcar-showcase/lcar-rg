@@ -10,12 +10,12 @@
   gap: 50px;
 }
 
-.nameInputContainer {
+.inputContainer {
   min-height: 120px;
 }
 
-.nameInputContainer,
-.nameInputContainer label {
+.inputContainer,
+.inputContainer label {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -24,7 +24,7 @@
   font-size: 1rem;
 }
 
-.nameInputContainer input {
+.inputContainer input {
   width: 100%;
   height: 60px;
   border-radius: 10px;
@@ -35,17 +35,17 @@
   font-size: 1.2rem;
 }
 
-.nameInputContainer input:disabled {
+.inputContainer input:disabled {
   background: grey;
   cursor: not-allowed;
 }
 
-.nameInputContainer input::placeholder {
+.inputContainer input::placeholder {
   color: #b9b4cc;
 }
 
 .notLoading {
-  color: #e85a5c; /* If not loading, it displays the error message */
+  color: #e85a5c; /* If not loading, it displays an error message by default */
 }
 
 .loading {

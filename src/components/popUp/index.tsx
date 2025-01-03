@@ -1,5 +1,5 @@
 import { PopUpType, SaveStatus } from "../../types";
-import CustomForm from "../saveForm";
+import ContinueGameForm from "../continueGameForm";
 import style from "./popUp.module.css";
 
 interface PopUpProps {
@@ -28,7 +28,7 @@ function PopUp({
             Return to Game
           </button>
         )}
-        {(type === "save" || type === "continue") && <CustomForm formType={type} togglePopUp={togglePopUp} />}
+        {(type === "save" || type === "continue") && <ContinueGameForm togglePopUp={togglePopUp} />}
         {type === "saving" && (
           <div className={style.popUpBodyContainer}>
             {saveStatus === "pending" ? (

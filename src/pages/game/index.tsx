@@ -92,17 +92,19 @@ interface HistoryItem {
 type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
 function Game() {
+  // Determine if game needs different intial state (continue game)
   const { state } = useLocation();
-  let loadBoardArr;
+  let loadBoard;
   let loadHistory;
   try {
-    loadBoardArr = state.loadedBoardArr as TileState[][];
-    loadHistory = state.loadedHistory as HistoryItem[];
+    // Continue game
+    ({ loadBoard, loadHistory } = state as { loadBoard: TileState[][]; loadHistory: HistoryItem[] });
   } catch {
-    loadBoardArr = null;
+    // New game
+    loadBoard = null;
     loadHistory = null;
   }
-  const [boardArr, setBoardArray] = useState(loadBoardArr || initBoardArray);
+  const [boardArr, setBoardArray] = useState(loadBoard || initBoardArray);
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>(
     loadHistory || [{ colour: "dark", tile: null, isSkipped: false }]
