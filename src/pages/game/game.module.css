@@ -1,6 +1,7 @@
 /* TODO: Add responsiveness for mobile screens */
 
 .header {
+  /* Header is logo + button */
   display: flex;
   flex-direction: row;
 }
