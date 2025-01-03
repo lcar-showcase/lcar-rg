@@ -76,7 +76,7 @@
 }
 
 .copyButtonClicked {
-  animation-name: flashGreen;
+  animation-name: flash;
   animation-duration: 1s;
 }
 
@@ -86,7 +86,7 @@
   border: 3px solid #48ca48;
 }
 
-@keyframes flashGreen {
+@keyframes flash {
   from {
     background: #b7b3c7;
   }
