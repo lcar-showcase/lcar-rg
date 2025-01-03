@@ -10,10 +10,6 @@
   gap: 50px;
 }
 
-.inputContainer {
-  min-height: 120px;
-}
-
 .inputContainer,
 .inputContainer label {
   display: flex;
