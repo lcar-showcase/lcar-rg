@@ -25,6 +25,8 @@ const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
   })
 );
 
+// TODO: Disable save during computer's turn
+
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
 // e.g. Going north (up) means: { changeRow: 1, changeCol: 0 }
@@ -370,6 +372,7 @@ function Game() {
           <button
             type="button"
             className="btn"
+            disabled={currentPlayer === "light"}
             onClick={() => {
               setShowPopUp(true);
               setPopUpType("saving");
