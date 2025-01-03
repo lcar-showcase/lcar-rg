@@ -325,7 +325,7 @@ function Game() {
   });
 
   useEffect(() => {
-    const save = async () => {
+    const saveGame = async () => {
       const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
         method: "POST",
         body: JSON.stringify({
@@ -339,17 +339,13 @@ function Game() {
         setUuid(body.uuid);
         return true;
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.log(err.message);
-        } else {
-          console.log(err);
-        }
+        setSaveStatus("fail");
       }
       return false;
     };
 
     if (popUpType === "saving") {
-      save().then((success) => {
+      saveGame().then((success) => {
         if (success) {
           setSaveStatus("ok");
         } else {
