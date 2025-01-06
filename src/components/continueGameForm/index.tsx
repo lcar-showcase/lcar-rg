@@ -37,8 +37,9 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
       try {
         const res = await fetch(req);
         const body = await res.json();
-        if (body.message) {
-          // body only returns a message property if UUID does not exist
+        console.log(body);
+        if (!body.data) {
+          // body does not have data if invalid UUID provided
           uuidExists = false;
         }
         const loadBoard = JSON.parse(body.data.board); // Game board
