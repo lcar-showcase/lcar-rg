@@ -329,36 +329,25 @@ function Game() {
     }
   }, [boardArr, currentPlayer, handleTurn, turn, winnerColour]);
 
-  useEffect(() => {
-    const saveGame = async () => {
-      const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
-        method: "POST",
-        body: JSON.stringify({
-          id: "reversi-cl",
-          data: JSON.stringify({ board: boardArr, history }),
-        }),
-      });
-      try {
-        const res = await fetch(req);
-        const body = await res.json();
-        setUuid(body.uuid);
-        return true;
-      } catch (err: unknown) {
-        setSaveStatus("fail");
-      }
-      return false;
-    };
-
-    if (popUpType === "saving") {
-      saveGame().then((success) => {
-        if (success) {
-          setSaveStatus("ok");
-        } else {
-          setSaveStatus("fail");
-        }
-      });
+  const saveGame = async () => {
+    const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
+      method: "POST",
+      body: JSON.stringify({
+        id: "reversi-cl",
+        data: JSON.stringify({ board: boardArr, history }),
+      }),
+    });
+    try {
+      const res = await fetch(req);
+      const body = await res.json();
+      setSaveStatus("ok");
+      setUuid(body.uuid);
+      return true;
+    } catch (err: unknown) {
+      setSaveStatus("fail");
     }
-  }, [boardArr, history, popUpType]);
+    return false;
+  };
 
   return (
     <>
@@ -377,6 +366,7 @@ function Game() {
               setShowPopUp(true);
               setPopUpType("saving");
               setSaveStatus("pending");
+              saveGame();
             }}
           >
             Save
