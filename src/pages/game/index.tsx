@@ -100,7 +100,7 @@ function Game() {
   let loadHistory;
   try {
     // Continue game
-    ({ loadBoard, loadHistory } = state as { loadBoard: TileState[][]; loadHistory: HistoryItem[] });
+    ({ board: loadBoard, history: loadHistory } = state as { board: TileState[][]; history: HistoryItem[] });
   } catch {
     // New game
     loadBoard = null;
@@ -335,7 +335,7 @@ function Game() {
         method: "POST",
         body: JSON.stringify({
           id: "reversi-cl",
-          data: { board: JSON.stringify(boardArr), history: JSON.stringify(history) },
+          data: JSON.stringify({ board: boardArr, history }),
         }),
       });
       try {

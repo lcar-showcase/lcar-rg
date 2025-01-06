@@ -37,14 +37,12 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
       try {
         const res = await fetch(req);
         const body = await res.json();
-        console.log(body);
         if (!body.data) {
           // body does not have data if invalid UUID provided
           uuidExists = false;
         }
-        const loadBoard = JSON.parse(body.data.board); // Game board
-        const loadHistory = JSON.parse(body.data.history); // History
-        goTo("/game", { state: { loadBoard, loadHistory } }); // Redirect to /game with overwritten initial states
+        const { board, history } = JSON.parse(body.data);
+        goTo("/game", { state: { board, history } }); // Redirect to /game with overwritten initial states
         togglePopUp(false);
       } catch (err: unknown) {
         setFormMsg(uuidExists ? "Failed to load game." : "UUID does not exist.");
