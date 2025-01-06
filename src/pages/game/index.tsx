@@ -382,7 +382,7 @@ function Game() {
           <button
             type="button"
             className={`btn ${style.saveButton}`}
-            disabled={currentPlayer === "light"}
+            disabled={currentPlayer === "light" && winnerColour === null} // Computer turn and no winner yet - disable save
             onClick={() => {
               setShowPopUp(true);
               setPopUpType("saving");
