@@ -10,7 +10,6 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
   const [currentInput, setCurrentInput] = useState("");
   const [formMsg, setFormMsg] = useState(""); // Message displayed below input
   const [isLoading, setIsLoading] = useState(false);
-  const inputId = "gameUuid";
   const goTo = useNavigate(); // Change page after user submits form
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -60,12 +59,12 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
     <form onSubmit={handleFormSubmit} className={style.formContainer}>
       {/* Input */}
       <div className={style.inputContainer}>
-        <label htmlFor={inputId}>
+        <label htmlFor="gameUuid">
           Enter an existing UUID
           <input
             type="text"
-            id={inputId}
-            name={inputId}
+            id="gameUuid"
+            name="gameUuid"
             placeholder="Letters, numbers and hyphens only; 36 characters"
             maxLength={36}
             minLength={36}
