@@ -98,6 +98,22 @@
   }
 }
 
+/* Mobile screens */
+@media (max-width: 450px) {
+  .saveButton {
+    min-width: 80px;
+    /* Stick closer to edges */
+    right: 25px;
+    top: 22px;
+  }
+
+  .backToMainMenuContainer {
+    left: 25px;
+    top: 24px;
+  }
+}
+
+/* Large screens */
 @media (min-width: 1400px) {
   .header button {
     font-size: 1.3rem;
