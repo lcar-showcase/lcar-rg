@@ -1,5 +1,5 @@
 type TileState = "dark" | "light" | null;
-type PopUpType = "win" | "saving" | "continue";
+type PopUpType = "win" | "saving" | "continue" | "confirm";
 type SaveStatus = "pending" | "ok" | "fail";
 
 /**

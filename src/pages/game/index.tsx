@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
@@ -307,6 +307,9 @@ function Game() {
       case "saving":
         title = "Saving game";
         break;
+      case "confirm":
+        title = "Return to Main Menu?";
+        break;
       default:
         title = "An error occured";
     }
@@ -365,13 +368,20 @@ function Game() {
       <div>
         {/* Header (Logo + Save button) */}
         <div className={style.header}>
-          <Link to="/" className={style.backToMainMenuContainer}>
-            <img src="/images/back_arrow.png" alt="back" />
-            <Logo isNav />
-          </Link>
           <button
             type="button"
-            className="btn"
+            className={`btn ${style.backToMainMenuContainer}`}
+            onClick={() => {
+              setPopUpType("confirm");
+              setShowPopUp(true);
+            }}
+          >
+            <img src="/images/back_arrow.png" alt="back" />
+            <Logo isNav />
+          </button>
+          <button
+            type="button"
+            className={`btn ${style.saveButton}`}
             disabled={currentPlayer === "light"}
             onClick={() => {
               setShowPopUp(true);

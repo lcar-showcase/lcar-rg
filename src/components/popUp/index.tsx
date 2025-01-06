@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { PopUpType, SaveStatus } from "../../types";
 import ContinueGameForm from "../continueGameForm";
 import style from "./popUp.module.css";
@@ -41,6 +42,19 @@ function PopUp({
           <button type="button" onClick={() => togglePopUp(false)} className="btn">
             Return to Game
           </button>
+        )}
+        {type === "confirm" && (
+          <div className={style.popUpBodyContainer}>
+            All unsaved progress will be lost.
+            <div className={style.buttonsContainer}>
+              <Link to="/" className="btn secondaryBtn">
+                Return
+              </Link>
+              <button type="button" className="btn" onClick={() => togglePopUp(false)}>
+                Stay
+              </button>
+            </div>
+          </div>
         )}
         {type === "continue" && <ContinueGameForm togglePopUp={togglePopUp} />}
         {type === "saving" && (
