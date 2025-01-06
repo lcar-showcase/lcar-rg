@@ -98,11 +98,9 @@ function Game() {
   const { state } = useLocation();
   let loadBoard;
   let loadHistory;
-  try {
-    // Continue game
+  if (state) {
     ({ board: loadBoard, history: loadHistory } = state as { board: TileState[][]; history: HistoryItem[] });
-  } catch {
-    // New game
+  } else {
     loadBoard = null;
     loadHistory = null;
   }
