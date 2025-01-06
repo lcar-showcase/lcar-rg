@@ -6,12 +6,10 @@ interface ContinueGameFormProps {
   togglePopUp(show: boolean): void; // To toggle PopUp state of parent
 }
 
-type LoadingStatus = "notLoading" | "loading";
-
 function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
   const [currentInput, setCurrentInput] = useState("");
   const [formMsg, setFormMsg] = useState(""); // Message displayed below input
-  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>("notLoading");
+  const [isLoading, setIsLoading] = useState(false);
   const inputId = "gameUuid";
   const goTo = useNavigate(); // Change page after user submits form
 
@@ -22,7 +20,7 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
     if (!regex.exec(currentInput)) {
       setFormMsg("Invalid UUID provided.");
     } else {
-      setLoadingStatus("loading");
+      setIsLoading(true);
       setFormMsg("Loading game...");
     }
   };
@@ -51,12 +49,12 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
       } catch (err: unknown) {
         setFormMsg(uuidExists ? "Failed to load game." : "UUID does not exist.");
       }
-      setLoadingStatus("notLoading");
+      setIsLoading(false);
     };
-    if (loadingStatus === "loading") {
+    if (isLoading === true) {
       loadGame();
     }
-  }, [currentInput, goTo, loadingStatus, togglePopUp]);
+  }, [currentInput, goTo, isLoading, togglePopUp]);
 
   return (
     <form onSubmit={handleFormSubmit} className={style.formContainer}>
@@ -72,25 +70,20 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
             maxLength={36}
             minLength={36}
             required
-            disabled={loadingStatus === "loading"}
+            disabled={isLoading === true}
             onChange={(e) => {
               setCurrentInput(e.target.value);
             }}
           />
         </label>
-        <p className={style[loadingStatus]}>{formMsg}</p>
+        <p className={isLoading ? `${style.loading}` : `${style.notLoading}`}>{formMsg}</p>
       </div>
       {/* Buttons */}
       <div className={style.buttonsContainer}>
-        <button
-          type="button"
-          disabled={loadingStatus === "loading"}
-          onClick={() => togglePopUp(false)}
-          className="btn secondaryBtn"
-        >
+        <button type="button" disabled={isLoading} onClick={() => togglePopUp(false)} className="btn secondaryBtn">
           Back
         </button>
-        <button type="submit" disabled={loadingStatus === "loading"} className="btn">
+        <button type="submit" disabled={isLoading} className="btn">
           Continue
         </button>
       </div>
