@@ -6,7 +6,7 @@ interface ContinueGameFormProps {
   togglePopUp(show: boolean): void; // To toggle PopUp state of parent
 }
 
-function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
+function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
   const [currentInput, setCurrentInput] = useState("");
   const [formMsg, setFormMsg] = useState(""); // Message displayed below input
   const [isLoading, setIsLoading] = useState(false);
