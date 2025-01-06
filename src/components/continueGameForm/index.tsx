@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import style from "./continueGameForm.module.css";
 
@@ -12,47 +12,39 @@ function ContinueGameForm({ togglePopUp = () => {} }: ContinueGameFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const goTo = useNavigate(); // Change page after user submits form
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Validate input - alphanumeric and hyphens only, with no whitespaces
     const regex = /^[a-zA-Z0-9-]+$/; // TODO: Refinement (if enough time) match UUID format exactly
     if (!regex.exec(currentInput)) {
       setFormMsg("Invalid UUID provided.");
     } else {
-      setIsLoading(true);
+      setIsLoading((loading) => !loading);
       setFormMsg("Loading game...");
     }
-  };
-
-  // Retrieve game data from API
-  useEffect(() => {
-    const loadGame = async () => {
-      const req = new Request(
-        `https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/?id=reversi-cl&uuid=${currentInput}`,
-        {
-          method: "GET",
-        }
-      );
-      let uuidExists = true;
-      try {
-        const res = await fetch(req);
-        const body = await res.json();
-        if (!body.data) {
-          // body does not have data if invalid UUID provided
-          uuidExists = false;
-        }
-        const { board, history } = JSON.parse(body.data);
-        goTo("/game", { state: { board, history } }); // Redirect to /game with overwritten initial states
-        togglePopUp(false);
-      } catch (err: unknown) {
-        setFormMsg(uuidExists ? "Failed to load game." : "UUID does not exist.");
+    // Load game
+    const req = new Request(
+      `https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/?id=reversi-cl&uuid=${currentInput}`,
+      {
+        method: "GET",
       }
-      setIsLoading(false);
-    };
-    if (isLoading === true) {
-      loadGame();
+    );
+    let uuidExists = true;
+    try {
+      const res = await fetch(req);
+      const body = await res.json();
+      if (!body.data) {
+        // body does not have data if invalid UUID provided
+        uuidExists = false;
+      }
+      const { board, history } = JSON.parse(body.data);
+      goTo("/game", { state: { board, history } }); // Redirect to /game with overwritten initial states
+      togglePopUp(false);
+    } catch (err: unknown) {
+      setFormMsg(uuidExists ? "Failed to load game." : "UUID does not exist.");
     }
-  }, [currentInput, goTo, isLoading, togglePopUp]);
+    setIsLoading((loading) => !loading);
+  };
 
   return (
     <form onSubmit={handleFormSubmit} className={style.formContainer}>
