@@ -53,6 +53,26 @@
   gap: 2px;
 }
 
+@media (max-width: 450px) {
+  .container {
+    width: 300px;
+    height: 300px;
+  }
+
+  .layout {
+    width: 285px;
+    height: 285px;
+    display: grid;
+    grid-template-columns: 12px repeat(8, 1fr) 12px;
+    grid-template-rows: 12px repeat(8, 1fr) 12px;
+    background: #2c4123;
+  }
+
+  .rowColId {
+    font-size: 0.5rem;
+  }
+}
+
 @media (min-width: 1400px) {
   .container {
     width: 600px;
