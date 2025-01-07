@@ -299,10 +299,10 @@ function Game() {
 
   // Helper function to get pop-up title
   const getPopUpTitle = () => {
-    if (popUpType === "win") {
-      return "Player wins!";
-    }
     if (popUpType === "saving") {
+      return "Saving game";
+    }
+    if (popUpType === "win") {
       if (winnerColour === "dark") {
         return "Player wins!";
       }
@@ -403,7 +403,7 @@ function Game() {
           <button
             type="button"
             className="btn"
-            disabled={currentPlayer === "light"}
+            disabled={currentPlayer === "light" && winnerColour === null} // Can save after game over
             onClick={() => {
               setShowPopUp(true);
               setPopUpType("saving");
