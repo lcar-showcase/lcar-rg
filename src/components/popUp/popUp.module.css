@@ -36,85 +36,10 @@
   gap: 50px;
 }
 
-.loading {
-  width: 40px;
-  aspect-ratio: 1;
-  animation-name: spin;
-  animation-duration: 0.8s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
-
-.saveOutcomeContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  color: #7a7787;
-}
-
-.ok {
-  color: #48ca48;
-}
-
-.fail {
-  color: #e85a5c;
-}
-
-.uuid {
-  display: flex;
-  background-color: #7a7787;
-  justify-content: center;
-  align-items: center;
-  padding: 15px 20px;
-  border-radius: 10px;
-  gap: 20px;
-}
-
-.uuid p {
-  color: white;
-  font-size: 1.2rem;
-}
-
-.uuid button {
-  font-size: 1rem;
-  min-width: 80px;
-  padding: 8px 10px;
-}
-
-.copyButtonClicked {
-  animation-name: flash;
-  animation-duration: 1s;
-}
-
-.copyButtonClicked button:disabled {
-  /* Disable button for 1s to let animation run to completion */
-  background: #48ca48;
-  border: 3px solid #48ca48;
-}
-
-@keyframes flash {
-  from {
-    background: #b7b3c7;
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (min-width: 1400px) {
   .popUp {
     font-size: 1.4rem;
     padding: 50px 100px;
     min-width: 680px;
-  }
-
-  .uuid {
-    font-size: 1.6rem;
   }
 }

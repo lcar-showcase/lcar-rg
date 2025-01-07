@@ -4,7 +4,7 @@ import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
-import { Coordinate, PopUpType, SaveStatus, TileState } from "../../types";
+import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
@@ -93,16 +93,18 @@ interface HistoryItem {
 
 type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
+type SaveStatus = "pending" | "ok" | "fail";
+
+type PopUpType = "win" | "saving" | "confirm";
+
 function Game() {
   // Determine if game needs different intial state (continue game)
   const { state } = useLocation();
   let loadBoard;
   let loadHistory;
-  try {
-    // Continue game
-    ({ loadBoard, loadHistory } = state as { loadBoard: TileState[][]; loadHistory: HistoryItem[] });
-  } catch {
-    // New game
+  if (state) {
+    ({ board: loadBoard, history: loadHistory } = state as { board: TileState[][]; history: HistoryItem[] });
+  } else {
     loadBoard = null;
     loadHistory = null;
   }
@@ -116,6 +118,7 @@ function Game() {
   const [popUpType, setPopUpType] = useState<PopUpType>("win");
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
   const [uuid, setUuid] = useState("");
+  const [copyButtonClicked, setCopyButtonClicked] = useState(false);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -294,26 +297,53 @@ function Game() {
     [boardArr, currentPlayer, history, turn]
   );
 
+  // Helper function to get pop-up title
   const getPopUpTitle = () => {
-    let title;
-    switch (popUpType) {
-      case "win":
-        if (winnerColour === "dark") {
-          title = "Player wins!";
-        } else {
-          title = "Computer wins!";
-        }
-        break;
-      case "saving":
-        title = "Saving game";
-        break;
-      case "confirm":
-        title = "Return to Main Menu?";
-        break;
-      default:
-        title = "An error occured";
+    if (popUpType === "saving") {
+      return "Saving game";
     }
-    return title;
+    if (popUpType === "win") {
+      if (winnerColour === "dark") {
+        return "Player wins!";
+      }
+      return "Computer wins!";
+    }
+    return "An error occured.";
+  };
+
+  // Helper function to determine pop-up content
+  const getSavingPopUpContent = () => {
+    if (saveStatus === "pending") {
+      return <img src="/images/loading.png" alt="Loading" className={style.loading} />;
+    }
+    if (saveStatus === "ok") {
+      return (
+        <div className={style.saveOutcomeContainer}>
+          <p className={style[saveStatus]}>Game saved successfully</p>
+          <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
+            <p>{uuid}</p>
+            <button
+              type="button"
+              className="btn"
+              disabled={copyButtonClicked}
+              onClick={() => {
+                // Copy to clipboard
+                navigator.clipboard.writeText(uuid);
+                if (copyButtonClicked === false) {
+                  setCopyButtonClicked(true);
+                }
+              }}
+            >
+              {copyButtonClicked ? "Copied" : "Copy"}
+            </button>
+          </div>
+          <p>Use the UUID above to load the game</p>
+        </div>
+      );
+    }
+    if (saveStatus === "fail") {
+      <div className={style[saveStatus]}>Failed to save game</div>;
+    }
   };
 
   // Render board after player turn, delay, then re-render board with computer's move
@@ -332,36 +362,34 @@ function Game() {
     }
   }, [boardArr, currentPlayer, handleTurn, turn, winnerColour]);
 
-  useEffect(() => {
-    const saveGame = async () => {
-      const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
-        method: "POST",
-        body: JSON.stringify({
-          id: "reversi-cl",
-          data: { board: JSON.stringify(boardArr), history: JSON.stringify(history) },
-        }),
-      });
-      try {
-        const res = await fetch(req);
-        const body = await res.json();
-        setUuid(body.uuid);
-        return true;
-      } catch (err: unknown) {
-        setSaveStatus("fail");
-      }
-      return false;
-    };
-
-    if (popUpType === "saving") {
-      saveGame().then((success) => {
-        if (success) {
-          setSaveStatus("ok");
-        } else {
-          setSaveStatus("fail");
-        }
-      });
+  const saveGame = async () => {
+    const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
+      method: "POST",
+      body: JSON.stringify({
+        id: "reversi-cl",
+        data: JSON.stringify({ board: boardArr, history }),
+      }),
+    });
+    try {
+      const res = await fetch(req);
+      const body = await res.json();
+      setSaveStatus("ok");
+      setUuid(body.uuid);
+      return true;
+    } catch (err: unknown) {
+      setSaveStatus("fail");
     }
-  }, [boardArr, history, popUpType]);
+    return false;
+  };
+
+  // Allow animation to run to completion
+  useEffect(() => {
+    setTimeout(() => {
+      if (copyButtonClicked === true) {
+        setCopyButtonClicked(false);
+      }
+    }, 1000);
+  }, [copyButtonClicked]);
 
   return (
     <>
@@ -382,11 +410,12 @@ function Game() {
           <button
             type="button"
             className={`btn ${style.saveButton}`}
-            disabled={currentPlayer === "light" && winnerColour === null} // Computer turn and no winner yet - disable save
+            disabled={currentPlayer === "light" && winnerColour === null} // Can save after game over
             onClick={() => {
               setShowPopUp(true);
               setPopUpType("saving");
               setSaveStatus("pending");
+              saveGame();
             }}
           >
             Save
@@ -414,14 +443,14 @@ function Game() {
       </div>
       {/* Pop-ups */}
       {showPopUp && (
+        // Save
         <PopUp
-          type={popUpType}
           title={getPopUpTitle()}
-          saveStatus={saveStatus}
-          uuid={uuid}
-          togglePopUp={setShowPopUp}
-          setParentPopUp={setPopUpType}
-        />
+          primaryButtonCallback={() => setShowPopUp(false)}
+          primaryButtonText="Return to Game"
+        >
+          {popUpType === "saving" && getSavingPopUpContent()}
+        </PopUp>
       )}
     </>
   );
