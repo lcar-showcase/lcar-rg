@@ -19,7 +19,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
     if (!regex.exec(currentInput)) {
       setFormMsg("Invalid UUID provided.");
     } else {
-      setIsLoading((loading) => !loading);
+      setIsLoading(true);
       setFormMsg("Loading game...");
     }
     // Load game
@@ -43,7 +43,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
     } catch (err: unknown) {
       setFormMsg(uuidExists ? "Failed to load game." : "UUID does not exist.");
     }
-    setIsLoading((loading) => !loading);
+    setIsLoading(false);
   };
 
   return (
