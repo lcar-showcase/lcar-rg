@@ -93,10 +93,17 @@ body {
   border: 3px solid grey;
 }
 
+@media (max-width: 450px) {
+  .btn {
+    font-size: 1rem;
+    min-width: 180px;
+    padding: 15px;
+  }
+}
+
 @media (min-width: 1400px) {
   .btn {
     font-size: 1.5rem;
     min-width: 250px;
-    padding: 20px;
   }
 }
