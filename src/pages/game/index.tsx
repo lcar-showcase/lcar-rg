@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
@@ -119,6 +119,7 @@ function Game() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
   const [uuid, setUuid] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
+  const goTo = useNavigate();
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -308,42 +309,53 @@ function Game() {
       }
       return "Computer wins!";
     }
+    if (popUpType === "confirm") {
+      return "Return to Main Menu?";
+    }
     return "An error occured.";
   };
 
   // Helper function to determine pop-up content
-  const getSavingPopUpContent = () => {
-    if (saveStatus === "pending") {
-      return <img src="/images/loading.png" alt="Loading" className={style.loading} />;
-    }
-    if (saveStatus === "ok") {
-      return (
-        <div className={style.saveOutcomeContainer}>
-          <p className={style[saveStatus]}>Game saved successfully</p>
-          <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
-            <p>{uuid}</p>
-            <button
-              type="button"
-              className="btn"
-              disabled={copyButtonClicked}
-              onClick={() => {
-                // Copy to clipboard
-                navigator.clipboard.writeText(uuid);
-                if (copyButtonClicked === false) {
-                  setCopyButtonClicked(true);
-                }
-              }}
-            >
-              {copyButtonClicked ? "Copied" : "Copy"}
-            </button>
+  const getPopUpContent = () => {
+    // Saving pop-up
+    if (popUpType === "saving") {
+      if (saveStatus === "pending") {
+        return <img src="/images/loading.png" alt="Loading" className={style.loading} />;
+      }
+      if (saveStatus === "ok") {
+        return (
+          <div className={style.saveOutcomeContainer}>
+            <p className={style[saveStatus]}>Game saved successfully</p>
+            <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
+              <p>{uuid}</p>
+              <button
+                type="button"
+                className="btn"
+                disabled={copyButtonClicked}
+                onClick={() => {
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(uuid);
+                  if (copyButtonClicked === false) {
+                    setCopyButtonClicked(true);
+                  }
+                }}
+              >
+                {copyButtonClicked ? "Copied" : "Copy"}
+              </button>
+            </div>
+            <p>Use the UUID above to load the game</p>
           </div>
-          <p>Use the UUID above to load the game</p>
-        </div>
-      );
+        );
+      }
+      if (saveStatus === "fail") {
+        <div className={style[saveStatus]}>Failed to save game</div>;
+      }
     }
-    if (saveStatus === "fail") {
-      <div className={style[saveStatus]}>Failed to save game</div>;
+    // Confirmation pop-up
+    if (popUpType === "confirm") {
+      return <div>All unsaved progress will be lost.</div>;
     }
+    return null; // No contents
   };
 
   // Render board after player turn, delay, then re-render board with computer's move
@@ -448,8 +460,10 @@ function Game() {
           title={getPopUpTitle()}
           primaryButtonCallback={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
+          secondaryButtonCallback={popUpType === "confirm" ? () => goTo("/") : null} // Only confirmation pop-up has secondary button
+          secondaryButtonText={popUpType === "confirm" ? "Return to Main Menu" : null}
         >
-          {popUpType === "saving" && getSavingPopUpContent()}
+          {getPopUpContent()}
         </PopUp>
       )}
     </>

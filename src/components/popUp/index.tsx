@@ -3,10 +3,10 @@ import style from "./popUp.module.css";
 interface PopUpProps {
   title: string;
   children?: React.ReactNode; // Children and buttons are optional
-  primaryButtonText?: string;
-  secondaryButtonText?: string;
-  primaryButtonCallback?(): void;
-  secondaryButtonCallback?(): void;
+  primaryButtonText?: string | null;
+  secondaryButtonText?: string | null;
+  primaryButtonCallback?: (() => void) | null;
+  secondaryButtonCallback?: (() => void) | null;
 }
 
 function PopUp({
@@ -14,8 +14,8 @@ function PopUp({
   children,
   primaryButtonText,
   secondaryButtonText,
-  primaryButtonCallback = () => {},
-  secondaryButtonCallback = () => {},
+  primaryButtonCallback = null,
+  secondaryButtonCallback = null,
 }: PopUpProps) {
   return (
     <div className={style.darken}>
@@ -23,12 +23,12 @@ function PopUp({
         <h2>{title}</h2>
         {children && <div className={style.popUpBodyContainer}>{children}</div>}
         <div className={style.buttonsContainer}>
-          {secondaryButtonText && (
+          {secondaryButtonText && secondaryButtonCallback && (
             <button type="button" className="secondaryBtn btn" onClick={secondaryButtonCallback}>
               {secondaryButtonText}
             </button>
           )}
-          {primaryButtonText && (
+          {primaryButtonText && primaryButtonCallback && (
             <button type="button" className="btn" onClick={primaryButtonCallback}>
               {primaryButtonText}
             </button>
