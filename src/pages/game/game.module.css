@@ -127,14 +127,13 @@
 }
 
 .copyButtonClicked {
-  animation-name: flash;
+  animation-name: flashUuidContainer;
   animation-duration: 1s;
 }
 
-.copyButtonClicked button:disabled {
-  /* Disable button for 1s to let animation run to completion */
-  background: #48ca48;
-  border: 3px solid #48ca48;
+.copyButtonClicked button {
+  animation-name: flashUuidButton;
+  animation-duration: 1s;
 }
 
 @keyframes historySecondItem {
@@ -146,9 +145,16 @@
   }
 }
 
-@keyframes flash {
+@keyframes flashUuidContainer {
   from {
     background: #b7b3c7;
+  }
+}
+
+@keyframes flashUuidButton {
+  from {
+    background: #48ca48;
+    border: 3px solid #48ca48;
   }
 }
 

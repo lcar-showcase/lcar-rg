@@ -5,8 +5,8 @@ interface PopUpProps {
   children?: React.ReactNode; // Children and buttons are optional
   primaryButtonText?: string;
   secondaryButtonText?: string;
-  primaryButtonCallback?(): void;
-  secondaryButtonCallback?(): void;
+  onClickPrimaryButton?(): void;
+  onClickSecondaryButton?(): void;
 }
 
 function PopUp({
@@ -14,8 +14,8 @@ function PopUp({
   children,
   primaryButtonText,
   secondaryButtonText,
-  primaryButtonCallback = () => {},
-  secondaryButtonCallback = () => {},
+  onClickPrimaryButton,
+  onClickSecondaryButton,
 }: PopUpProps) {
   return (
     <div className={style.darken}>
@@ -23,13 +23,13 @@ function PopUp({
         <h2>{title}</h2>
         {children && <div className={style.popUpBodyContainer}>{children}</div>}
         <div className={style.buttonsContainer}>
-          {secondaryButtonText && (
-            <button type="button" className="secondaryBtn btn" onClick={secondaryButtonCallback}>
+          {secondaryButtonText && onClickSecondaryButton && (
+            <button type="button" className="secondaryBtn btn" onClick={onClickSecondaryButton}>
               {secondaryButtonText}
             </button>
           )}
-          {primaryButtonText && (
-            <button type="button" className="btn" onClick={primaryButtonCallback}>
+          {primaryButtonText && onClickPrimaryButton && (
+            <button type="button" className="btn" onClick={onClickPrimaryButton}>
               {primaryButtonText}
             </button>
           )}

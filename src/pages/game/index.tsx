@@ -325,7 +325,6 @@ function Game() {
             <button
               type="button"
               className="btn"
-              disabled={copyButtonClicked}
               onClick={() => {
                 // Copy to clipboard
                 navigator.clipboard.writeText(uuid);
@@ -439,7 +438,7 @@ function Game() {
         // Save
         <PopUp
           title={getPopUpTitle()}
-          primaryButtonCallback={() => setShowPopUp(false)}
+          onClickPrimaryButton={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
         >
           {popUpType === "saving" && getSavingPopUpContent()}
