@@ -48,6 +48,13 @@
   color: #b9b4cc;
 }
 
+@media (max-width: 450px) {
+  .buttonsContainer {
+    flex-direction: column; /* Instead of row */
+    gap: 15px;
+  }
+}
+
 @media (min-width: 1400px) {
   .inputContainer,
   .inputContainer label {

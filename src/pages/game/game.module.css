@@ -12,7 +12,6 @@
   top: 30px;
   font-size: 1rem;
   min-width: 120px;
-  height: 40px;
   padding: 10px 10px;
 }
 
@@ -169,21 +168,6 @@
   }
 }
 
-/* Mobile screens */
-@media (max-width: 450px) {
-  .saveButton {
-    min-width: 80px;
-    /* Stick closer to edges */
-    right: 25px;
-    top: 22px;
-  }
-
-  .backToMainMenuContainer {
-    left: 25px;
-    top: 24px;
-  }
-}
-
 /* Large screens */
 @keyframes flash {
   from {
@@ -213,9 +197,17 @@
     left: 25px;
     top: 24px;
   }
+
+  .uuid {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .uuid p {
+    font-size: 0.8rem;
+  }
 }
 
-/* Large screens */
 @media (min-width: 1400px) {
   .header button {
     font-size: 1.3rem;
@@ -244,7 +236,7 @@
     --animation-initial-offset: -40px;
   }
 
-  .uuid {
+  .uuid p {
     font-size: 1.6rem;
   }
 }
