@@ -4,7 +4,7 @@ import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
-import { Coordinate, PopUpType, SaveStatus, TileState } from "../../types";
+import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
 
@@ -93,6 +93,10 @@ interface HistoryItem {
 
 type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
+type SaveStatus = "pending" | "ok" | "fail";
+
+type PopUpType = "win" | "saving"; // This component can display two types of pop-ups
+
 function Game() {
   // Determine if game needs different intial state (continue game)
   const { state } = useLocation();
@@ -114,6 +118,7 @@ function Game() {
   const [popUpType, setPopUpType] = useState<PopUpType>("win");
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
   const [uuid, setUuid] = useState("");
+  const [copyButtonClicked, setCopyButtonClicked] = useState(false);
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -292,23 +297,53 @@ function Game() {
     [boardArr, currentPlayer, history, turn]
   );
 
+  // Helper function to get pop-up title
   const getPopUpTitle = () => {
-    let title;
-    switch (popUpType) {
-      case "win":
-        if (winnerColour === "dark") {
-          title = "Player wins!";
-        } else {
-          title = "Computer wins!";
-        }
-        break;
-      case "saving":
-        title = "Saving game";
-        break;
-      default:
-        title = "An error occured";
+    if (popUpType === "win") {
+      return "Player wins!";
     }
-    return title;
+    if (popUpType === "saving") {
+      if (winnerColour === "dark") {
+        return "Player wins!";
+      }
+      return "Computer wins!";
+    }
+    return "An error occured.";
+  };
+
+  // Helper function to determine pop-up content
+  const getPopUpContent = () => {
+    if (saveStatus === "pending") {
+      return <img src="/images/loading.png" alt="Loading" className={style.loading} />;
+    }
+    if (saveStatus === "ok") {
+      return (
+        <div className={style.saveOutcomeContainer}>
+          <p className={style[saveStatus]}>Game saved successfully</p>
+          <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
+            <p>{uuid}</p>
+            <button
+              type="button"
+              className="btn"
+              disabled={copyButtonClicked}
+              onClick={() => {
+                // Copy to clipboard
+                navigator.clipboard.writeText(uuid);
+                if (copyButtonClicked === false) {
+                  setCopyButtonClicked(true);
+                }
+              }}
+            >
+              {copyButtonClicked ? "Copied" : "Copy"}
+            </button>
+          </div>
+          <p>Use the UUID above to load the game</p>
+        </div>
+      );
+    }
+    if (saveStatus === "fail") {
+      <div className={style[saveStatus]}>Failed to save game</div>;
+    }
   };
 
   // Render board after player turn, delay, then re-render board with computer's move
@@ -346,6 +381,15 @@ function Game() {
     }
     return false;
   };
+
+  // Allow animation to run to completion
+  useEffect(() => {
+    setTimeout(() => {
+      if (copyButtonClicked === true) {
+        setCopyButtonClicked(false);
+      }
+    }, 1000);
+  }, [copyButtonClicked]);
 
   return (
     <>
@@ -391,15 +435,23 @@ function Game() {
         </div>
       </div>
       {/* Pop-ups */}
-      {showPopUp && (
+      {showPopUp && popUpType === "win" && (
+        // Win
         <PopUp
-          type={popUpType}
           title={getPopUpTitle()}
-          saveStatus={saveStatus}
-          uuid={uuid}
-          togglePopUp={setShowPopUp}
-          setParentPopUp={setPopUpType}
+          primaryButtonCallback={() => setShowPopUp(false)}
+          primaryButtonText="Return to Game"
         />
+      )}
+      {showPopUp && popUpType === "saving" && (
+        // Save
+        <PopUp
+          title={getPopUpTitle()}
+          primaryButtonCallback={() => setShowPopUp(false)}
+          primaryButtonText="Return to Game"
+        >
+          {getPopUpContent()}
+        </PopUp>
       )}
     </>
   );

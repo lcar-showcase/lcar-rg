@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import ContinueGameForm from "../../components/continueGameForm";
 import Logo from "../../components/logo";
 import PopUp from "../../components/popUp";
 import style from "./mainMenu.module.css";
@@ -26,7 +27,11 @@ function MainMenu() {
           Continue Game
         </button>
       </div>
-      {showPopUp && <PopUp type="continue" title="Continue Game" togglePopUp={setShowPopUp} />}
+      {showPopUp && (
+        <PopUp title="Continue Game">
+          <ContinueGameForm togglePopUp={setShowPopUp} />
+        </PopUp>
+      )}
     </>
   );
 }
