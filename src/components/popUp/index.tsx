@@ -2,7 +2,7 @@ import style from "./popUp.module.css";
 
 interface PopUpProps {
   title: string;
-  children?: React.ReactNode;
+  children?: React.ReactNode; // Children and buttons are optional
   primaryButtonText?: string;
   secondaryButtonText?: string;
   primaryButtonCallback?(): void;

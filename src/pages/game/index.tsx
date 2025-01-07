@@ -95,7 +95,7 @@ type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
 type SaveStatus = "pending" | "ok" | "fail";
 
-type PopUpType = "win" | "saving"; // This component can display two types of pop-ups
+type PopUpType = "win" | "saving";
 
 function Game() {
   // Determine if game needs different intial state (continue game)
@@ -312,7 +312,7 @@ function Game() {
   };
 
   // Helper function to determine pop-up content
-  const getPopUpContent = () => {
+  const getSavingPopUpContent = () => {
     if (saveStatus === "pending") {
       return <img src="/images/loading.png" alt="Loading" className={style.loading} />;
     }
@@ -435,22 +435,14 @@ function Game() {
         </div>
       </div>
       {/* Pop-ups */}
-      {showPopUp && popUpType === "win" && (
-        // Win
-        <PopUp
-          title={getPopUpTitle()}
-          primaryButtonCallback={() => setShowPopUp(false)}
-          primaryButtonText="Return to Game"
-        />
-      )}
-      {showPopUp && popUpType === "saving" && (
+      {showPopUp && (
         // Save
         <PopUp
           title={getPopUpTitle()}
           primaryButtonCallback={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
         >
-          {getPopUpContent()}
+          {popUpType === "saving" && getSavingPopUpContent()}
         </PopUp>
       )}
     </>
