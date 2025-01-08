@@ -4,6 +4,7 @@ import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
+import { API_BASE_URL, GAME_ID } from "../../constants";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -298,66 +299,6 @@ function Game() {
     [boardArr, currentPlayer, history, turn]
   );
 
-  // Helper function to get pop-up title
-  const getPopUpTitle = () => {
-    if (popUpType === "saving") {
-      return "Saving game";
-    }
-    if (popUpType === "win") {
-      if (winnerColour === "dark") {
-        return "Player wins!";
-      }
-      return "Computer wins!";
-    }
-    if (popUpType === "confirm") {
-      return "Return to Main Menu?";
-    }
-    return "An error occured.";
-  };
-
-  // Helper function to determine pop-up content
-  const getPopUpContent = () => {
-    // Saving pop-up
-    if (popUpType === "saving") {
-      if (saveStatus === "pending") {
-        return <img src="/images/loading.png" alt="Loading" className={style.loading} />;
-      }
-      if (saveStatus === "ok") {
-        return (
-          <div className={style.saveOutcomeContainer}>
-            <p className={style[saveStatus]}>Game saved successfully</p>
-            <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
-              <p>{uuid}</p>
-              <button
-                type="button"
-                className="btn"
-                disabled={copyButtonClicked}
-                onClick={() => {
-                  // Copy to clipboard
-                  navigator.clipboard.writeText(uuid);
-                  if (copyButtonClicked === false) {
-                    setCopyButtonClicked(true);
-                  }
-                }}
-              >
-                {copyButtonClicked ? "Copied" : "Copy"}
-              </button>
-            </div>
-            <p>Use the UUID above to load the game</p>
-          </div>
-        );
-      }
-      if (saveStatus === "fail") {
-        <div className={style[saveStatus]}>Failed to save game</div>;
-      }
-    }
-    // Confirmation pop-up
-    if (popUpType === "confirm") {
-      return <div>All unsaved progress will be lost.</div>;
-    }
-    return null; // No contents
-  };
-
   // Render board after player turn, delay, then re-render board with computer's move
   useEffect(() => {
     if (currentPlayer === "light" && !winnerColour) {
@@ -375,10 +316,10 @@ function Game() {
   }, [boardArr, currentPlayer, handleTurn, turn, winnerColour]);
 
   const saveGame = async () => {
-    const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
+    const req = new Request(API_BASE_URL, {
       method: "POST",
       body: JSON.stringify({
-        id: "reversi-cl",
+        id: GAME_ID,
         data: JSON.stringify({ board: boardArr, history }),
       }),
     });
@@ -454,16 +395,61 @@ function Game() {
         </div>
       </div>
       {/* Pop-ups */}
-      {showPopUp && (
-        // Save
+      {showPopUp && popUpType === "win" && (
         <PopUp
-          title={getPopUpTitle()}
-          primaryButtonCallback={() => setShowPopUp(false)}
+          title={`${winnerColour === "dark" ? "Player" : "Computer"} wins!`}
+          onClickPrimaryButton={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
-          secondaryButtonCallback={popUpType === "confirm" ? () => goTo("/") : null} // Only confirmation pop-up has secondary button
-          secondaryButtonText={popUpType === "confirm" ? "Return to Main Menu" : null}
+        />
+      )}
+      {showPopUp && popUpType === "saving" && saveStatus === "pending" && (
+        <PopUp
+          title="Saving game"
+          disablePrimaryButton={saveStatus === "pending"}
+          onClickPrimaryButton={() => setShowPopUp(false)}
+          primaryButtonText="Return to Game"
         >
-          {getPopUpContent()}
+          <img src="/images/loading.png" alt="Loading" className={style.loading} />
+        </PopUp>
+      )}
+      {showPopUp && popUpType === "saving" && saveStatus === "ok" && (
+        <PopUp title="Saving game" onClickPrimaryButton={() => setShowPopUp(false)} primaryButtonText="Return to Game">
+          <div className={style.saveOutcomeContainer}>
+            <p className={style[saveStatus]}>Game saved successfully</p>
+            <div className={`${style.uuid} ${copyButtonClicked && style.copyButtonClicked}`}>
+              <p>{uuid}</p>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  // Copy to clipboard
+                  navigator.clipboard.writeText(uuid);
+                  if (copyButtonClicked === false) {
+                    setCopyButtonClicked(true);
+                  }
+                }}
+              >
+                {copyButtonClicked ? "Copied" : "Copy"}
+              </button>
+            </div>
+            <p>Use the UUID above to load the game</p>
+          </div>
+        </PopUp>
+      )}
+      {showPopUp && popUpType === "saving" && saveStatus === "fail" && (
+        <PopUp title="Saving game" onClickPrimaryButton={() => setShowPopUp(false)} primaryButtonText="Return to Game">
+          <div className={style[saveStatus]}>Failed to save game</div>
+        </PopUp>
+      )}
+      {showPopUp && popUpType === "confirm" && (
+        <PopUp
+          title="Return to Main Menu?"
+          onClickPrimaryButton={() => setShowPopUp(false)}
+          primaryButtonText="Stay"
+          onClickSecondaryButton={() => goTo("/")}
+          secondaryButtonText="Return"
+        >
+          <div>All unsaved progress will be lost.</div>
         </PopUp>
       )}
     </>

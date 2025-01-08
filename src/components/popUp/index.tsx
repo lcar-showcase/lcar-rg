@@ -3,10 +3,12 @@ import style from "./popUp.module.css";
 interface PopUpProps {
   title: string;
   children?: React.ReactNode; // Children and buttons are optional
-  primaryButtonText?: string | null;
-  secondaryButtonText?: string | null;
-  primaryButtonCallback?: (() => void) | null;
-  secondaryButtonCallback?: (() => void) | null;
+  primaryButtonText?: string;
+  secondaryButtonText?: string;
+  disablePrimaryButton?: boolean;
+  disableSecondaryButton?: boolean;
+  onClickPrimaryButton?(): void;
+  onClickSecondaryButton?(): void;
 }
 
 function PopUp({
@@ -14,8 +16,10 @@ function PopUp({
   children,
   primaryButtonText,
   secondaryButtonText,
-  primaryButtonCallback = null,
-  secondaryButtonCallback = null,
+  disablePrimaryButton = false, // Buttons enabled by default
+  disableSecondaryButton = false,
+  onClickPrimaryButton,
+  onClickSecondaryButton,
 }: PopUpProps) {
   return (
     <div className={style.darken}>
@@ -23,13 +27,18 @@ function PopUp({
         <h2>{title}</h2>
         {children && <div className={style.popUpBodyContainer}>{children}</div>}
         <div className={style.buttonsContainer}>
-          {secondaryButtonText && secondaryButtonCallback && (
-            <button type="button" className="secondaryBtn btn" onClick={secondaryButtonCallback}>
+          {secondaryButtonText && onClickSecondaryButton && (
+            <button
+              type="button"
+              className="secondaryBtn btn"
+              disabled={disableSecondaryButton}
+              onClick={onClickSecondaryButton}
+            >
               {secondaryButtonText}
             </button>
           )}
-          {primaryButtonText && primaryButtonCallback && (
-            <button type="button" className="btn" onClick={primaryButtonCallback}>
+          {primaryButtonText && onClickPrimaryButton && (
+            <button type="button" className="btn" disabled={disablePrimaryButton} onClick={onClickPrimaryButton}>
               {primaryButtonText}
             </button>
           )}

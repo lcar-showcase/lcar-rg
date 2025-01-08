@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import { API_BASE_URL, GAME_ID } from "../../constants";
 import style from "./continueGameForm.module.css";
 
 interface ContinueGameFormProps {
@@ -19,16 +20,13 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
     if (!regex.exec(currentInput)) {
       setFormMsg("Invalid UUID provided.");
     } else {
-      setIsLoading((loading) => !loading);
+      setIsLoading(true);
       setFormMsg("Loading game...");
     }
     // Load game
-    const req = new Request(
-      `https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/?id=reversi-cl&uuid=${currentInput}`,
-      {
-        method: "GET",
-      }
-    );
+    const req = new Request(`${API_BASE_URL}/?id=${GAME_ID}&uuid=${currentInput}`, {
+      method: "GET",
+    });
     let uuidExists = true;
     try {
       const res = await fetch(req);
@@ -43,7 +41,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
     } catch (err: unknown) {
       setFormMsg(uuidExists ? "Failed to load game." : "UUID does not exist.");
     }
-    setIsLoading((loading) => !loading);
+    setIsLoading(false);
   };
 
   return (
