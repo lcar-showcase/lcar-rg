@@ -22,7 +22,7 @@
   color: #f1e3d7;
   font-weight: 700;
   /* Override global .btn CSS */
-  padding: 0;
+  padding: 15px;
   background: none;
   border: none;
   box-shadow: none;
@@ -30,7 +30,7 @@
 
 /* Override global .btn CSS */
 .backToMainMenuContainer:hover {
-  background: none;
+  background: #7a7787;
 }
 
 .back {
