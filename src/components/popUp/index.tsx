@@ -5,6 +5,8 @@ interface PopUpProps {
   children?: React.ReactNode; // Children and buttons are optional
   primaryButtonText?: string;
   secondaryButtonText?: string;
+  disablePrimaryButton?: boolean;
+  disableSecondaryButton?: boolean;
   onClickPrimaryButton?(): void;
   onClickSecondaryButton?(): void;
 }
@@ -14,6 +16,8 @@ function PopUp({
   children,
   primaryButtonText,
   secondaryButtonText,
+  disablePrimaryButton = false, // Buttons enabled by default
+  disableSecondaryButton = false,
   onClickPrimaryButton,
   onClickSecondaryButton,
 }: PopUpProps) {
@@ -24,12 +28,17 @@ function PopUp({
         {children && <div className={style.popUpBodyContainer}>{children}</div>}
         <div className={style.buttonsContainer}>
           {secondaryButtonText && onClickSecondaryButton && (
-            <button type="button" className="secondaryBtn btn" onClick={onClickSecondaryButton}>
+            <button
+              type="button"
+              className="secondaryBtn btn"
+              disabled={disableSecondaryButton}
+              onClick={onClickSecondaryButton}
+            >
               {secondaryButtonText}
             </button>
           )}
           {primaryButtonText && onClickPrimaryButton && (
-            <button type="button" className="btn" onClick={onClickPrimaryButton}>
+            <button type="button" className="btn" disabled={disablePrimaryButton} onClick={onClickPrimaryButton}>
               {primaryButtonText}
             </button>
           )}
