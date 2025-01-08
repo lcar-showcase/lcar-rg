@@ -23,7 +23,7 @@
 .hint {
   /* Input hint */
   text-align: start;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #b9b4cc;
 }
 
@@ -61,12 +61,20 @@
     gap: 15px;
   }
 
+  .hint {
+    font-size: 0.8rem;
+  }
+
   .inputContainer input::placeholder {
     font-size: 0.75rem;
   }
 }
 
 @media (min-width: 1400px) {
+  .hint {
+    font-size: 1rem;
+  }
+
   .inputContainer,
   .inputContainer label {
     font-size: 1.2rem;
