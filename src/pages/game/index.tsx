@@ -4,6 +4,7 @@ import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
+import { API_BASE_URL, GAME_ID } from "../../constants";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -314,10 +315,10 @@ function Game() {
   }, [boardArr, currentPlayer, handleTurn, turn, winnerColour]);
 
   const saveGame = async () => {
-    const req = new Request("https://cpy6alcm5f.execute-api.ap-southeast-1.amazonaws.com/", {
+    const req = new Request(API_BASE_URL, {
       method: "POST",
       body: JSON.stringify({
-        id: "reversi-cl",
+        id: GAME_ID,
         data: JSON.stringify({ board: boardArr, history }),
       }),
     });
