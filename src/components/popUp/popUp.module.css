@@ -29,7 +29,7 @@
   align-items: center;
   justify-content: center;
   gap: 25px;
-  min-height: 80px;
+  min-height: 50px;
 }
 
 .buttonsContainer {
@@ -43,5 +43,9 @@
     font-size: 1.4rem;
     padding: 50px 100px;
     min-width: 680px;
+  }
+
+  .popUpBodyContainer {
+    min-height: 80px;
   }
 }
