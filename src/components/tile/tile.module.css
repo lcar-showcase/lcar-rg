@@ -21,6 +21,17 @@
   border: 2px solid #d2bba7;
 }
 
+.flash {
+  animation-name: flash;
+  animation-duration: 1s;
+}
+
+@keyframes flash {
+  from {
+    background: #98b988;
+  }
+}
+
 /* TODO: (Enhancement) Make valid tiles more obvious */
 .valid {
   width: 40%;
