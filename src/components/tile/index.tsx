@@ -5,7 +5,7 @@ interface TileProps {
   id: string;
   tileState: TileState;
   isValidMove: boolean;
-  isClicked: boolean;
+  isComputerClicked: boolean;
   currentPlayer: TileState;
   handleClick(): void;
 }
@@ -16,7 +16,7 @@ interface TileProps {
  * @param tileState - Disk colour on the Tile.
  * @returns Tile component.
  */
-function Tile({ id, tileState, isValidMove, isClicked, currentPlayer, handleClick }: TileProps) {
+function Tile({ id, tileState, isValidMove, isComputerClicked: isClicked, currentPlayer, handleClick }: TileProps) {
   return (
     <div
       id={id}

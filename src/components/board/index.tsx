@@ -5,7 +5,7 @@ import style from "./board.module.css";
 interface BoardProps {
   boardArray: TileState[][];
   validTiles: Coordinate[];
-  clickedTile: Coordinate | null; // Tile that was clicked by computer during its turn
+  computerClickedTile: Coordinate | null;
   rows: string[];
   cols: string[];
   currentPlayer: TileState;
@@ -16,7 +16,15 @@ interface BoardProps {
  * The game board.
  * @returns Board component.
  */
-function Board({ boardArray, validTiles, clickedTile, rows, cols, currentPlayer, handleTurn }: BoardProps) {
+function Board({
+  boardArray,
+  validTiles,
+  computerClickedTile: clickedTile,
+  rows,
+  cols,
+  currentPlayer,
+  handleTurn,
+}: BoardProps) {
   return (
     <section className={style.container}>
       <div className={style.layout}>
@@ -43,7 +51,7 @@ function Board({ boardArray, validTiles, clickedTile, rows, cols, currentPlayer,
                 <Tile
                   key={`${rows[rowId]}${cols[colId]}`}
                   id={`${rows[rowId]}${cols[colId]}`}
-                  isClicked={!!(clickedTile && rowId === clickedTile.row && colId === clickedTile.col)}
+                  isComputerClicked={!!(clickedTile && rowId === clickedTile.row && colId === clickedTile.col)}
                   currentPlayer={currentPlayer}
                   tileState={exists ? null : boardArray[rowId][colId]}
                   isValidMove={!!exists}

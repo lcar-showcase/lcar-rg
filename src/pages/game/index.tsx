@@ -120,7 +120,7 @@ function Game() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
   const [uuid, setUuid] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
-  const [selectedTile, setSelectedTile] = useState<Coordinate | null>(null); // Tile selected by computer for animation
+  const [selectedComputerTile, setSelectedComputerTile] = useState<Coordinate | null>(null);
   const goTo = useNavigate();
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
@@ -291,7 +291,7 @@ function Game() {
         }
         // Set computer's selected tile for animation
         if (currentPlayer === "light") {
-          setSelectedTile({ row, col });
+          setSelectedComputerTile({ row, col });
         }
       }
 
@@ -392,7 +392,7 @@ function Game() {
             cols={cols}
             currentPlayer={currentPlayer}
             handleTurn={handleTurn}
-            clickedTile={selectedTile}
+            computerClickedTile={selectedComputerTile}
           />
           <div className={style.history}>
             <p key={history.length - 1}>{generateHistoryMessage(history[history.length - 1])}</p>
