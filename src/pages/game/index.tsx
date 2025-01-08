@@ -362,7 +362,7 @@ function Game() {
               setShowPopUp(true);
             }}
           >
-            <img src="/images/back_arrow.png" alt="back" />
+            <img src="/images/back_arrow.png" alt="back" className={style.back} />
             <Logo isNav />
           </button>
           <button

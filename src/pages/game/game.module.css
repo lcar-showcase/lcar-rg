@@ -33,7 +33,7 @@
   background: none;
 }
 
-.backToMainMenuContainer > img {
+.back {
   width: 30px;
   aspect-ratio: 68 / 35;
   margin-right: 10px;
