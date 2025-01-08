@@ -64,6 +64,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
             }}
           />
         </label>
+        <p className={style.hint}>Letters, numbers and hyphens only; 36 characters</p>
         <p className={isLoading ? `${style.loading}` : `${style.notLoading}`}>{formMsg}</p>
       </div>
       {/* Buttons */}
