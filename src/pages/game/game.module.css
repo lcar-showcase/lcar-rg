@@ -175,21 +175,6 @@
   }
 }
 
-/* Mobile screens */
-@media (max-width: 450px) {
-  .saveButton {
-    min-width: 80px;
-    /* Stick closer to edges */
-    right: 25px;
-    top: 22px;
-  }
-
-  .backToMainMenuContainer {
-    left: 25px;
-    top: 24px;
-  }
-}
-
 /* Large screens */
 @keyframes flash {
   from {
@@ -203,21 +188,6 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-/* Mobile screens */
-@media (max-width: 450px) {
-  .saveButton {
-    min-width: 80px;
-    /* Stick closer to edges */
-    right: 25px;
-    top: 22px;
-  }
-
-  .backToMainMenuContainer {
-    left: 25px;
-    top: 24px;
   }
 }
 

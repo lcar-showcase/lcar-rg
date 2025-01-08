@@ -33,10 +33,3 @@
 .nonNavigable .flipped {
   margin-right: 8px;
 }
-
-/* Hide logo on mobile screens */
-@media (max-width: 450px) {
-  .navigable {
-    visibility: hidden;
-  }
-}
