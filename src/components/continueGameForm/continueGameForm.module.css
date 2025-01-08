@@ -53,6 +53,10 @@
     flex-direction: column; /* Instead of row */
     gap: 15px;
   }
+
+  .inputContainer input::placeholder {
+    font-size: 0.8rem;
+  }
 }
 
 @media (min-width: 1400px) {
