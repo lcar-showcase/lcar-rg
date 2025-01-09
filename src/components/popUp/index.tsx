@@ -16,8 +16,8 @@ function PopUp({
   children,
   primaryButtonText,
   secondaryButtonText,
-  disablePrimaryButton = false, // Buttons enabled by default
-  disableSecondaryButton = false,
+  disablePrimaryButton, // Buttons enabled by default
+  disableSecondaryButton,
   onClickPrimaryButton,
   onClickSecondaryButton,
 }: PopUpProps) {
