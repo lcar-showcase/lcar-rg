@@ -1,15 +1,37 @@
+import { useState } from "react";
+import { Link } from "react-router";
+import ContinueGameForm from "../../components/continueGameForm";
 import Logo from "../../components/logo";
-import MenuLink from "../../components/menuLinks";
+import PopUp from "../../components/popUp";
 import style from "./mainMenu.module.css";
 
 function MainMenu() {
+  const [showPopUp, setShowPopUp] = useState(false);
+
+  // TODO: (Enhancement) Make MainMenu title bigger (or anything that will make it stand out)
+
   return (
     <>
       <Logo isNav={false} />
-      <div className={style.linksContainer}>
-        <MenuLink text="New Game" path="/game" />
-        {/* TODO: Add "Continue Game menuLink" */}
+      <div className={style.mainMenuButtonsContainer}>
+        <Link to="/game" className="btn">
+          New Game
+        </Link>
+        <button
+          type="button"
+          onClick={() => {
+            setShowPopUp(true);
+          }}
+          className="btn"
+        >
+          Continue Game
+        </button>
       </div>
+      {showPopUp && (
+        <PopUp title="Continue Game">
+          <ContinueGameForm togglePopUp={setShowPopUp} />
+        </PopUp>
+      )}
     </>
   );
 }

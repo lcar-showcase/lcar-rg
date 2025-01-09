@@ -21,6 +21,7 @@
   border: 2px solid #d2bba7;
 }
 
+/* TODO: (Enhancement) Make valid tiles more obvious */
 .valid {
   width: 30%;
   height: 30%;
