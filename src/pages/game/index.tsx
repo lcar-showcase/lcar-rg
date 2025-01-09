@@ -362,7 +362,7 @@ function Game() {
             }}
           >
             <img src="/images/back_arrow.png" alt="back" className={style.back} />
-            <img src="/images/logo.png" alt="logo" className={`logoBase ${style.logo}`} />
+            <img src="/images/logo.png" alt="reversi" className={`logoBase ${style.logo}`} />
           </button>
           <button
             type="button"

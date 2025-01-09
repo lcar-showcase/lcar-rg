@@ -224,7 +224,7 @@
     font-size: 0.8rem;
   }
 
-  .navigable {
+  .logo {
     display: none;
   }
 }
@@ -259,5 +259,13 @@
 
   .uuid p {
     font-size: 1.6rem;
+  }
+
+  .backToMainMenuContainer {
+    padding: 10px;
+  }
+
+  .logo {
+    width: 200px;
   }
 }

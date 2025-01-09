@@ -7,11 +7,9 @@ import style from "./mainMenu.module.css";
 function MainMenu() {
   const [showPopUp, setShowPopUp] = useState(false);
 
-  // TODO: (Enhancement) Make MainMenu title bigger (or anything that will make it stand out)
-
   return (
     <>
-      <img src="/images/logo.png" alt="logo" className={`logoBase ${style.logo}`} />
+      <img src="/images/logo.png" alt="reversi" className={`logoBase ${style.logo}`} />
       <div className={style.mainMenuButtonsContainer}>
         <Link to="/game" className="btn">
           New Game
