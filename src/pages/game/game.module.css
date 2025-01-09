@@ -22,7 +22,7 @@
   color: #f1e3d7;
   font-weight: 700;
   /* Override global .btn CSS */
-  padding: 0;
+  padding: 15px;
   background: none;
   border: none;
   box-shadow: none;
@@ -30,12 +30,12 @@
 
 /* Override global .btn CSS */
 .backToMainMenuContainer:hover {
-  background: none;
+  background: #7a7787;
 }
 
-.backToMainMenuContainer > img {
-  width: 30px;
-  aspect-ratio: 68 / 35;
+.back {
+  width: 20px;
+  aspect-ratio: 46 / 38;
   margin-right: 10px;
 }
 
@@ -50,6 +50,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+  margin-top: 50px; /* Prevent logo from overlapping with scoreboard */
 }
 
 .history {
@@ -141,6 +142,14 @@
   animation-duration: 1s;
 }
 
+.logo {
+  width: 180px;
+}
+
+.logo:hover {
+  color: #7a7787;
+}
+
 @keyframes historySecondItem {
   from {
     color: #f1e3d7;
@@ -215,6 +224,10 @@
   .uuid p {
     font-size: 0.8rem;
   }
+
+  .logo {
+    display: none;
+  }
 }
 
 @media (min-width: 1400px) {
@@ -247,5 +260,13 @@
 
   .uuid p {
     font-size: 1.6rem;
+  }
+
+  .backToMainMenuContainer {
+    padding: 10px;
+  }
+
+  .logo {
+    width: 200px;
   }
 }

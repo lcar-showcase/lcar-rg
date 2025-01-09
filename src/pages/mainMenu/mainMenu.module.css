@@ -5,3 +5,21 @@
   align-items: center;
   gap: 30px;
 }
+
+.logo {
+  margin-bottom: 50px;
+  width: 600px;
+}
+
+/* Special case for devices between 450px and 640px, logo will be too wide */
+@media (max-width: 640px) {
+  .logo {
+    width: 450px;
+  }
+}
+
+@media (max-width: 450px) {
+  .logo {
+    width: 300px;
+  }
+}

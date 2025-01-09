@@ -93,6 +93,10 @@ body {
   border: 3px solid grey;
 }
 
+.logoBase {
+  aspect-ratio: 79 / 10;
+}
+
 @media (max-width: 450px) {
   .btn {
     font-size: 1rem;
