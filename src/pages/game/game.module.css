@@ -6,7 +6,7 @@
   flex-direction: row;
 }
 
-.header button {
+.saveButton {
   position: fixed;
   right: 40px;
   top: 30px;
@@ -24,12 +24,20 @@
   align-items: center;
   color: #f1e3d7;
   font-weight: 700;
-  display: flex;
-  height: 35px;
+  /* Override global .btn CSS */
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* Override global .btn CSS */
+.backToMainMenuContainer:hover {
+  background: none;
 }
 
 .backToMainMenuContainer > img {
-  height: 40%;
+  width: 30px;
   aspect-ratio: 68 / 35;
   margin-right: 10px;
 }
@@ -167,6 +175,23 @@
   }
 }
 
+/* Large screens */
+@keyframes flash {
+  from {
+    background: #b7b3c7;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Large screens */
 @media (min-width: 1400px) {
   .header button {
     font-size: 1.3rem;

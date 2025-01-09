@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Board from "../../components/board";
 import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
@@ -96,7 +96,7 @@ type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
 type SaveStatus = "pending" | "ok" | "fail";
 
-type PopUpType = "win" | "saving";
+type PopUpType = "win" | "saving" | "confirm";
 
 function Game() {
   // Determine if game needs different intial state (continue game)
@@ -120,6 +120,7 @@ function Game() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
   const [uuid, setUuid] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
+  const goTo = useNavigate();
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
   // Determine "lines" that can be flipped by player
@@ -348,13 +349,20 @@ function Game() {
       <div>
         {/* Header (Logo + Save button) */}
         <div className={style.header}>
-          <Link to="/" className={style.backToMainMenuContainer}>
-            <img src="/images/back_arrow.png" alt="back" />
-            <Logo isNav />
-          </Link>
           <button
             type="button"
-            className="btn"
+            className={`btn ${style.backToMainMenuContainer}`}
+            onClick={() => {
+              setPopUpType("confirm");
+              setShowPopUp(true);
+            }}
+          >
+            <img src="/images/back_arrow.png" alt="back" />
+            <Logo isNav />
+          </button>
+          <button
+            type="button"
+            className={`btn ${style.saveButton}`}
             disabled={currentPlayer === "light" && winnerColour === null} // Can save after game over
             onClick={() => {
               setShowPopUp(true);
@@ -431,6 +439,17 @@ function Game() {
       {showPopUp && popUpType === "saving" && saveStatus === "fail" && (
         <PopUp title="Saving game" onClickPrimaryButton={() => setShowPopUp(false)} primaryButtonText="Return to Game">
           <div className={style[saveStatus]}>Failed to save game</div>
+        </PopUp>
+      )}
+      {showPopUp && popUpType === "confirm" && (
+        <PopUp
+          title="Return to Main Menu?"
+          onClickPrimaryButton={() => setShowPopUp(false)}
+          primaryButtonText="Stay"
+          onClickSecondaryButton={() => goTo("/")}
+          secondaryButtonText="Return"
+        >
+          <div>All unsaved progress will be lost.</div>
         </PopUp>
       )}
     </>
