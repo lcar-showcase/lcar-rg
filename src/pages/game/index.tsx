@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Board from "../../components/board";
-import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
 import { API_BASE_URL, GAME_ID } from "../../constants";
@@ -363,7 +362,7 @@ function Game() {
             }}
           >
             <img src="/images/back_arrow.png" alt="back" className={style.back} />
-            <Logo isNav />
+            <img src="/images/logo.png" alt="logo" className={`logoBase ${style.logo}`} />
           </button>
           <button
             type="button"

@@ -5,3 +5,8 @@
   align-items: center;
   gap: 30px;
 }
+
+.logo {
+  margin-bottom: 50px;
+  width: 600px;
+}

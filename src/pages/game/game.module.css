@@ -141,6 +141,14 @@
   animation-duration: 1s;
 }
 
+.logo {
+  width: 180px;
+}
+
+.logo:hover {
+  color: #7a7787;
+}
+
 @keyframes historySecondItem {
   from {
     color: #f1e3d7;
@@ -214,6 +222,10 @@
 
   .uuid p {
     font-size: 0.8rem;
+  }
+
+  .navigable {
+    display: none;
   }
 }
 
