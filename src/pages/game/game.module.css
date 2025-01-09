@@ -1,5 +1,3 @@
-/* TODO: Add responsiveness for mobile screens */
-
 .header {
   /* Header is logo + button */
   display: flex;
@@ -12,7 +10,6 @@
   top: 30px;
   font-size: 1rem;
   min-width: 120px;
-  height: 40px;
   padding: 10px 10px;
 }
 
@@ -191,7 +188,35 @@
   }
 }
 
-/* Large screens */
+/* Mobile screens */
+@media (max-width: 450px) {
+  .saveButton {
+    min-width: 80px;
+    /* Stick closer to edges */
+    right: 25px;
+    top: 22px;
+  }
+
+  .backToMainMenuContainer {
+    left: 15px;
+    top: 24px;
+  }
+
+  button.backToMainMenuContainer {
+    min-width: 0; /* Should not be as big as a regular button */
+    padding: 10px; /* Increase area of button so it can be tapped easily */
+  }
+
+  .uuid {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .uuid p {
+    font-size: 0.8rem;
+  }
+}
+
 @media (min-width: 1400px) {
   .header button {
     font-size: 1.3rem;
@@ -219,7 +244,7 @@
     --animation-initial-offset: -40px;
   }
 
-  .uuid {
+  .uuid p {
     font-size: 1.6rem;
   }
 }

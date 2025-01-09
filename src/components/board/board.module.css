@@ -53,6 +53,24 @@
   gap: 2px;
 }
 
+@media (max-width: 450px) {
+  .container {
+    width: 300px;
+    height: 300px;
+  }
+
+  .layout {
+    width: 285px;
+    height: 285px;
+    grid-template-columns: 12px repeat(8, 1fr) 12px;
+    grid-template-rows: 12px repeat(8, 1fr) 12px;
+  }
+
+  .rowColId {
+    font-size: 0.5rem;
+  }
+}
+
 @media (min-width: 1400px) {
   .container {
     width: 600px;
@@ -62,10 +80,8 @@
   .layout {
     width: 570px;
     height: 570px;
-    display: grid;
     grid-template-columns: 25px repeat(8, 1fr) 25px;
     grid-template-rows: 25px repeat(8, 1fr) 25px;
-    background: #2c4123;
   }
 
   .rowColId {

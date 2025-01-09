@@ -54,7 +54,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
             type="text"
             id="gameUuid"
             name="gameUuid"
-            placeholder="Letters, numbers and hyphens only; 36 characters"
+            placeholder="e.g. 0cdf7cc9-77a6-434f-9b38-6acd940d770e"
             maxLength={36}
             minLength={36}
             required
@@ -64,6 +64,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
             }}
           />
         </label>
+        <p className={style.hint}>Letters, numbers and hyphens only; 36 characters</p>
         <p className={isLoading ? `${style.loading}` : `${style.notLoading}`}>{formMsg}</p>
       </div>
       {/* Buttons */}
