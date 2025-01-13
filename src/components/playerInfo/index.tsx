@@ -1,3 +1,5 @@
+import turnIndicatorActiveImg from "../../../images/turn_indicator_active.png";
+import turnIndicatorInactiveImg from "../../../images/turn_indicator_inactive.png";
 import { TileState } from "../../types";
 import style from "./playerInfo.module.css";
 
@@ -22,7 +24,7 @@ function PlayerInfo({ currPlayer, playerColour, score }: PlayerInfoProps) {
       {/* Turn indicator */}
       <img
         className={`${style.turnIndicator} ${isDark && style.playerTurnIndicator} ${isCurrPlayerTurn && style.activeTurnIndicator}`}
-        src={isCurrPlayerTurn ? "/images/turn_indicator_active.png" : "/images/turn_indicator_inactive.png"}
+        src={isCurrPlayerTurn ? turnIndicatorActiveImg : turnIndicatorInactiveImg}
         alt={isCurrPlayerTurn ? "Turn indidcator active" : "Turn indicator inactive"}
       />
     </div>
