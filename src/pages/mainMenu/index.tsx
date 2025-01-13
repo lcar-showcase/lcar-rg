@@ -1,18 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import ContinueGameForm from "../../components/continueGameForm";
-import Logo from "../../components/logo";
 import PopUp from "../../components/popUp";
 import style from "./mainMenu.module.css";
 
 function MainMenu() {
   const [showPopUp, setShowPopUp] = useState(false);
 
-  // TODO: (Enhancement) Make MainMenu title bigger (or anything that will make it stand out)
-
   return (
     <>
-      <Logo isNav={false} />
+      <img src="/images/logo.png" alt="reversi" className={`logoBase ${style.logo}`} />
       <div className={style.mainMenuButtonsContainer}>
         <Link to="/game" className="btn">
           New Game

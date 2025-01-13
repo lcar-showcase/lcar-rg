@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Board from "../../components/board";
-import Logo from "../../components/logo";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
 import { API_BASE_URL, GAME_ID } from "../../constants";
@@ -120,6 +119,7 @@ function Game() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
   const [uuid, setUuid] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
+  const [selectedComputerTile, setSelectedComputerTile] = useState<Coordinate | null>(null);
   const goTo = useNavigate();
   const currentPlayer = turn % 2 === 0 ? "dark" : "light"; // Humans players are always even/dark
 
@@ -288,7 +288,12 @@ function Game() {
         } else {
           setTurn(turn + 1);
         }
+        // Set computer's selected tile for animation
+        if (currentPlayer === "light") {
+          setSelectedComputerTile({ row, col });
+        }
       }
+
       // Show pop up once a winner is detected
       if (checkWinner(newBoard)) {
         setWinnerColour(checkWinner(newBoard));
@@ -302,7 +307,6 @@ function Game() {
   // Render board after player turn, delay, then re-render board with computer's move
   useEffect(() => {
     if (currentPlayer === "light" && !winnerColour) {
-      // TODO: Additionally, maybe highlight tile to show where computer placed its tile (as future enhancement)
       const timeoutId = setTimeout(() => {
         const compValidTiles = computeValidLines(boardArr, currentPlayer);
         const moveId = Math.floor(Math.random() * compValidTiles.length); // Random move
@@ -357,8 +361,8 @@ function Game() {
               setShowPopUp(true);
             }}
           >
-            <img src="/images/back_arrow.png" alt="back" />
-            <Logo isNav />
+            <img src="/images/back_arrow.png" alt="back" className={style.back} />
+            <img src="/images/logo.png" alt="reversi" className={`logoBase ${style.logo}`} />
           </button>
           <button
             type="button"
@@ -387,6 +391,7 @@ function Game() {
             cols={cols}
             currentPlayer={currentPlayer}
             handleTurn={handleTurn}
+            computerClickedTile={selectedComputerTile}
           />
           <div className={style.history}>
             <p key={history.length - 1}>{generateHistoryMessage(history[history.length - 1])}</p>
