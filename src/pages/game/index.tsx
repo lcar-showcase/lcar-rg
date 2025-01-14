@@ -402,7 +402,7 @@ function Game() {
       {/* Pop-ups */}
       {showPopUp && popUpType === "win" && (
         <PopUp
-          title={`${winnerColour === "dark" ? "Player" : "Computer"} wins!`}
+          title={winnerColour === "dark" ? "Player wins!" : winnerColour === "light" ? "Computer wins!" : "Tie!"}
           onClickPrimaryButton={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
         />
