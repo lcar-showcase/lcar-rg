@@ -29,8 +29,6 @@ const initBoardArray = () =>
     })
   );
 
-// TODO: (Enhancement) Confirmation pop-up when going back
-
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
 // e.g. Going north (up) means: { changeRow: 1, changeCol: 0 }

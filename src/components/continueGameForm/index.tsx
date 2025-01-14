@@ -16,7 +16,7 @@ function ContinueGameForm({ togglePopUp }: ContinueGameFormProps) {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Validate input - alphanumeric and hyphens only, with no whitespaces
-    const regex = /^[a-zA-Z0-9-]+$/; // TODO: Refinement (if enough time) match UUID format exactly
+    const regex = /^[a-zA-Z0-9-]+$/;
     if (!regex.exec(currentInput)) {
       setFormMsg("Invalid UUID provided.");
     } else {
