@@ -38,6 +38,16 @@
   gap: 50px;
 }
 
+.redButton {
+  background: #e85a5c;
+  border: solid 3px #e85a5c;
+}
+
+.redButton:hover {
+  background: #c04446;
+  border: solid 3px #c04446;
+}
+
 @media (max-width: 450px) {
   .popUp {
     font-size: 1rem;

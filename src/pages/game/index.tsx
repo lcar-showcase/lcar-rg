@@ -424,6 +424,7 @@ function Game() {
             setShowPopUp(false);
           }}
           secondaryButtonText="Reset Board"
+          isSecondaryButtonDangerous
         />
       )}
       {showPopUp && popUpType === "saving" && saveStatus === "pending" && (

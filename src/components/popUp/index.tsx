@@ -7,6 +7,8 @@ interface PopUpProps {
   secondaryButtonText?: string;
   disablePrimaryButton?: boolean;
   disableSecondaryButton?: boolean;
+  isPrimaryButtonDangerous?: boolean;
+  isSecondaryButtonDangerous?: boolean;
   onClickPrimaryButton?(): void;
   onClickSecondaryButton?(): void;
 }
@@ -18,6 +20,8 @@ function PopUp({
   secondaryButtonText,
   disablePrimaryButton, // Buttons enabled by default
   disableSecondaryButton,
+  isPrimaryButtonDangerous, // If button causes irreversible/dangerous effect, alert user by make it red
+  isSecondaryButtonDangerous,
   onClickPrimaryButton,
   onClickSecondaryButton,
 }: PopUpProps) {
@@ -30,7 +34,7 @@ function PopUp({
           {secondaryButtonText && onClickSecondaryButton && (
             <button
               type="button"
-              className="secondaryBtn btn"
+              className={`secondaryBtn btn ${isSecondaryButtonDangerous && style.redButton}`}
               disabled={disableSecondaryButton}
               onClick={onClickSecondaryButton}
             >
@@ -38,7 +42,12 @@ function PopUp({
             </button>
           )}
           {primaryButtonText && onClickPrimaryButton && (
-            <button type="button" className="btn" disabled={disablePrimaryButton} onClick={onClickPrimaryButton}>
+            <button
+              type="button"
+              className={`btn ${isPrimaryButtonDangerous && style.redButton}`}
+              disabled={disablePrimaryButton}
+              onClick={onClickPrimaryButton}
+            >
               {primaryButtonText}
             </button>
           )}
