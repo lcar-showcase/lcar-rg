@@ -276,14 +276,14 @@ function Game() {
         computeValidLines(boardArr, currentPlayer).find((line) => line.valid.row === row && line.valid.col === col)
       ) {
         setBoardArray(newBoard);
-        setHistory([...history, { colour: currentPlayer, tile: { row, col }, isSkipped: false }]);
+        setHistory((prevHistory) => [...prevHistory, { colour: currentPlayer, tile: { row, col }, isSkipped: false }]);
         const otherPlayer = currentPlayer === "light" ? "dark" : "light";
         if (computeValidLines(newBoard, otherPlayer).length === 0) {
           // Next player has no valid moves on new board; skip
           setTurn(turn + 2);
           if (!checkWinner(newBoard)) {
             // Do not add last "skip turn" to history if game over
-            setHistory([...history, { colour: otherPlayer, tile: null, isSkipped: true }]);
+            setHistory((prevHistory) => [...prevHistory, { colour: otherPlayer, tile: null, isSkipped: true }]);
           }
         } else {
           setTurn(turn + 1);
@@ -301,7 +301,7 @@ function Game() {
         setShowPopUp(true);
       }
     },
-    [boardArr, currentPlayer, history, turn]
+    [boardArr, currentPlayer, turn]
   );
 
   // Render board after player turn, delay, then re-render board with computer's move
