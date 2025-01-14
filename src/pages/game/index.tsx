@@ -384,8 +384,18 @@ function Game() {
         {/* Board */}
         <div className={style.gameInfo}>
           <div className={style.scoreboardContainer}>
-            <PlayerInfo currPlayer={currentPlayer} playerColour="dark" score={getPlayerScore("dark", boardArr)} />
-            <PlayerInfo currPlayer={currentPlayer} playerColour="light" score={getPlayerScore("light", boardArr)} />
+            <PlayerInfo
+              currPlayer={currentPlayer}
+              playerColour="dark"
+              score={getPlayerScore("dark", boardArr)}
+              isSkipped={history[history.length - 1].colour === "dark" && history[history.length - 1].isSkipped} // Skipped turn is always last item in history state
+            />
+            <PlayerInfo
+              currPlayer={currentPlayer}
+              playerColour="light"
+              score={getPlayerScore("light", boardArr)}
+              isSkipped={history[history.length - 1].colour === "light" && history[history.length - 1].isSkipped}
+            />
           </div>
           <Board
             boardArray={boardArr}
