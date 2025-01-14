@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import backArrowImg from "../../../images/back_arrow.png";
+import loadingImg from "../../../images/loading.png";
+import logoImg from "../../../images/logo.png";
 import Board from "../../components/board";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
@@ -361,8 +364,8 @@ function Game() {
               setShowPopUp(true);
             }}
           >
-            <img src="/images/back_arrow.png" alt="back" className={style.back} />
-            <img src="/images/logo.png" alt="reversi" className={`logoBase ${style.logo}`} />
+            <img src={backArrowImg} alt="back" className={style.back} />
+            <img src={logoImg} alt="reversi" className={`logoBase ${style.logo}`} />
           </button>
           <button
             type="button"
@@ -414,7 +417,7 @@ function Game() {
           onClickPrimaryButton={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
         >
-          <img src="/images/loading.png" alt="Loading" className={style.loading} />
+          <img src={loadingImg} alt="Loading" className={style.loading} />
         </PopUp>
       )}
       {showPopUp && popUpType === "saving" && saveStatus === "ok" && (

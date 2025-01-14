@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import logoImg from "../../../images/logo.png";
 import ContinueGameForm from "../../components/continueGameForm";
 import PopUp from "../../components/popUp";
 import style from "./mainMenu.module.css";
@@ -9,7 +10,7 @@ function MainMenu() {
 
   return (
     <>
-      <img src="/images/logo.png" alt="reversi" className={`logoBase ${style.logo}`} />
+      <img src={logoImg} alt="reversi" className={`logoBase ${style.logo}`} />
       <div className={style.mainMenuButtonsContainer}>
         <Link to="/game" className="btn">
           New Game
