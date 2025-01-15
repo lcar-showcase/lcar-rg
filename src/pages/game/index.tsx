@@ -469,9 +469,9 @@ function Game() {
         <PopUp
           title="Return to Main Menu?"
           onClickPrimaryButton={() => setShowPopUp(false)}
-          primaryButtonText="Stay"
+          primaryButtonText="Cancel"
           onClickSecondaryButton={() => goTo("/")}
-          secondaryButtonText="Return"
+          secondaryButtonText="Return to Main Menu"
         >
           <div>All unsaved progress will be lost.</div>
         </PopUp>
