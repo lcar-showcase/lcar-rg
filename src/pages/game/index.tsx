@@ -16,19 +16,18 @@ const rows = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const cols = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 // Initialise 8 by 8 board, with 4 default disks
-const initBoardArray: TileState[][] = Array.from({ length: 8 }, (_row, rowId) =>
-  Array.from({ length: 8 }, (_col, colId) => {
-    if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
-      return "light";
-    }
-    if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
-      return "dark";
-    }
-    return null;
-  })
-);
-
-// TODO: (Enhancement) Confirmation pop-up when going back
+const initBoardArray = () =>
+  Array.from({ length: 8 }, (_row, rowId) =>
+    Array.from({ length: 8 }, (_col, colId) => {
+      if ((rowId === 3 && colId === 3) || (rowId === 4 && colId === 4)) {
+        return "light";
+      }
+      if ((rowId === 3 && colId === 4) || (rowId === 4 && colId === 3)) {
+        return "dark";
+      }
+      return null;
+    })
+  );
 
 // All directions to check for (8 total)
 // changeRow and changeCol behave like the x and y axes respectively.
@@ -111,7 +110,7 @@ function Game() {
     loadBoard = null;
     loadHistory = null;
   }
-  const [boardArr, setBoardArray] = useState(loadBoard || initBoardArray);
+  const [boardArr, setBoardArray] = useState(loadBoard || initBoardArray());
   const [turn, setTurn] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>(
     loadHistory || [{ colour: "dark", tile: null, isSkipped: false }]
@@ -418,6 +417,13 @@ function Game() {
           title={winnerColour === "dark" ? "Player wins!" : winnerColour === "light" ? "Computer wins!" : "Tie!"}
           onClickPrimaryButton={() => setShowPopUp(false)}
           primaryButtonText="Return to Game"
+          onClickSecondaryButton={() => {
+            setBoardArray(initBoardArray());
+            setHistory([{ colour: "dark", tile: null, isSkipped: false }]); // Init. history with one item - Game start
+            setShowPopUp(false);
+          }}
+          secondaryButtonText="Reset Board"
+          isSecondaryButtonDangerous
         />
       )}
       {showPopUp && popUpType === "saving" && saveStatus === "pending" && (
