@@ -420,6 +420,7 @@ function Game() {
           onClickSecondaryButton={() => {
             setBoardArray(initBoardArray());
             setHistory([{ colour: "dark", tile: null, isSkipped: false }]); // Init. history with one item - Game start
+            setTurn(0);
             setShowPopUp(false);
           }}
           secondaryButtonText="Restart Game"
