@@ -421,6 +421,7 @@ function Game() {
             setBoardArray(initBoardArray());
             setHistory([{ colour: "dark", tile: null, isSkipped: false }]); // Init. history with one item - Game start
             setTurn(0);
+            setWinnerColour(null);
             setShowPopUp(false);
           }}
           secondaryButtonText="Restart Game"
