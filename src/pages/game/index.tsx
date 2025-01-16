@@ -422,7 +422,7 @@ function Game() {
             setHistory([{ colour: "dark", tile: null, isSkipped: false }]); // Init. history with one item - Game start
             setShowPopUp(false);
           }}
-          secondaryButtonText="Reset Board"
+          secondaryButtonText="Restart Game"
           isSecondaryButtonDangerous
         />
       )}
