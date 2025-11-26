@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import backArrowImg from "../../../images/back_arrow.png";
-import loadingImg from "../../../images/loading.png";
+// import loadingImg from "../../../images/loading.png";
 import logoImg from "../../../images/logo.png";
 import Board from "../../components/board";
 import PlayerInfo from "../../components/playerInfo";
 import PopUp from "../../components/popUp";
-import { API_BASE_URL, GAME_ID } from "../../constants";
+// import { API_BASE_URL, GAME_ID } from "../../constants";
 import { Coordinate, TileState } from "../../types";
 import style from "./game.module.css";
 import "../../index.css";
@@ -95,7 +95,7 @@ interface HistoryItem {
 
 type Winner = TileState | "tie"; // Dark, light, tie or null (no winner yet)
 
-type SaveStatus = "pending" | "ok" | "fail";
+// type SaveStatus = "pending" | "ok" | "fail";
 
 type PopUpType = "win" | "saving" | "confirm";
 
@@ -118,8 +118,8 @@ function Game() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [winnerColour, setWinnerColour] = useState<Winner>(null);
   const [popUpType, setPopUpType] = useState<PopUpType>("win");
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
-  const [uuid, setUuid] = useState("");
+  // const [saveStatus, setSaveStatus] = useState<SaveStatus>("ok");
+  // const [uuid, setUuid] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
   const [selectedComputerTile, setSelectedComputerTile] = useState<Coordinate | null>(null);
   const goTo = useNavigate();
@@ -321,25 +321,25 @@ function Game() {
     }
   }, [boardArr, currentPlayer, handleTurn, turn, winnerColour]);
 
-  const saveGame = async () => {
-    const req = new Request(API_BASE_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        id: GAME_ID,
-        data: JSON.stringify({ board: boardArr, history }),
-      }),
-    });
-    try {
-      const res = await fetch(req);
-      const body = await res.json();
-      setSaveStatus("ok");
-      setUuid(body.uuid);
-      return true;
-    } catch (err: unknown) {
-      setSaveStatus("fail");
-    }
-    return false;
-  };
+  // const saveGame = async () => {
+  //   const req = new Request(API_BASE_URL, {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       id: GAME_ID,
+  //       data: JSON.stringify({ board: boardArr, history }),
+  //     }),
+  //   });
+  //   try {
+  //     const res = await fetch(req);
+  //     const body = await res.json();
+  //     setSaveStatus("ok");
+  //     setUuid(body.uuid);
+  //     return true;
+  //   } catch (err: unknown) {
+  //     setSaveStatus("fail");
+  //   }
+  //   return false;
+  // };
 
   // Allow animation to run to completion
   useEffect(() => {
@@ -366,7 +366,7 @@ function Game() {
             <img src={backArrowImg} alt="back" className={style.back} />
             <img src={logoImg} alt="reversi" className={`logoBase ${style.logo}`} />
           </button>
-          <button
+          {/* <button
             type="button"
             className={`btn ${style.saveButton}`}
             disabled={currentPlayer === "light" && winnerColour === null} // Can save after game over
@@ -378,7 +378,7 @@ function Game() {
             }}
           >
             Save
-          </button>
+          </button> */}
         </div>
         {/* Board */}
         <div className={style.gameInfo}>
@@ -428,7 +428,7 @@ function Game() {
           isSecondaryButtonDangerous
         />
       )}
-      {showPopUp && popUpType === "saving" && saveStatus === "pending" && (
+      {/* {showPopUp && popUpType === "saving" && saveStatus === "pending" && (
         <PopUp
           title="Saving game"
           disablePrimaryButton={saveStatus === "pending"}
@@ -466,7 +466,7 @@ function Game() {
         <PopUp title="Saving game" onClickPrimaryButton={() => setShowPopUp(false)} primaryButtonText="Return to Game">
           <div className={style[saveStatus]}>Failed to save game</div>
         </PopUp>
-      )}
+      )} */}
       {showPopUp && popUpType === "confirm" && (
         <PopUp
           title="Return to Main Menu?"

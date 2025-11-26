@@ -15,7 +15,7 @@ function MainMenu() {
         <Link to="/game" className="btn">
           New Game
         </Link>
-        <button
+        {/* <button
           type="button"
           onClick={() => {
             setShowPopUp(true);
@@ -23,7 +23,7 @@ function MainMenu() {
           className="btn"
         >
           Continue Game
-        </button>
+        </button> */}
       </div>
       {showPopUp && (
         <PopUp title="Continue Game">
