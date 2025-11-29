@@ -1,4 +1,4 @@
-# ![logo](https://imgur.com/a/cqP7qHZ) Reversi Game
+# ![logo](https://i.imgur.com/NRAODCD.png) Reversi Game
 
 ## Table of Contents
 
@@ -22,19 +22,19 @@ A web-based implementation of the popular [Reversi](https://en.wikipedia.org/wik
 
 #### Homepage
 
-![homepage](https://imgur.com/XQZI5Ag)
+![homepage](https://i.imgur.com/XQZI5Ag.png)
 
 #### New game
 
-![newgame](https://imgur.com/A9JaCpB)
+![newgame](https://i.imgur.com/A9JaCpB.png)
 
 #### Game over
 
-![gameover](https://imgur.com/qzUMuS9)
+![gameover](https://i.imgur.com/qzUMuS9.png)
 
 #### Mobile view
 
-![mobile](https://imgur.com/xvlkNIx)
+![mobile](https://i.imgur.com/xvlkNIx.png)
 
 ## Use Instructions <a name="use">
 
